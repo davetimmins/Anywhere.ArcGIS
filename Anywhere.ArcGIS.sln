@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Anywhere.ArcGIS", "src\Anywhere.ArcGIS\Anywhere.ArcGIS.csproj", "{2783DE88-F689-4BB8-82E4-93B89D5AC280}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{095789B0-2BE9-44C9-B059-3F0231D45A5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anywhere.ArcGIS.Test", "tests\Anywhere.ArcGIS.Test\Anywhere.ArcGIS.Test.csproj", "{A239F500-53C4-47B4-B159-0AF607F770B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anywhere.ArcGIS.Test.Integration", "tests\Anywhere.ArcGIS.Test.Integration\Anywhere.ArcGIS.Test.Integration.csproj", "{69EB2440-69B9-49AA-BA34-6E00881EE76E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2783DE88-F689-4BB8-82E4-93B89D5AC280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2783DE88-F689-4BB8-82E4-93B89D5AC280}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2783DE88-F689-4BB8-82E4-93B89D5AC280}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2783DE88-F689-4BB8-82E4-93B89D5AC280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A239F500-53C4-47B4-B159-0AF607F770B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A239F500-53C4-47B4-B159-0AF607F770B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A239F500-53C4-47B4-B159-0AF607F770B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A239F500-53C4-47B4-B159-0AF607F770B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69EB2440-69B9-49AA-BA34-6E00881EE76E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EB2440-69B9-49AA-BA34-6E00881EE76E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EB2440-69B9-49AA-BA34-6E00881EE76E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EB2440-69B9-49AA-BA34-6E00881EE76E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A239F500-53C4-47B4-B159-0AF607F770B2} = {095789B0-2BE9-44C9-B059-3F0231D45A5D}
+		{69EB2440-69B9-49AA-BA34-6E00881EE76E} = {095789B0-2BE9-44C9-B059-3F0231D45A5D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6A43882-13B2-4BFF-8BF6-88A3E678B678}
+	EndGlobalSection
+EndGlobal

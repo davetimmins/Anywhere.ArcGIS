@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Dave Timmins</Authors>
+    <Company>Dave Timmins</Company>
+    <Description>Operations and data types used with the ArcGIS Server REST API.</Description>
+    <Copyright>Copyright Dave Timmins (c) 2017. All rights reserved.</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/davetimmins/Anywhere.ArcGIS</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/davetimmins/ArcGIS.PCL</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
+    <PackageReleaseNotes>Initial port of ArcGIS.PCL to netstandard</PackageReleaseNotes>
+    <Version>1.0.0-beta.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteGuard" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>
