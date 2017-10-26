@@ -1,4 +1,6 @@
-Top migrate from ArcGIS.PCL to Anywhere.ArcGIS the following breaking changes need to be done / reviewed:
+Why the change? Well there are 2 main reasons, the first is that this is now a netstandard library rather than a portable class library (PCL), so the old naming didn't really apply. Secondly, NuGet now has package Id reservations and so I can't use ArcGIS as the suffix anymore.
+
+To migrate from ArcGIS.PCL to Anywhere.ArcGIS the following breaking changes need to be done / reviewed:
 
 - All namespaces have changed from `ArcGIS.ServiceModel.*` to `Anywhere.ArcGIS.*`.
 
