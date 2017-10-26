@@ -73,7 +73,7 @@ Refer to the integration test project for more examples.
 
 Absolutely! Please feel free to raise issues, fork the source code, send pull requests, etc.
 
-No pull request is too small. Even whitespace fixes are appreciated. Before you contribute anything make sure you read [CONTRIBUTING](https://github.com/davetimmins/Anywhere.ArcGIS/CONTRIBUTING.md).
+No pull request is too small. Even whitespace fixes are appreciated. Before you contribute anything make sure you read [CONTRIBUTING](https://github.com/davetimmins/Anywhere.ArcGIS/blob/master/CONTRIBUTING.md).
 
 ### Installation
 
@@ -97,5 +97,5 @@ Anywhere.ArcGIS uses [Semantic Versioning](http://semver.org/).
 
 ### Icon
 
-Icon made by [Freepik](http://www.freepik.com) from [www.flaticon.com](http://www.flaticon.com/free-icon/triangle-of-triangles_32915)
+Icon made by [Freepik](http://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/triangle-of-triangles_32915)
                 
