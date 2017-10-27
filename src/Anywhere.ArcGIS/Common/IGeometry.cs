@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Anywhere.ArcGIS.GeoJson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,10 +15,10 @@ namespace Anywhere.ArcGIS.Common
     /// Envelopes
     /// </summary>
     /// <remarks>Starting at ArcGIS Server 10.1, geometries containing m and z values are supported</remarks>
-    public interface IGeometry<out T>
+    public interface IGeometry
     {
         /// <summary>
-        /// The spatial reference can be defined using a well-known ID (wkid) or well-known text (wkt) 
+        /// The spatial reference can be defined using a well-known ID (wkid) or well-known text (wkt)
         /// </summary>
         [DataMember(Name = "spatialReference")]
         SpatialReference SpatialReference { get; set; }
@@ -35,10 +36,10 @@ namespace Anywhere.ArcGIS.Common
         Point GetCenter();
 
         /// <summary>
-        /// Get the associated geometry
+        /// Converts the geometry to its GeoJSON representation
         /// </summary>
-        /// <returns>The geometry object</returns>
-        T GetGeometry();
+        /// <returns>The corresponding GeoJSON for the geometry</returns>
+        IGeoJsonGeometry ToGeoJson();
     }
 
     /// <summary>
@@ -138,7 +139,7 @@ namespace Anywhere.ArcGIS.Common
     }
 
     [DataContract]
-    public class Point : IGeometry<Point>, IEquatable<Point>
+    public class Point : IGeometry, IEquatable<Point>
     {
         [DataMember(Name = "spatialReference", Order = 5)]
         public SpatialReference SpatialReference { get; set; }
@@ -163,12 +164,6 @@ namespace Anywhere.ArcGIS.Common
         public Point GetCenter()
         {
             return new Point { X = X, Y = Y, SpatialReference = SpatialReference };
-        }
-
-        public Point GetGeometry()
-        {
-            // TODO : make immutable?
-            return this;
         }
 
         public bool Equals(Point other)
@@ -199,14 +194,14 @@ namespace Anywhere.ArcGIS.Common
             return Equals((Point)obj);
         }
 
-        //public IGeoJsonGeometry ToGeoJson()
-        //{
-        //    return new GeoJsonPoint { Type = "Point", Coordinates = new[] { X, Y } };
-        //}
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return new GeoJsonPoint { Type = "Point", Coordinates = new[] { X, Y } };
+        }
     }
 
     [DataContract]
-    public class MultiPoint : IGeometry<MultiPoint>, IEquatable<MultiPoint>
+    public class MultiPoint : IGeometry, IEquatable<MultiPoint>
     {
         [DataMember(Name = "spatialReference", Order = 4)]
         public SpatialReference SpatialReference { get; set; }
@@ -228,11 +223,6 @@ namespace Anywhere.ArcGIS.Common
         public Point GetCenter()
         {
             return GetExtent().GetCenter();
-        }
-
-        public MultiPoint GetGeometry()
-        {
-            return this;
         }
 
         public bool Equals(MultiPoint other)
@@ -262,14 +252,14 @@ namespace Anywhere.ArcGIS.Common
             return Equals((MultiPoint)obj);
         }
 
-        //public IGeoJsonGeometry ToGeoJson()
-        //{
-        //    return new GeoJsonLineString { Type = "MultiPoint", Coordinates = Points };
-        //}
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return new GeoJsonLineString { Type = "MultiPoint", Coordinates = Points };
+        }
     }
 
     [DataContract]
-    public class Polyline : IGeometry<Polyline>, IEquatable<Polyline>
+    public class Polyline : IGeometry, IEquatable<Polyline>
     {
         [DataMember(Name = "spatialReference", Order = 4)]
         public SpatialReference SpatialReference { get; set; }
@@ -303,11 +293,6 @@ namespace Anywhere.ArcGIS.Common
             return GetExtent().GetCenter();
         }
 
-        public Polyline GetGeometry()
-        {
-            return this;
-        }
-
         public bool Equals(Polyline other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -335,10 +320,10 @@ namespace Anywhere.ArcGIS.Common
             return Equals((Polyline)obj);
         }
 
-        //public IGeoJsonGeometry<GeoJsonLineString> ToGeoJson()
-        //{
-        //    return Paths.Any() ? new GeoJsonLineString { Type = "LineString", Coordinates = Paths.First() } : null;
-        //}
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return Paths.Any() ? new GeoJsonLineString { Type = "LineString", Coordinates = Paths.First() } : null;
+        }
     }
 
     public class PointCollection : List<double[]>
@@ -377,7 +362,7 @@ namespace Anywhere.ArcGIS.Common
     { }
 
     [DataContract]
-    public class Polygon : IGeometry<Polygon>, IEquatable<Polygon>
+    public class Polygon : IGeometry, IEquatable<Polygon>
     {
         [DataMember(Name = "spatialReference", Order = 4)]
         public SpatialReference SpatialReference { get; set; }
@@ -411,11 +396,6 @@ namespace Anywhere.ArcGIS.Common
             return GetExtent().GetCenter();
         }
 
-        public Polygon GetGeometry()
-        {
-            return this;
-        }
-
         public bool Equals(Polygon other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -443,14 +423,14 @@ namespace Anywhere.ArcGIS.Common
             return Equals((Polygon)obj);
         }
 
-        //public IGeoJsonGeometry ToGeoJson()
-        //{
-        //    return new GeoJsonPolygon { Type = "Polygon", Coordinates = Rings };
-        //}
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return new GeoJsonPolygon { Type = "Polygon", Coordinates = Rings };
+        }
     }
 
     [DataContract]
-    public class Extent : IGeometry<Extent>, IEquatable<Extent>
+    public class Extent : IGeometry, IEquatable<Extent>
     {
         [DataMember(Name = "spatialReference", Order = 5)]
         public SpatialReference SpatialReference { get; set; }
@@ -475,11 +455,6 @@ namespace Anywhere.ArcGIS.Common
         public Point GetCenter()
         {
             return new Point { X = ((XMin + XMax) / 2), Y = ((YMin + YMax) / 2), SpatialReference = SpatialReference };
-        }
-
-        public Extent GetGeometry()
-        {
-            return this;
         }
 
         public Extent Union(Extent extent)
@@ -548,23 +523,23 @@ namespace Anywhere.ArcGIS.Common
             return Equals((Extent)obj);
         }
 
-        //public IGeoJsonGeometry ToGeoJson()
-        //{
-        //    return new GeoJsonPolygon
-        //    {
-        //        Type = "Polygon",
-        //        Coordinates = new PointCollectionList
-        //        {
-        //            new PointCollection
-        //            {
-        //                new[]{ XMin, YMin },
-        //                new[]{ XMax, YMin },
-        //                new[]{ XMax, YMax },
-        //                new[]{ XMin, YMax },
-        //                new[]{ XMin, YMin }
-        //            }
-        //        }
-        //    };
-        //}
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return new GeoJsonPolygon
+            {
+                Type = "Polygon",
+                Coordinates = new PointCollectionList
+                {
+                    new PointCollection
+                    {
+                        new[]{ XMin, YMin },
+                        new[]{ XMax, YMin },
+                        new[]{ XMax, YMax },
+                        new[]{ XMin, YMax },
+                        new[]{ XMin, YMin }
+                    }
+                }
+            };
+        }
     }
 }

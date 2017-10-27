@@ -16,7 +16,7 @@
     /// It requires the Sync capability.
     /// </summary>
     [DataContract]
-    public class CreateReplica<T> : ArcGISServerOperation where T : IGeometry<T>
+    public class CreateReplica : ArcGISServerOperation
     {
         public const string Operation = "createReplica";
 
@@ -54,11 +54,11 @@
         public SpatialReference InputGeometrySpatialReference { get; set; }
 
         /// <summary>
-        ///  (Required) The geometry to apply as the spatial filter. 
+        ///  (Required) The geometry to apply as the spatial filter.
         ///  All the features in layers intersecting this geometry will be replicated
         /// </summary>
         [DataMember(Name = "geometry")]
-        public IGeometry<T> Geometry { get; set; }
+        public IGeometry Geometry { get; set; }
 
         internal static readonly Dictionary<Type, Func<string>> TypeMap = new Dictionary<Type, Func<string>>
         {
@@ -67,8 +67,8 @@
             { typeof(Extent), () => GeometryTypes.Envelope },
             { typeof(Polygon), () => GeometryTypes.Polygon },
             { typeof(Polyline), () => GeometryTypes.Polyline }
-        };           
-                
+        };
+
         /// <summary>
         /// Gets or sets the name of the replica on the server. The replica name is unique per feature service.
         /// This is not a required parameter.
@@ -97,8 +97,8 @@
         { get { return LayerQueries == null || !LayerQueries.Any() ? null : LayerQueries.ToDictionary(k => k.Id, v => v); } }
 
         /// <summary>
-        ///  Specifies whether the replica is to be used on a client, such as a mobile device or ArcGIS Pro, or on another server. 
-        ///  Specifying server allows you to publish the replica to another portal and then synchronize changes between two feature services. 
+        ///  Specifies whether the replica is to be used on a client, such as a mobile device or ArcGIS Pro, or on another server.
+        ///  Specifying server allows you to publish the replica to another portal and then synchronize changes between two feature services.
         ///  The default is client.
         /// </summary>
         [DataMember(Name = "targetType")]
@@ -171,7 +171,7 @@
         /// </summary>
         [DataMember(Name = "attachmentsSyncDirection")]
         public string AttachmentsSyncDirection { get; set; }
-       
+
         /// <summary>
         /// The format of the replica geodatabase returned in the response.
         /// sqlite or json are valid values.
@@ -214,17 +214,17 @@
         public string Where { get; set; }
 
         /// <summary>
-        /// Determines whether or not to apply the geometry for the layer. 
+        /// Determines whether or not to apply the geometry for the layer.
         /// The default is true. If set to false, features from the layer that intersect the geometry are not added.
         /// </summary>
         [DataMember(Name = "useGeometry")]
         public bool UseGeometry { get; set; }
 
         /// <summary>
-        /// Determines whether or not to add related rows. 
-        /// The default is true. 
-        /// Value true is honored only for queryOption = none. 
-        /// This is only applicable if your data has relationship classes. 
+        /// Determines whether or not to add related rows.
+        /// The default is true.
+        /// Value true is honored only for queryOption = none.
+        /// This is only applicable if your data has relationship classes.
         /// Relationships are only processed in a forward direction from origin to destination.
         /// </summary>
         [DataMember(Name = "includeRelated")]
@@ -244,7 +244,7 @@
 
     [DataContract]
     public class ArcGISReplica<T> : PortalResponse
-        where T : IGeometry<T>
+        where T : IGeometry
     {
         [DataMember(Name = "replicaName")]
         public string Name { get; set; }
@@ -276,7 +276,7 @@
 
     [DataContract]
     public class ReplicaLayer<T>
-        where T : IGeometry<T>
+        where T : IGeometry
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }

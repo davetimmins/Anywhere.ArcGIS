@@ -11,7 +11,7 @@ namespace Anywhere.ArcGIS.Common
     /// <typeparam name="T">Type of geometry that the feature represents.</typeparam>
     /// <remarks>All properties are optional.</remarks>
     [DataContract]
-    public class Feature<T> : IEquatable<Feature<T>> where T : IGeometry<T>
+    public class Feature<T> : IEquatable<Feature<T>> where T : IGeometry
     {
         const string ObjectIDName = "objectid";
         const string GlobalIDName = "globalid";

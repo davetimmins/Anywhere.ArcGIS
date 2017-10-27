@@ -8,7 +8,7 @@ Use ArcGIS Server REST resources without an official SDK. Ths is a netstandard 2
 
 A typical use case would be the need to call some ArcGIS REST resource from server .NET code or maybe a console app. The features that this returns can be used directly as Esri JSON in JavaScript apps using the Esri JS API.
 
-Works with secure and non-secure ArcGIS Server on premise / in the cloud, Portal for ArcGIS and ArcGIS Online.
+Works with secure and non-secure ArcGIS Server on premise / in the cloud, Portal for ArcGIS and ArcGIS Online. Also supports converting GeoJSON <-> ArcGIS Features.
 
 ### Quickstart
 
