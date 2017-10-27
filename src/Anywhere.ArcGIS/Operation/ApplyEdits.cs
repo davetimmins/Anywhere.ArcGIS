@@ -7,11 +7,12 @@ using System.Runtime.Serialization;
 namespace Anywhere.ArcGIS.Operation
 {
     /// <summary>
-    /// This operation adds, updates and deletes features to the associated feature layer or table in a single call (POST only). 
+    /// This operation adds, updates and deletes features to the associated feature layer or table in a single call (POST only).
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [DataContract]
-    public class ApplyEdits<T> : ArcGISServerOperation where T : IGeometry<T>
+    public class ApplyEdits<T> : ArcGISServerOperation
+        where T : IGeometry
     {
         public ApplyEdits(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.ApplyEdits, beforeRequest, afterRequest)
@@ -20,7 +21,7 @@ namespace Anywhere.ArcGIS.Operation
             Updates = new List<Feature<T>>();
             Deletes = new List<long>();
         }
-                
+
         /// <summary>
         /// The array of features to be added.
         /// </summary>
@@ -110,7 +111,8 @@ namespace Anywhere.ArcGIS.Operation
             return results.Where(r => r.Success == success);
         }
 
-        public void SetExpected<T>(ApplyEdits<T> operation) where T : IGeometry<T>
+        public void SetExpected<T>(ApplyEdits<T> operation)
+            where T : IGeometry
         {
             if (operation == null) return;
 

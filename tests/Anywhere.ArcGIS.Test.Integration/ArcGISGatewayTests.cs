@@ -24,7 +24,7 @@
             : base(root, tokenProvider: tokenProvider)
         { }
 
-        public Task<QueryResponse<Tout>> QueryAsPost<Tout>(Query queryOptions) where Tout : IGeometry<Tout>
+        public Task<QueryResponse<Tout>> QueryAsPost<Tout>(Query queryOptions) where Tout : IGeometry
         {
             return Post<QueryResponse<Tout>, Query>(queryOptions, CancellationToken.None);
         }
@@ -512,14 +512,15 @@
                 return gateway.Query<Point>(queryPointAllResults);
             });
 
-            var queryPointExtentResults = new Query<Extent>(serviceUrl.AsEndpoint())
+            var queryPointExtentResults = new Query(serviceUrl.AsEndpoint())
             {
                 Geometry = new Extent { XMin = 0, YMin = 0, XMax = 180, YMax = -90, SpatialReference = SpatialReference.WGS84 }, // SE quarter of globe
                 OutputSpatialReference = SpatialReference.WebMercator
             };
+
             var resultPointExtentResults = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.Query<Point, Extent>(queryPointExtentResults);
+                return gateway.Query<Point>(queryPointExtentResults);
             });
 
             var rings = new Point[]
@@ -531,13 +532,13 @@
                 new Point { X = 0, Y = 0 }
             }.ToPointCollectionList();
 
-            var queryPointPolygonResults = new Query<Polygon>(serviceUrl.AsEndpoint())
+            var queryPointPolygonResults = new Query(serviceUrl.AsEndpoint())
             {
                 Geometry = new Polygon { Rings = rings }
             };
             var resultPointPolygonResults = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.Query<Point, Polygon>(queryPointPolygonResults);
+                return gateway.Query<Point>(queryPointPolygonResults);
             });
 
             countAllResults = resultPointAllResults.Features.Count();

@@ -138,21 +138,16 @@
         /// <param name="queryOptions">Query filter parameters</param>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns>The matching features for the query</returns>
-        public virtual Task<QueryResponse<Tout>> Query<Tout, Tin>(Query<Tin> queryOptions, CancellationToken ct = default(CancellationToken)) where Tout : IGeometry<Tout> where Tin : IGeometry<Tin>
+        public virtual Task<QueryResponse<T>> Query<T>(Query queryOptions, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
-            return Get<QueryResponse<Tout>, Query<Tin>>(queryOptions, ct);
+            return Get<QueryResponse<T>, Query>(queryOptions, ct);
         }
 
-        public virtual Task<QueryResponse<Tout>> Query<Tout>(Query queryOptions, CancellationToken ct = default(CancellationToken)) where Tout : IGeometry<Tout>
+        public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
-            return Get<QueryResponse<Tout>, Query>(queryOptions, ct);
-        }
-
-        public virtual async Task<QueryResponse<Tout>> BatchQuery<Tout, Tin>(Query<Tin> queryOptions, CancellationToken ct = default(CancellationToken))
-            where Tout : IGeometry<Tout>
-            where Tin : IGeometry<Tin>
-        {
-            var result = await Get<QueryResponse<Tout>, Query<Tin>>(queryOptions, ct);
+            var result = await Get<QueryResponse<T>, Query>(queryOptions, ct);
 
             if (result != null && result.Error == null && result.Features != null && result.Features.Any() && result.ExceededTransferLimit.HasValue && result.ExceededTransferLimit.Value == true)
             {
@@ -167,44 +162,7 @@
                     var innerQueryOptions = queryOptions;
                     innerQueryOptions.ResultOffset = batchSize * loop;
                     innerQueryOptions.ResultRecordCount = batchSize;
-                    var innerResult = await Get<QueryResponse<Tout>, Query<Tin>>(queryOptions, ct).ConfigureAwait(false);
-
-                    if (innerResult != null && innerResult.Error == null && innerResult.Features != null && innerResult.Features.Any())
-                    {
-                        result.Features.ToList().AddRange(innerResult.Features);
-                        exceeded = result.ExceededTransferLimit.HasValue && innerResult.ExceededTransferLimit.Value;
-                    }
-                    else
-                    {
-                        exceeded = false;
-                    }
-
-                    loop++;
-                }
-            }
-
-            return result;
-        }
-
-        public virtual async Task<QueryResponse<Tout>> BatchQuery<Tout>(Query queryOptions, CancellationToken ct = default(CancellationToken))
-            where Tout : IGeometry<Tout>
-        {
-            var result = await Get<QueryResponse<Tout>, Query>(queryOptions, ct);
-
-            if (result != null && result.Error == null && result.Features != null && result.Features.Any() && result.ExceededTransferLimit.HasValue && result.ExceededTransferLimit.Value == true)
-            {
-                // need to get the remaining data since we went over the limit
-                var batchSize = result.Features.Count();
-                var loop = 1;
-                var exceeded = true;
-
-                while (exceeded == true)
-                {
-                    _logger.InfoFormat("Exceeded query transfer limit (found {0}), batching query for {1} - loop {2}", batchSize, queryOptions.RelativeUrl, loop);
-                    var innerQueryOptions = queryOptions;
-                    innerQueryOptions.ResultOffset = batchSize * loop;
-                    innerQueryOptions.ResultRecordCount = batchSize;
-                    var innerResult = await Get<QueryResponse<Tout>, Query>(queryOptions, ct).ConfigureAwait(false);
+                    var innerResult = await Get<QueryResponse<T>, Query>(queryOptions, ct).ConfigureAwait(false);
 
                     if (innerResult != null && innerResult.Error == null && innerResult.Features != null && innerResult.Features.Any())
                     {
@@ -263,7 +221,8 @@
         /// <param name="edits">The edits to perform</param>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns>A collection of add, update and delete results</returns>
-        public virtual async Task<ApplyEditsResponse> ApplyEdits<T>(ApplyEdits<T> edits, CancellationToken ct = default(CancellationToken)) where T : IGeometry<T>
+        public virtual async Task<ApplyEditsResponse> ApplyEdits<T>(ApplyEdits<T> edits, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
             var result = await Post<ApplyEditsResponse, ApplyEdits<T>>(edits, ct);
             result.SetExpected(edits);
@@ -278,7 +237,8 @@
         /// <param name="outputSpatialReference">The spatial reference you want the result set to be</param>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns>The corresponding features with the newly projected geometries</returns>
-        public virtual async Task<List<Feature<T>>> Project<T>(List<Feature<T>> features, SpatialReference outputSpatialReference, CancellationToken ct = default(CancellationToken)) where T : IGeometry<T>
+        public virtual async Task<List<Feature<T>>> Project<T>(List<Feature<T>> features, SpatialReference outputSpatialReference, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
             var op = new ProjectGeometry<T>(GeometryServiceEndpoint, features, outputSpatialReference);
             var projected = await Post<GeometryOperationResponse<T>, ProjectGeometry<T>>(op, ct).ConfigureAwait(false);
@@ -290,7 +250,8 @@
             return result;
         }
 
-        public virtual async Task<List<Feature<T>>> Project<T>(ProjectGeometry<T> operation, CancellationToken ct = default(CancellationToken)) where T : IGeometry<T>
+        public virtual async Task<List<Feature<T>>> Project<T>(ProjectGeometry<T> operation, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
             var projected = await Post<GeometryOperationResponse<T>, ProjectGeometry<T>>(operation, ct).ConfigureAwait(false);
 
@@ -310,7 +271,8 @@
         /// <param name="distance">Distance in meters to buffer the geometries by</param>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns>The corresponding features with the newly buffered geometries</returns>
-        public virtual async Task<List<Feature<T>>> Buffer<T>(List<Feature<T>> features, SpatialReference spatialReference, double distance, CancellationToken ct = default(CancellationToken)) where T : IGeometry<T>
+        public virtual async Task<List<Feature<T>>> Buffer<T>(List<Feature<T>> features, SpatialReference spatialReference, double distance, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
             var op = new BufferGeometry<T>(GeometryServiceEndpoint, features, spatialReference, distance);
             var buffered = await Post<GeometryOperationResponse<T>, BufferGeometry<T>>(op, ct).ConfigureAwait(false);
@@ -330,7 +292,8 @@
         /// <param name = "spatialReference" > The spatial reference of the geometries</param>
         /// <param name = "ct" > Optional cancellation token to cancel pending request</param>
         /// <returns>The corresponding features with the newly simplified geometries</returns>
-        public virtual async Task<List<Feature<T>>> Simplify<T>(List<Feature<T>> features, SpatialReference spatialReference, CancellationToken ct = default(CancellationToken)) where T : IGeometry<T>
+        public virtual async Task<List<Feature<T>>> Simplify<T>(List<Feature<T>> features, SpatialReference spatialReference, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
             var op = new SimplifyGeometry<T>(GeometryServiceEndpoint, features, spatialReference);
             var simplified = await Post<GeometryOperationResponse<T>, SimplifyGeometry<T>>(op, ct).ConfigureAwait(false);
@@ -342,11 +305,10 @@
             return result;
         }
 
-        public Task<ArcGISReplica<Tout>> CreateReplica<Tout, Tin>(CreateReplica<Tin> createReplica, CancellationToken ct = default(CancellationToken))
-            where Tout : IGeometry<Tout>
-            where Tin : IGeometry<Tin>
+        public Task<ArcGISReplica<T>> CreateReplica<T>(CreateReplica createReplica, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
         {
-            return Post<ArcGISReplica<Tout>, CreateReplica<Tin>>(createReplica, ct);
+            return Post<ArcGISReplica<T>, CreateReplica>(createReplica, ct);
         }
 
         public Task<PortalResponse> UnregisterReplica(UnregisterReplica unregisterReplica, CancellationToken ct = default(CancellationToken))
