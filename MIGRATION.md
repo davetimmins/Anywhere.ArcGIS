@@ -9,3 +9,5 @@ To migrate from ArcGIS.PCL to Anywhere.ArcGIS the following breaking changes nee
 - `SecurePortalGateway` has been renamed to just `PortalGateway`.
 
 - Internally all requests now use an `ArcGISServerOperation` type, this allows before and after actions to be invoked for the HTTP request.
+
+- Renamed `GdbVersion` to `GeodatabaseVersion`.

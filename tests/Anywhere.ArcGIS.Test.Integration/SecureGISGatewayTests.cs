@@ -60,7 +60,10 @@
         [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "user1", "user1")]
         public async Task CanDescribeSecureSite(string rootUrl, string username, string password)
         {
-            var gateway = new PortalGateway(rootUrl, username, password);
+            var gateway = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return PortalGateway.Create(rootUrl, username, password);
+            });
 
             var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {

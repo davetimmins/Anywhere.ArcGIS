@@ -22,10 +22,10 @@
         public void GatewayRootUrlHasCorrectFormat(string rootUrl)
         {
             var gateway = new PortalGateway(rootUrl);
-            Assert.True(gateway.RootUrl.EndsWith("/", StringComparison.Ordinal));
+            Assert.EndsWith("/", gateway.RootUrl, StringComparison.Ordinal);
             Assert.True(gateway.RootUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) || gateway.RootUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase));
-            Assert.False(gateway.RootUrl.ToLowerInvariant().Contains("/rest/services/"));
-            Assert.False(gateway.RootUrl.ToLowerInvariant().Contains("/tokens/"));
+            Assert.DoesNotContain("/rest/services/", gateway.RootUrl.ToLowerInvariant());
+            Assert.DoesNotContain("/tokens/", gateway.RootUrl.ToLowerInvariant());
         }
 
         [Fact]
@@ -37,7 +37,6 @@
         [Theory]
         [InlineData("http://www.arcgis.com/arcgis")]
         [InlineData("http://www.arcgis.com/ArcGIS")]
-        [InlineData("http://www.arcgis.com/ArcGIS/")]
         [InlineData("http://www.arcgis.com/ArcGIS/")]
         [InlineData("http://www.arcgis.com/ArcGIS/rest/services")]
         [InlineData("http://www.arcgis.com/ArcGIS/rest/services/")]
@@ -59,7 +58,6 @@
         [Theory]
         [InlineData("https://www.arcgis.com/arcgis")]
         [InlineData("https://www.arcgis.com/ArcGIS")]
-        [InlineData("https://www.arcgis.com/ArcGIS/")]
         [InlineData("https://www.arcgis.com/ArcGIS/")]
         [InlineData("https://www.arcgis.com/ArcGIS/rest/services")]
         [InlineData("https://www.arcgis.com/ArcGIS/rest/services/")]

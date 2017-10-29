@@ -20,6 +20,7 @@ namespace Anywhere.ArcGIS.Operation
             Adds = new List<Feature<T>>();
             Updates = new List<Feature<T>>();
             Deletes = new List<long>();
+            RollbackOnFailure = true;
         }
 
         /// <summary>
@@ -42,6 +43,48 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "deletes")]
         public string DeleteIds { get { return Deletes == null ? string.Empty : string.Join(",", Deletes); } }
+
+        /// <summary>
+        /// Geodatabase version to apply the edits. This parameter applies only if the isDataVersioned property of the layer is true.
+        /// If the gdbVersion parameter is not specified, edits are made to the published map’s version.
+        /// This option was added at 10.1.
+        /// </summary>
+        [DataMember(Name = "gdbVersion")]
+        public string GeodatabaseVersion { get; set; }
+
+        /// <summary>
+        /// Optional parameter specifying whether the response will report the time features were deleted.
+        /// If returnEditMoment = true, the server will report the time in the response's editMoment key.
+        /// The default value is false.
+        /// This option was added at 10.5 and works with ArcGIS Server services only.
+        /// </summary>
+        [DataMember(Name = "returnEditMoment")]
+        public bool ReturnEditMoment { get; set; }
+
+        /// <summary>
+        /// Optional parameter to specify if the edits should be applied only if all submitted edits succeed.
+        /// If false, the server will apply the edits that succeed even if some of the submitted edits fail.
+        /// If true, the server will apply the edits only if all edits succeed. The default value is true.
+        /// Not all data supports setting this parameter.
+        /// Query the supportsRollbackonFailureParameter property of the layer to determine whether or not a layer supports setting this parameter.
+        /// If supportsRollbackOnFailureParameter = false for a layer, then when editing this layer, rollbackOnFailure will always be true, regardless of how the parameter is set.
+        /// However, if supportsRollbackonFailureParameter = true, this means the rollbackOnFailure parameter value will be honored on edit operations.
+        /// This option was added at 10.1.
+        /// </summary>
+        [DataMember(Name = "rollbackOnFailure")]
+        public bool RollbackOnFailure { get; set; }
+
+        /// <summary>
+        /// When set to true, the features and attachments in the adds, updates, deletes, and attachments parameters are identified by their globalIds.
+        /// When true, the service adds the new features and attachments while preserving the globalIds submitted in the payload.
+        /// If the globalId of a feature (or an attachment) collides with a pre-existing feature (or an attachment), that feature and/or attachment add fails.
+        /// Other adds, updates, or deletes are attempted if rollbackOnFailure is false.
+        /// If rollbackOnFailure is true, the whole operation fails and rolls back on any failure including a globalId collision.
+        /// When useGlobalIds is true, updates and deletes are identified by each feature or attachment globalId rather than their objectId or attachmentId.
+        /// This option was added at 10.4.
+        /// </summary>
+        [DataMember(Name = "useGlobalIds")]
+        public bool UseGlobalIds { get; set; }
     }
 
     /// <summary>
@@ -136,5 +179,8 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "success")]
         public bool Success { get; set; }
+
+        [DataMember(Name = "editMoment")]
+        public string EditMoment { get; set; }
     }
 }

@@ -92,15 +92,12 @@ namespace Anywhere.ArcGIS.Operation
         [DataMember(Name = "objectIds")]
         public string ObjectIdsValue { get { return ObjectIds == null || !ObjectIds.Any() ? null : string.Join(",", ObjectIds); } }
 
-
         /// <summary>
         /// The spatial reference of the returned geometry.
         /// If not specified, the geometry is returned in the spatial reference of the input.
         /// </summary>
         [DataMember(Name = "outSR")]
         public SpatialReference OutputSpatialReference { get; set; }
-
-
 
         /// <summary>
         /// The spatial relationship to be applied on the input geometry while performing the query.
@@ -170,7 +167,7 @@ namespace Anywhere.ArcGIS.Operation
         /// GeoDatabase version to query.
         /// </summary>
         [DataMember(Name = "gdbVersion")]
-        public string GdbVersion { get; set; }
+        public string GeodatabaseVersion { get; set; }
 
         /// <summary>
         /// If true, returns distinct values based on the fields specified in outFields.

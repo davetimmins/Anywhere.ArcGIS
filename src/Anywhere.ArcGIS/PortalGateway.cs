@@ -15,6 +15,37 @@
     /// </summary>
     public class PortalGateway : PortalGatewayBase
     {
+        /// <summary>
+        /// Create a new <see cref="PortalGateway"/> using the default token service as discovered using the Info operation for the server
+        /// </summary>
+        /// <param name="rootUrl"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="serializer"></param>
+        /// <param name="httpClientFunc"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public new static async Task<PortalGateway> Create(
+            string rootUrl, string username, string password,
+            ISerializer serializer = null, Func<HttpClient> httpClientFunc = null,
+            CancellationToken ct = default(CancellationToken))
+        {
+            if (string.IsNullOrWhiteSpace(rootUrl))
+            {
+                throw new ArgumentNullException(nameof(rootUrl), "rootUrl is null.");
+            }
+
+            var info = await new PortalGateway(rootUrl, serializer: serializer, httpClientFunc: httpClientFunc).Info(ct);
+
+            var result = new PortalGateway(
+                rootUrl,
+                tokenProvider: new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password),
+                serializer: serializer,
+                httpClientFunc: httpClientFunc);
+
+            return result;
+        }
+
         public PortalGateway(string rootUrl, ISerializer serializer = null, ITokenProvider tokenProvider = null, Func<HttpClient> httpClientFunc = null)
             : base(rootUrl, serializer, tokenProvider, httpClientFunc)
         { }

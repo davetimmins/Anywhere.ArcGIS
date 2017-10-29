@@ -25,6 +25,37 @@
         readonly ILog _logger;
 
         /// <summary>
+        /// Create a new <see cref="PortalGatewayBase"/> using the default token service as discovered using the Info operation for the server
+        /// </summary>
+        /// <param name="rootUrl"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="serializer"></param>
+        /// <param name="httpClientFunc"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static async Task<PortalGatewayBase> Create(
+            string rootUrl, string username, string password,
+            ISerializer serializer = null, Func<HttpClient> httpClientFunc = null,
+            CancellationToken ct = default(CancellationToken))
+        {
+            if (string.IsNullOrWhiteSpace(rootUrl))
+            {
+                throw new ArgumentNullException(nameof(rootUrl), "rootUrl is null.");
+            }
+
+            var info = await new PortalGatewayBase(rootUrl, serializer: serializer, httpClientFunc: httpClientFunc).Info(ct);
+
+            var result = new PortalGatewayBase(
+                rootUrl,
+                tokenProvider: new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password),
+                serializer: serializer,
+                httpClientFunc: httpClientFunc);
+
+            return result;
+        }
+
+        /// <summary>
         /// Create an ArcGIS Server gateway to access secure resources
         /// </summary>
         /// <param name="rootUrl">Made up of scheme://host:port/site</param>
@@ -212,6 +243,17 @@
         public virtual Task<QueryForIdsResponse> QueryForIds(QueryForIds queryOptions, CancellationToken ct = default(CancellationToken))
         {
             return Get<QueryForIdsResponse, QueryForIds>(queryOptions, ct);
+        }
+
+        /// <summary>
+        /// This operation deletes features in a feature layer or table
+        /// </summary>
+        /// <param name="deleteFeatures"></param>
+        /// <param name="ct">Optional cancellation token to cancel pending request</param>
+        /// <returns>The success if no ObjectIds are specified or the individual result if using ObjectIds</returns>
+        public virtual Task<DeleteFeaturesResponse> DeleteFeatures(DeleteFeatures deleteFeatures, CancellationToken ct = default(CancellationToken))
+        {
+            return Post<DeleteFeaturesResponse, DeleteFeatures>(deleteFeatures, ct);
         }
 
         /// <summary>

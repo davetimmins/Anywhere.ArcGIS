@@ -53,4 +53,4 @@ REST admin operations:
 
 There are also methods to add / update and download attachments for a feature and you can extend this library by writing your own operations.
 
-Refer to the integration test project for more examples.s
+Refer to the integration test project for more examples.
