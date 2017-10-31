@@ -15,7 +15,6 @@
         public SecureGISGatewayTests(IntegrationTestFixture fixture, ITestOutputHelper output)
         {
             fixture.SetTestOutputHelper(output);
-            CryptoProviderFactory.Disabled = true;
         }
 
         [Theory]
