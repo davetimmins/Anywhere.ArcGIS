@@ -7,11 +7,11 @@ namespace Anywhere.ArcGIS
     {
         public static Func<ICryptoProvider> Get { get; set; }
 
-        public static bool Disabled { get; set; }
+        public static bool Enabled { get; set; }
 
         static CryptoProviderFactory()
         {
-            Get = (() => { return Disabled ? null : new RsaEncrypter(); });
+            Get = (() => { return Enabled ? new RsaEncrypter() : null; });
         }
     }
 

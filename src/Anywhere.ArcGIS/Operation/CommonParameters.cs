@@ -8,6 +8,7 @@ namespace Anywhere.ArcGIS.Operation
         public const string Find = "find";
         public const string ApplyEdits = "applyEdits";
         public const string DeleteAttachments = "deleteAttachments";
+        public const string DeleteFeatures = "deleteFeatures";
         public const string CreateReplica = "createReplica";
         public const string UnregisterReplica = "unRegisterReplica";
         public const string SingleInputGeocode = "find";

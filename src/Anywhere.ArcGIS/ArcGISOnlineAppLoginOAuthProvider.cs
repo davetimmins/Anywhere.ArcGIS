@@ -75,7 +75,7 @@
 
         public string RootUrl
         {
-            get { return "https://www.arcgis.com/sharing/oauth2/token"; }
+            get { return "https://www.arcgis.com/sharing/rest/oauth2/token"; }
         }
 
         public bool CancelPendingRequests { get; set; }

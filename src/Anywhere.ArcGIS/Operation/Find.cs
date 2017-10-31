@@ -30,7 +30,7 @@ namespace Anywhere.ArcGIS.Operation
         public string SearchText { get; set; }
 
         /// <summary>
-        /// If false, the operation searches for an exact match of the SearchText string. An exact match is case sensitive. 
+        /// If false, the operation searches for an exact match of the SearchText string. An exact match is case sensitive.
         /// Otherwise, it searches for a value that contains the searchText provided. This search is not case sensitive
         /// </summary>
         /// <remarks>Default is true</remarks>
@@ -78,7 +78,7 @@ namespace Anywhere.ArcGIS.Operation
         public int? MaxAllowableOffset { get; set; }
 
         /// <summary>
-        /// This option can be used to specify the number of decimal places in the response geometries returned by the find operation. 
+        /// This option can be used to specify the number of decimal places in the response geometries returned by the find operation.
         /// This applies to X and Y values only (not m or z values).
         /// </summary>
         [DataMember(Name = "geometryPrecision")]
@@ -102,7 +102,21 @@ namespace Anywhere.ArcGIS.Operation
         /// Switch map layers to point to an alternate geodabase version.
         /// </summary>
         [DataMember(Name = "gdbVersion")]
-        public string GdbVersion { get; set; }
+        public string GeodatabaseVersion { get; set; }
+
+        /// <summary>
+        /// If true, the values in the result will not be formatted i.e. numbers will returned as is and dates will be returned as epoch values.
+        /// This option was added at 10.5.
+        /// </summary>
+        [DataMember(Name = "returnUnformattedValues")]
+        public bool ReturnUnformattedValues { get; set; }
+
+        /// <summary>
+        /// If true, field names will be returned instead of field aliases.
+        /// This option was added at 10.5.
+        /// </summary>
+        [DataMember(Name = "returnFieldName")]
+        public bool ReturnFieldNames { get; set; }
     }
 
     [DataContract]

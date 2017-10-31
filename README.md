@@ -41,6 +41,7 @@ Supports the following as typed operations:
  - `QueryForExtent` return the bounding extent for the result of the query operation
  - `Find` search across _n_ layers and fields in a service
  - `ApplyEdits` post adds, updates and deletes to a feature service layer
+ - `DeleteFeatures` delete features in a feature layer or table
  - `Geocode` single line of input to perform a geocode using a custom locator or the Esri world locator
  - `Suggest` lightweight geocode operation that only returns text results, commonly used for predictive searching
  - `ReverseGeocode` find location candidates for a input point location
