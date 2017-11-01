@@ -11,7 +11,13 @@ namespace Anywhere.ArcGIS.Operation
     public class DeleteAttachments : ArcGISServerOperation
     {        
         public DeleteAttachments(ArcGISServerEndpoint endpoint, long objectID, Action beforeRequest = null, Action afterRequest = null)
-            : base(endpoint.RelativeUrl.Trim('/') + string.Format("/{0}/{1}", objectID, Operations.DeleteAttachments), beforeRequest, afterRequest)
+            : this((endpoint.RelativeUrl.Trim('/') + string.Format("/{0}/{1}", objectID, Operations.DeleteAttachments)).AsEndpoint(), beforeRequest, afterRequest)
+        {
+            AttachmentIds = new List<long>();
+        }
+
+        public DeleteAttachments(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+            : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.DeleteAttachments, beforeRequest, afterRequest)
         {
             AttachmentIds = new List<long>();
         }

@@ -279,6 +279,15 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "length")]
         public int? Length { get; set; }
+
+        [DataMember(Name = "sqlType")]
+        public string SqlType { get; set; }
+
+        [DataMember(Name = "domain")]
+        public string Domain { get; set; }
+
+        [DataMember(Name = "defaultValue")]
+        public string DefaultValue { get; set; }
     }
 
     /// <summary>
