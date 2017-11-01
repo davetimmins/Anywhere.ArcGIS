@@ -409,6 +409,11 @@
             return Post<DeleteAttachmentsResponse, DeleteAttachments>(deletes, ct);
         }
 
+        public Task<QueryAttachmentsResponse> QueryAttachments(QueryAttachments queryAttachments, CancellationToken ct = default(CancellationToken))
+        {
+            return Post<QueryAttachmentsResponse, QueryAttachments>(queryAttachments, ct);
+        }
+
         async Task<Token> CheckGenerateToken(CancellationToken ct)
         {
             if (TokenProvider == null)
