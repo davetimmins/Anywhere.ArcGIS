@@ -2,6 +2,8 @@
 
 ### Anywhere.ArcGIS
 
+[![Build status](https://ci.appveyor.com/api/projects/status/h45tr0g9eff9iv65?svg=true)](https://ci.appveyor.com/project/davetimmins/anywhere-arcgis) 
+
 [![NuGet Status](https://img.shields.io/nuget/vpre/Anywhere.ArcGIS.svg)](https://www.nuget.org/packages/Anywhere.ArcGIS/) [![GitHub Status](https://img.shields.io/github/release/davetimmins/Anywhere.ArcGIS/all.svg)](https://github.com/davetimmins/Anywhere.ArcGIS/releases)
 
 Use ArcGIS Server REST resources without an official SDK. Ths is a netstandard 2.0 library, it was ported from [ArcGIS.PCL](https://github.com/davetimmins/ArcGIS.PCL/). It is not endorsed, affiliated or supported by Esri.
