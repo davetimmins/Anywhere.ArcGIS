@@ -2,7 +2,7 @@
 
 ### Anywhere.ArcGIS
 
-[![Build status](https://ci.appveyor.com/api/projects/status/h45tr0g9eff9iv65?svg=true)](https://ci.appveyor.com/project/davetimmins/anywhere-arcgis) 
+[![Build status](https://ci.appveyor.com/api/projects/status/h45tr0g9eff9iv65?svg=true)](https://ci.appveyor.com/project/davetimmins/anywhere-arcgis) [![Build status](https://travis-ci.org/davetimmins/Anywhere.ArcGIS.svg)](https://travis-ci.org/davetimmins/Anywhere.ArcGIS)
 
 [![NuGet Status](https://img.shields.io/nuget/vpre/Anywhere.ArcGIS.svg)](https://www.nuget.org/packages/Anywhere.ArcGIS/) [![GitHub Status](https://img.shields.io/github/release/davetimmins/Anywhere.ArcGIS/all.svg)](https://github.com/davetimmins/Anywhere.ArcGIS/releases)
 
