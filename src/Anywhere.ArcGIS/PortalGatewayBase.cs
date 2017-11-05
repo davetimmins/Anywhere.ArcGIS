@@ -449,7 +449,7 @@
 
         /// <summary>
         /// The queryDomains operation returns full domain information for the domains referenced by the layers in the service. 
-        /// This operation is performed on a feature service resource.
+        /// This operation is performed on a map / feature service resource.
         /// </summary>
         /// <param name="queryDomains">The operation takes an array of layer IDs</param>
         /// <param name="ct"></param>

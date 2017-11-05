@@ -13,7 +13,7 @@ namespace Anywhere.ArcGIS.Operation
         public QueryDomains(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.QueryDomains, beforeRequest, afterRequest)
         {
-            LayerIds = new List<int>();
+            LayerIdsToSearch = new List<int>();
         }
 
         /// <summary>
@@ -21,13 +21,13 @@ namespace Anywhere.ArcGIS.Operation
         /// The set of domains to return is based on the domains referenced by these layers.
         /// </summary>
         [IgnoreDataMember]
-        public List<int> LayerIds { get; set; }
+        public List<int> LayerIdsToSearch { get; set; }
 
         /// <summary>
         /// The list of object Ids to be queried. This list is a comma delimited list of field names.
         /// </summary>
         [DataMember(Name = "layers")]
-        public string LayerIdsValue { get { return LayerIds == null || !LayerIds.Any() ? null : string.Join(",", LayerIds); } }
+        public int[] LayerIdsToSearchValue { get { return LayerIdsToSearch == null || !LayerIdsToSearch.Any() ? null : LayerIdsToSearch.ToArray(); } }
     }
 
     [DataContract]

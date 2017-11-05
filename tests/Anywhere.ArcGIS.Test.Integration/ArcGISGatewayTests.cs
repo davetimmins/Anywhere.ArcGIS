@@ -673,5 +673,49 @@
             Assert.True(result.Results.Any());
             Assert.True(result.Results.All(i => i.Geometry == null));
         }
+
+        [Fact]
+        public async Task CanQueryAttachments()
+        {
+            var gateway = new PortalGateway("http://services1.arcgis.com/YFRZ5T5eRL3tLQNK/ArcGIS/");
+
+            var queryAttachments = new QueryAttachments(@"test_sync/FeatureServer/0".AsEndpoint())
+            {
+                AttachmentTypes = "image/png",
+                DefinitionExpression = "ASSET_R_ID = 44",
+                GlobalIds = new List<string> { "2aa7a8fd-6f6c-44e4-827d-14b4acc2123a" }
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.QueryAttachments(queryAttachments);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.AttachmentGroups.Any());
+
+            var group = result.AttachmentGroups.First();
+            Assert.Equal(group.ParentGlobalId, queryAttachments.GlobalIds.First());            
+            Assert.Equal(group.AttachmentInfos.First().ContentType, queryAttachments.AttachmentTypes);
+        }
+
+        [Fact]
+        public async Task CanQueryDomains()
+        {
+            var gateway = new PortalGateway("http://gis.stlouiscountymn.gov/arcgis");
+
+            var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/".AsEndpoint())
+            {
+                LayerIdsToSearch = new List<int> { 0 }
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.QueryDomains(queryDomains);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.Domains.Any());
+        }
     }
 }
