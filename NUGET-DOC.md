@@ -26,6 +26,7 @@ Supports the following as typed operations:
  - `QueryForIds` only return the ObjectIds for the results of the query operation
  - `QueryForExtent` return the bounding extent for the result of the query operation
  - `QueryAttachments` return attachments grouped by the source feature object Ids and global id
+ - `QueryDomains` returns full domain information for the domains referenced by the layers in the service
  - `Find` search across _n_ layers and fields in a service
  - `ApplyEdits` post adds, updates and deletes to a feature service layer
  - `Geocode` single line of input to perform a geocode using a custom locator or the Esri world locator
