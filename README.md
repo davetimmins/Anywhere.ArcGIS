@@ -39,6 +39,7 @@ Supports the following as typed operations:
  - `QueryForCount` only return the number of results for the query operation
  - `QueryForIds` only return the ObjectIds for the results of the query operation
  - `QueryForExtent` return the bounding extent for the result of the query operation
+ - `QueryAttachments` return attachments grouped by the source feature object Ids and global id
  - `Find` search across _n_ layers and fields in a service
  - `ApplyEdits` post adds, updates and deletes to a feature service layer
  - `DeleteFeatures` delete features in a feature layer or table
