@@ -10,7 +10,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/davetimmins/Anywhere.ArcGIS</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/logo.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/davetimmins/ArcGIS.PCL</RepositoryUrl>
+    <RepositoryUrl>https://github.com/davetimmins/Anywhere.ArcGIS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
     <PackageReleaseNotes>Initial port of ArcGIS.PCL to netstandard</PackageReleaseNotes>

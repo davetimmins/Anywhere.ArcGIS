@@ -61,6 +61,8 @@ Supports the following as typed operations:
  - `DescribeServices` return services information (name, sublayers etc.)
  - `DescribeService` return service information (name, sublayers etc.)
  - `DescribeLayer` return layer information
+ - `HealthCheck` verify that the server is accepting requests
+ - `GetFeature` return a feature from a map/feature service
 
 REST admin operations:
 
