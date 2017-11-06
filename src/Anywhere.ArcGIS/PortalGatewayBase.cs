@@ -163,6 +163,19 @@
         }
 
         /// <summary>
+        /// The feature resource represents a single feature in a layer in a map service.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="layerFeature"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
+        {
+            return Get<LayerFeatureResponse<T>, LayerFeature>(layerFeature, ct);
+        }
+
+        /// <summary>
         /// Call the query operation
         /// </summary>
         /// <typeparam name="T">The geometry type for the result set</typeparam>
@@ -355,7 +368,7 @@
         /// <param name="createReplica"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public Task<ArcGISReplica<T>> CreateReplica<T>(CreateReplica createReplica, CancellationToken ct = default(CancellationToken))
+        public virtual Task<ArcGISReplica<T>> CreateReplica<T>(CreateReplica createReplica, CancellationToken ct = default(CancellationToken))
             where T : IGeometry
         {
             return Post<ArcGISReplica<T>, CreateReplica>(createReplica, ct);
@@ -368,12 +381,12 @@
         /// <param name="unregisterReplica"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public Task<PortalResponse> UnregisterReplica(UnregisterReplica unregisterReplica, CancellationToken ct = default(CancellationToken))
+        public virtual Task<PortalResponse> UnregisterReplica(UnregisterReplica unregisterReplica, CancellationToken ct = default(CancellationToken))
         {
             return Post<PortalResponse, UnregisterReplica>(unregisterReplica, ct);
         }
 
-        public async Task<FileInfo> DownloadAttachmentToLocal(Attachment attachment, string documentLocation)
+        public virtual async Task<FileInfo> DownloadAttachmentToLocal(Attachment attachment, string documentLocation)
         {
             if (attachment == null)
             {
@@ -431,7 +444,7 @@
         /// Each edit result indicates whether the edit was successful or not. 
         /// If successful, the objectId of the result is the ID of the deleted attachment. 
         /// If unsuccessful, it also includes an error code and an error description.</returns>
-        public Task<DeleteAttachmentsResponse> DeleteAttachments(DeleteAttachments deletes, CancellationToken ct = default(CancellationToken))
+        public virtual Task<DeleteAttachmentsResponse> DeleteAttachments(DeleteAttachments deletes, CancellationToken ct = default(CancellationToken))
         {
             return Post<DeleteAttachmentsResponse, DeleteAttachments>(deletes, ct);
         }
@@ -442,7 +455,7 @@
         /// <param name="queryAttachments"></param>
         /// <param name="ct"></param>
         /// <returns>Attachments grouped by the source feature object Ids and global ids (if they exist)</returns>
-        public Task<QueryAttachmentsResponse> QueryAttachments(QueryAttachments queryAttachments, CancellationToken ct = default(CancellationToken))
+        public virtual Task<QueryAttachmentsResponse> QueryAttachments(QueryAttachments queryAttachments, CancellationToken ct = default(CancellationToken))
         {
             return Post<QueryAttachmentsResponse, QueryAttachments>(queryAttachments, ct);
         }
@@ -454,7 +467,7 @@
         /// <param name="queryDomains">The operation takes an array of layer IDs</param>
         /// <param name="ct"></param>
         /// <returns>The set of domains referenced by the layers</returns>
-        public Task<QueryDomainsResponse> QueryDomains(QueryDomains queryDomains, CancellationToken ct = default(CancellationToken))
+        public virtual Task<QueryDomainsResponse> QueryDomains(QueryDomains queryDomains, CancellationToken ct = default(CancellationToken))
         {
             return Get<QueryDomainsResponse, QueryDomains>(queryDomains, ct);
         }

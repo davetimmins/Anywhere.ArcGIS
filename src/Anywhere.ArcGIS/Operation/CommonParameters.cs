@@ -28,6 +28,7 @@ namespace Anywhere.ArcGIS.Operation
         public const string ServiceReport = "services/{0}/report";
         public const string ArcGISOnlineSearch = "search";
         public const string ServerInfoRoute = "rest/info";
+        public const string ServerHealthCheckRoute = "rest/info/healthCheck";
     }
 
     /// <summary>

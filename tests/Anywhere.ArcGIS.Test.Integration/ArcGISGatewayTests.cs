@@ -717,5 +717,44 @@
             Assert.Null(result.Error);
             Assert.True(result.Domains.Any());
         }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.co.nz/arcgis")]
+        [InlineData("http://services.arcgisonline.com/arcgis")]
+        [InlineData("https://services.arcgisonline.com/arcgis")]
+        public async Task CanGetHealthCheck(string rootUrl)
+        {
+            var gateway = new PortalGateway(rootUrl);
+            
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.HealthCheck();
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.IsHealthy);
+        }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.com/arcgis", "Specialty/Soil_Survey_Map/MapServer/2", 1)]
+        [InlineData("https://services.arcgisonline.com/arcgis/", "Specialty/Soil_Survey_Map/MapServer/2", 2)]
+        [InlineData("https://services.arcgisonline.com/arcgis", "Specialty/Soil_Survey_Map/MapServer/1", 1)]
+        public async Task CanGetFeature(string rootUrl, string relativeUrl, long objectId)
+        {
+            var gateway = new PortalGateway(rootUrl);
+
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.GetFeature<Polygon>(new LayerFeature(relativeUrl.AsEndpoint(), objectId));
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.Feature);
+            Assert.NotNull(result.Feature.Attributes);
+            Assert.NotNull(result.Feature.Geometry);
+            Assert.Equal(result.Feature.ObjectID, objectId);
+        }
     }
 }

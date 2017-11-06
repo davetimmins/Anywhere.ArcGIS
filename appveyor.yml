@@ -1,3 +1,5 @@
+init:
+  - git config --global core.autocrlf true
 version: 1.0.{build}
 image: Visual Studio 2017
 test: on
@@ -7,4 +9,4 @@ branches:
   only:
   - dev
 build_script:
-- ps: .\Build.ps1
+- ps: .\build.ps1

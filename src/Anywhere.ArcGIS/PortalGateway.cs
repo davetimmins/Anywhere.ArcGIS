@@ -59,6 +59,16 @@
         { }
 
         /// <summary>
+        /// Request the health of a server
+        /// </summary>
+        /// <param name="ct">Optional cancellation token to cancel pending request</param>
+        /// <returns>True if the server is available to accept requests, otherwise false</returns>
+        public virtual Task<HealthCheckResponse> HealthCheck(CancellationToken ct = default(CancellationToken))
+        {
+            return Get<HealthCheckResponse, HealthCheck>(new HealthCheck(), ct);
+        }
+
+        /// <summary>
         /// Recursively parses an ArcGIS Server site and discovers the resources available
         /// </summary>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
