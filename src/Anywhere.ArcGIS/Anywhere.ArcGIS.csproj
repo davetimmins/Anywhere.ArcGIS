@@ -5,7 +5,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Dave Timmins</Authors>
     <Company>Dave Timmins</Company>
+    <Title>Anywhere.ArcGIS</Title>
     <Description>Operations and data types used with the ArcGIS Server REST API.</Description>
+    <Summary>Operations and data types used with the ArcGIS Server REST API.</Summary>
     <Copyright>Copyright Dave Timmins (c) 2017. All rights reserved.</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/davetimmins/Anywhere.ArcGIS</PackageProjectUrl>
