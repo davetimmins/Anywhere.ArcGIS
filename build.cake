@@ -35,11 +35,13 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    DotNetCoreBuild(solution,
-        new DotNetCoreBuildSettings()
-            {
-                Configuration = configuration
-            });
+    DotNetCoreBuild(
+        solution,
+        new DotNetCoreBuildSettings
+        {
+            Configuration = configuration,
+            ArgumentCustomization = args => args.Append($"/p:CI=true  /v:n")
+		});
 });
 
 Task("Test")

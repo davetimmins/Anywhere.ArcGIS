@@ -220,6 +220,7 @@
             Assert.True(result.Features.Any());
             Assert.Null(result.Links);
             Assert.True(result.Features.All(i => i.Geometry != null));
+            Assert.Equal(typeof(Point), result.GeometryType);
         }
 
         [Fact]
