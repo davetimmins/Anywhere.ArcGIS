@@ -163,6 +163,19 @@
         }
 
         /// <summary>
+        /// The feature resource represents a single feature in a layer in a map service.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="layerFeature"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
+        {
+            return Get<LayerFeatureResponse<T>, LayerFeature>(layerFeature, ct);
+        }
+
+        /// <summary>
         /// Call the query operation
         /// </summary>
         /// <typeparam name="T">The geometry type for the result set</typeparam>
@@ -347,18 +360,33 @@
             return result;
         }
 
-        public Task<ArcGISReplica<T>> CreateReplica<T>(CreateReplica createReplica, CancellationToken ct = default(CancellationToken))
+        /// <summary>
+        /// This operation creates the replica between the feature service and a client based on a client-supplied replica definition. 
+        /// It requires the Sync capability. 
+        /// </summary>
+        /// <typeparam name="T">The geometry type for the result</typeparam>
+        /// <param name="createReplica"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<ArcGISReplica<T>> CreateReplica<T>(CreateReplica createReplica, CancellationToken ct = default(CancellationToken))
             where T : IGeometry
         {
             return Post<ArcGISReplica<T>, CreateReplica>(createReplica, ct);
         }
 
-        public Task<PortalResponse> UnregisterReplica(UnregisterReplica unregisterReplica, CancellationToken ct = default(CancellationToken))
+        /// <summary>
+        /// This operation unregisters a replica on the feature service. 
+        /// It requires the Sync capability.
+        /// </summary>
+        /// <param name="unregisterReplica"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<PortalResponse> UnregisterReplica(UnregisterReplica unregisterReplica, CancellationToken ct = default(CancellationToken))
         {
             return Post<PortalResponse, UnregisterReplica>(unregisterReplica, ct);
         }
 
-        public async Task<FileInfo> DownloadAttachmentToLocal(Attachment attachment, string documentLocation)
+        public virtual async Task<FileInfo> DownloadAttachmentToLocal(Attachment attachment, string documentLocation)
         {
             if (attachment == null)
             {
@@ -404,14 +432,44 @@
             return new FileInfo(fileInfo.FullName);
         }
 
-        public Task<DeleteAttachmentsResponse> DeleteAttachments(DeleteAttachments deletes, CancellationToken ct = default(CancellationToken))
+        /// <summary>
+        /// This operation deletes attachments associated with a feature. 
+        /// Deleting an attachment is a feature update; it requires the Update capability.
+        /// This operation is available only if the layer has advertised that it has attachments. 
+        /// A layer has attachments if its hasAttachments property is true.
+        /// </summary>
+        /// <param name="deletes"></param>
+        /// <param name="ct"></param>
+        /// <returns>An array of edit result objects. 
+        /// Each edit result indicates whether the edit was successful or not. 
+        /// If successful, the objectId of the result is the ID of the deleted attachment. 
+        /// If unsuccessful, it also includes an error code and an error description.</returns>
+        public virtual Task<DeleteAttachmentsResponse> DeleteAttachments(DeleteAttachments deletes, CancellationToken ct = default(CancellationToken))
         {
             return Post<DeleteAttachmentsResponse, DeleteAttachments>(deletes, ct);
         }
 
-        public Task<QueryAttachmentsResponse> QueryAttachments(QueryAttachments queryAttachments, CancellationToken ct = default(CancellationToken))
+        /// <summary>
+        /// Query for attachments
+        /// </summary>
+        /// <param name="queryAttachments"></param>
+        /// <param name="ct"></param>
+        /// <returns>Attachments grouped by the source feature object Ids and global ids (if they exist)</returns>
+        public virtual Task<QueryAttachmentsResponse> QueryAttachments(QueryAttachments queryAttachments, CancellationToken ct = default(CancellationToken))
         {
             return Post<QueryAttachmentsResponse, QueryAttachments>(queryAttachments, ct);
+        }
+
+        /// <summary>
+        /// The queryDomains operation returns full domain information for the domains referenced by the layers in the service. 
+        /// This operation is performed on a map / feature service resource.
+        /// </summary>
+        /// <param name="queryDomains">The operation takes an array of layer IDs</param>
+        /// <param name="ct"></param>
+        /// <returns>The set of domains referenced by the layers</returns>
+        public virtual Task<QueryDomainsResponse> QueryDomains(QueryDomains queryDomains, CancellationToken ct = default(CancellationToken))
+        {
+            return Get<QueryDomainsResponse, QueryDomains>(queryDomains, ct);
         }
 
         async Task<Token> CheckGenerateToken(CancellationToken ct)

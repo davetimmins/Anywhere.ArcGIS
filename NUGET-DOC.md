@@ -25,8 +25,11 @@ Supports the following as typed operations:
  - `QueryForCount` only return the number of results for the query operation
  - `QueryForIds` only return the ObjectIds for the results of the query operation
  - `QueryForExtent` return the bounding extent for the result of the query operation
+ - `QueryAttachments` return attachments grouped by the source feature object Ids and global id
+ - `QueryDomains` returns full domain information for the domains referenced by the layers in the service
  - `Find` search across _n_ layers and fields in a service
  - `ApplyEdits` post adds, updates and deletes to a feature service layer
+ - `DeleteFeatures` delete features in a feature layer or table
  - `Geocode` single line of input to perform a geocode using a custom locator or the Esri world locator
  - `Suggest` lightweight geocode operation that only returns text results, commonly used for predictive searching
  - `ReverseGeocode` find location candidates for a input point location
@@ -42,6 +45,8 @@ Supports the following as typed operations:
  - `DescribeServices` return services information (name, sublayers etc.)
  - `DescribeService` return service information (name, sublayers etc.)
  - `DescribeLayer` return layer information
+ - `HealthCheck` verify that the server is accepting requests
+ - `GetFeature` return a feature from a map/feature service
 
 REST admin operations:
 

@@ -220,6 +220,7 @@
             Assert.True(result.Features.Any());
             Assert.Null(result.Links);
             Assert.True(result.Features.All(i => i.Geometry != null));
+            Assert.Equal(typeof(Point), result.GeometryType);
         }
 
         [Fact]
@@ -672,6 +673,89 @@
             Assert.Null(result.Error);
             Assert.True(result.Results.Any());
             Assert.True(result.Results.All(i => i.Geometry == null));
+        }
+
+        [Fact]
+        public async Task CanQueryAttachments()
+        {
+            var gateway = new PortalGateway("http://services1.arcgis.com/YFRZ5T5eRL3tLQNK/ArcGIS/");
+
+            var queryAttachments = new QueryAttachments(@"test_sync/FeatureServer/0".AsEndpoint())
+            {
+                AttachmentTypes = "image/png",
+                DefinitionExpression = "ASSET_R_ID = 44",
+                GlobalIds = new List<string> { "2aa7a8fd-6f6c-44e4-827d-14b4acc2123a" }
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.QueryAttachments(queryAttachments);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.AttachmentGroups.Any());
+
+            var group = result.AttachmentGroups.First();
+            Assert.Equal(group.ParentGlobalId, queryAttachments.GlobalIds.First());            
+            Assert.Equal(group.AttachmentInfos.First().ContentType, queryAttachments.AttachmentTypes);
+        }
+
+        [Fact]
+        public async Task CanQueryDomains()
+        {
+            var gateway = new PortalGateway("http://gis.stlouiscountymn.gov/arcgis");
+
+            var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/".AsEndpoint())
+            {
+                LayerIdsToSearch = new List<int> { 0 }
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.QueryDomains(queryDomains);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.Domains.Any());
+        }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.co.nz/arcgis")]
+        [InlineData("http://services.arcgisonline.com/arcgis")]
+        [InlineData("https://services.arcgisonline.com/arcgis")]
+        public async Task CanGetHealthCheck(string rootUrl)
+        {
+            var gateway = new PortalGateway(rootUrl);
+            
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.HealthCheck();
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.IsHealthy);
+        }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.com/arcgis", "Specialty/Soil_Survey_Map/MapServer/2", 1)]
+        [InlineData("https://services.arcgisonline.com/arcgis/", "Specialty/Soil_Survey_Map/MapServer/2", 2)]
+        [InlineData("https://services.arcgisonline.com/arcgis", "Specialty/Soil_Survey_Map/MapServer/1", 1)]
+        public async Task CanGetFeature(string rootUrl, string relativeUrl, long objectId)
+        {
+            var gateway = new PortalGateway(rootUrl);
+
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.GetFeature<Polygon>(new LayerFeature(relativeUrl.AsEndpoint(), objectId));
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.Feature);
+            Assert.NotNull(result.Feature.Attributes);
+            Assert.NotNull(result.Feature.Geometry);
+            Assert.Equal(result.Feature.ObjectID, objectId);
         }
     }
 }

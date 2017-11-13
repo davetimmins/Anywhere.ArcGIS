@@ -33,6 +33,9 @@
         [DataMember(Name = "owningSystemUrl")]
         public string OwningSystemUrl { get; set; }
 
+        [DataMember(Name = "owningTenant")]
+        public string OwningTenant { get; set; }
+
         [DataMember(Name = "authInfo")]
         public AuthInfo AuthenticationInfo { get; set; }
     }
@@ -48,5 +51,25 @@
 
         [DataMember(Name = "shortLivedTokenValidity")]
         public int ShortLivedTokenValidity { get; set; }
+    }
+
+    /// <summary>
+    /// The health check reports if the responding machine in the ArcGIS Server site is able to receive and process requests.
+    /// For example, during site creation, this URL reports the site is unhealthy because it can't take requests at that time.
+    /// This endpoint is useful if you're setting up a third-party load balancer or other monitoring software that supports a health check function.
+    /// </summary>
+    [DataContract]
+    public class HealthCheck : ArcGISServerOperation
+    {
+        public HealthCheck(Action beforeRequest = null, Action afterRequest = null)
+            : base(new RootServerEndpoint(Operations.ServerHealthCheckRoute), beforeRequest, afterRequest)
+        { }
+    }
+
+    [DataContract]
+    public class HealthCheckResponse : PortalResponse
+    {
+        [DataMember(Name = "success")]
+        public bool IsHealthy { get; set; }
     }
 }

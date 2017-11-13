@@ -6,6 +6,7 @@ namespace Anywhere.ArcGIS.Operation
     {
         public const string Query = "query";
         public const string QueryAttachments = "queryAttachments";
+        public const string QueryDomains = "queryDomains";
         public const string Find = "find";
         public const string ApplyEdits = "applyEdits";
         public const string DeleteAttachments = "deleteAttachments";
@@ -27,6 +28,7 @@ namespace Anywhere.ArcGIS.Operation
         public const string ServiceReport = "services/{0}/report";
         public const string ArcGISOnlineSearch = "search";
         public const string ServerInfoRoute = "rest/info";
+        public const string ServerHealthCheckRoute = "rest/info/healthCheck";
     }
 
     /// <summary>
