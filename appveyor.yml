@@ -1,12 +1,77 @@
-init:
-  - git config --global core.autocrlf true
-version: 1.0.{build}
-image: Visual Studio 2017
-test: on
-pull_requests:
-  do_not_increment_build_number: true
-branches:
-  only:
-  - dev
-build_script:
-- ps: .\build.ps1
+
+
+# master branch
+-
+  branches:
+    only:
+      - master
+  
+  init:
+    - git config --global core.autocrlf true
+
+  image: Visual Studio 2017
+
+  version: "{build}"
+
+  build_script:
+    - ps: .\build.ps1
+
+  test: off
+
+  artifacts:
+    - path: artifacts\output\*.nupkg
+      name: packages
+    - path: artifacts\logs
+    - path: artifacts\tests
+
+# dev branch
+-
+  branches:
+    only:
+      - dev
+
+  init:
+    - git config --global core.autocrlf true
+
+  image: Visual Studio 2017
+
+  version: "{build}"
+
+  build_script:
+    - SET VERSION_SUFFIX=-%APPVEYOR_REPO_BRANCH%%APPVEYOR_BUILD_NUMBER%
+    - ps: .\build.ps1
+
+  test: off
+
+  artifacts:
+    - path: artifacts\output\*.nupkg
+      name: packages
+    - path: artifacts\logs
+    - path: artifacts\tests
+
+  deploy:
+    - provider: NuGet
+      server: https://www.myget.org/F/0b0e5c5f92fe4ccbba32eec8c0bb4c22/
+      api_key:
+        secure: UAYBSvPmTiXAgAzxVTG1XcQKqD6gkGVT5Y7zpVycpw86vd7U+G1e47ufZVLEDobt
+      artifact: packages
+
+# all other branches
+-
+  init:
+    - git config --global core.autocrlf true
+
+  image: Visual Studio 2017
+  
+  version: "{build}"
+
+  build_script:
+    - SET VERSION_SUFFIX=-%APPVEYOR_REPO_BRANCH%%APPVEYOR_BUILD_NUMBER%
+    - ps: .\build.ps1
+
+  test: off
+
+  artifacts:
+    - path: artifacts\output\*.nupkg
+    - path: artifacts\logs
+    - path: artifacts\tests
