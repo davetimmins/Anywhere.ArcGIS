@@ -12,6 +12,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class Query : ArcGISServerOperation
     {
+        public Query(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         /// <summary>
         /// Represents a request for a query against a service resource
         /// </summary>
@@ -296,6 +300,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForIds : Query
     {
+        public QueryForIds(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         // TODO : make these work with or without input geometry
         public QueryForIds(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
@@ -323,12 +331,15 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForCount : Query
     {
+        public QueryForCount(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public QueryForCount(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         {
             ReturnGeometry = false;
         }
-
 
         [DataMember(Name = "returnCountOnly")]
         public bool ReturnCountOnly { get { return true; } }
@@ -347,6 +358,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForExtent : QueryForCount
     {
+        public QueryForExtent(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public QueryForExtent(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         { }

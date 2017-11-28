@@ -3,7 +3,6 @@
     using Anywhere.ArcGIS;
     using Anywhere.ArcGIS.Common;
     using Anywhere.ArcGIS.Operation;
-    using Anywhere.ArcGIS.Serializers;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -168,7 +167,7 @@
             for (var i = 0; i < 3000; i++)
                 longWhere.Append(i);
 
-            var query = new Query(@"/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { Where = longWhere + "'" };
+            var query = new Query(@"/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0") { Where = longWhere + "'" };
 
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
@@ -208,7 +207,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var query = new Query(relativeUrl.AsEndpoint());
+            var query = new Query(relativeUrl);
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.Query<Point>(query);
@@ -248,7 +247,7 @@
 
             gateway = new ArcGISGateway();
 
-            var queryPolygon = new Query(@"/Hydrography/Watershed173811/MapServer/0".AsEndpoint()) { Where = "areasqkm = 0.012", OutFields = new List<string> { "areasqkm" } };
+            var queryPolygon = new Query(@"/Hydrography/Watershed173811/MapServer/0") { Where = "areasqkm = 0.012", OutFields = new List<string> { "areasqkm" } };
             var resultPolygon = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.QueryAsPost<Polygon>(queryPolygon);
@@ -272,7 +271,7 @@
             Assert.True(resultPoint.Features.Any());
             Assert.True(resultPoint.Features.All(i => i.Geometry == null));
 
-            var queryPolyline = new Query(@"Hydrography/Watershed173811/MapServer/1".AsEndpoint()) { OutFields = new List<string> { "lengthkm" }, ReturnGeometry = false };
+            var queryPolyline = new Query(@"Hydrography/Watershed173811/MapServer/1") { OutFields = new List<string> { "lengthkm" }, ReturnGeometry = false };
             var resultPolyline = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.QueryAsPost<Polyline>(queryPolyline);
@@ -308,7 +307,7 @@
         {
             var gateway = new ArcGISGateway();
 
-            var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { ReturnGeometry = false };
+            var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0") { ReturnGeometry = false };
             var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.Query<Point>(queryPoint);
@@ -349,7 +348,7 @@
             Assert.True(resultPolyline.Features.All(i => i.Geometry == null));
             Assert.True(resultPolyline.Features.All(i => i.Attributes != null && i.Attributes.Count == 1));
 
-            var queryPolygon = new Query(@"/Hydrography/Watershed173811/MapServer/0".AsEndpoint())
+            var queryPolygon = new Query(@"/Hydrography/Watershed173811/MapServer/0")
             {
                 Where = "areasqkm = 0.012",
                 OutFields = new List<string> { "areasqkm", "elevation", "resolution", "reachcode" }
@@ -380,7 +379,7 @@
                 return gateway.Query<Point>(query);
             });
 
-            var queryDesc = new Query(relativeUrl.AsEndpoint())
+            var queryDesc = new Query(relativeUrl)
             {
                 OrderBy = new List<string> { orderby + " DESC" },
                 ReturnGeometry = false
@@ -421,7 +420,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var queryCount = new QueryForCount(relativeUrl.AsEndpoint());
+            var queryCount = new QueryForCount(relativeUrl);
             var resultCount = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.QueryForCount(queryCount);
@@ -465,7 +464,7 @@
         {
             var gateway = new PortalGateway("http://services.arcgisonline.com/arcgis/");
 
-            var query = new QueryForIds(@"/Specialty/Soil_Survey_Map/MapServer/2".AsEndpoint());
+            var query = new QueryForIds(@"/Specialty/Soil_Survey_Map/MapServer/2");
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.QueryForIds(query);
@@ -533,7 +532,7 @@
                 new Point { X = 0, Y = 0 }
             }.ToPointCollectionList();
 
-            var queryPointPolygonResults = new Query(serviceUrl.AsEndpoint())
+            var queryPointPolygonResults = new Query(serviceUrl)
             {
                 Geometry = new Polygon { Rings = rings }
             };
@@ -599,7 +598,7 @@
             feature.Attributes.Add("description", "'something'"); // problem with serialization means we need single quotes around string values
             feature.Attributes.Add("objectId", id);
 
-            var updates = new ApplyEdits<Point>(@"Fire/Sheep/FeatureServer/0".AsEndpoint())
+            var updates = new ApplyEdits<Point>(@"Fire/Sheep/FeatureServer/0")
             {
                 Updates = new List<Feature<Point>> { feature }
             };
@@ -635,7 +634,7 @@
         {
             var gateway = new ArcGISGateway();
 
-            var find = new Find(@"/Network/USA/MapServer".AsEndpoint())
+            var find = new Find(@"/Network/USA/MapServer")
             {
                 SearchText = "route",
                 LayerIdsToSearch = new List<int> { 1, 2, 3 },
@@ -680,7 +679,7 @@
         {
             var gateway = new PortalGateway("http://services1.arcgis.com/YFRZ5T5eRL3tLQNK/ArcGIS/");
 
-            var queryAttachments = new QueryAttachments(@"test_sync/FeatureServer/0".AsEndpoint())
+            var queryAttachments = new QueryAttachments(@"test_sync/FeatureServer/0")
             {
                 AttachmentTypes = "image/png",
                 DefinitionExpression = "ASSET_R_ID = 44",
@@ -705,7 +704,7 @@
         {
             var gateway = new PortalGateway("http://gis.stlouiscountymn.gov/arcgis");
 
-            var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/".AsEndpoint())
+            var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/")
             {
                 LayerIdsToSearch = new List<int> { 0 }
             };
@@ -747,7 +746,7 @@
 
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.GetFeature<Polygon>(new LayerFeature(relativeUrl.AsEndpoint(), objectId));
+                return gateway.GetFeature<Polygon>(new LayerFeature(relativeUrl, objectId));
             });
 
             Assert.NotNull(result);

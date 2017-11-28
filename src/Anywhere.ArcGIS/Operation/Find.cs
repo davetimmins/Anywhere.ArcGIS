@@ -11,6 +11,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class Find : ArcGISServerOperation
     {
+        public Find(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         /// <summary>
         /// Represents a request for a find against a service resource
         /// </summary>

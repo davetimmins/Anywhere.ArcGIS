@@ -10,6 +10,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryDomains : ArcGISServerOperation
     {
+        public QueryDomains(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public QueryDomains(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.QueryDomains, beforeRequest, afterRequest)
         {
@@ -71,5 +75,4 @@ namespace Anywhere.ArcGIS.Operation
         [DataMember(Name = "code")]
         public object Value { get; set; }
     }
-
 }

@@ -10,6 +10,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class DeleteFeatures : ArcGISServerOperation
     {
+        public DeleteFeatures(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public DeleteFeatures(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.DeleteFeatures, beforeRequest, afterRequest)
         {

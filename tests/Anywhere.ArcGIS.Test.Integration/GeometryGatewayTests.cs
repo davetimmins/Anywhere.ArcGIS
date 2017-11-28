@@ -22,7 +22,7 @@
             var gateway = new PortalGateway("http://sampleserver1.arcgisonline.com/ArcGIS");
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5".AsEndpoint()) { Where = "STATE_NAME = 'Oregon'" });
+                return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5") { Where = "STATE_NAME = 'Oregon'" });
             });
             var features = result.Features.Where(f => f.Geometry.Rings.Any()).ToList();
 
@@ -81,7 +81,7 @@
             var gateway = new PortalGateway("http://sampleserver1.arcgisonline.com/ArcGIS");
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5".AsEndpoint()) { Where = "STATE_NAME = 'Oregon'" });
+                return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5") { Where = "STATE_NAME = 'Oregon'" });
             });
 
             var features = result.Features.Where(f => f.Geometry.Rings.Any()).ToList();

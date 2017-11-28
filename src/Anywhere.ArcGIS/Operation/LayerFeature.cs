@@ -1,14 +1,16 @@
 ﻿using Anywhere.ArcGIS.Common;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Anywhere.ArcGIS.Operation
 {
     [DataContract]
     public class LayerFeature : ArcGISServerOperation
     {
+        public LayerFeature(string relativeUrl, long featureId, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), featureId, beforeRequest, afterRequest)
+        { }
+
         public LayerFeature(ArcGISServerEndpoint endpoint, long featureId, Action beforeRequest = null, Action afterRequest = null)
             : base($"{endpoint.RelativeUrl.Trim('/')}/{featureId}", beforeRequest, afterRequest)
         { }
