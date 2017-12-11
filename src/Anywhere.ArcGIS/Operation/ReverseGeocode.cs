@@ -49,6 +49,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class ReverseGeocode : GeocodeOperation
     {
+        public ReverseGeocode(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public ReverseGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.ReverseGeocode), beforeRequest, afterRequest)
         {

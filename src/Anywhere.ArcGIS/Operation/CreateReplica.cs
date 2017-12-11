@@ -18,7 +18,9 @@
     [DataContract]
     public class CreateReplica : ArcGISServerOperation
     {
-        public const string Operation = "createReplica";
+        public CreateReplica(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
 
         public CreateReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.CreateReplica, beforeRequest, afterRequest)
@@ -234,6 +236,10 @@
     [DataContract]
     public class UnregisterReplica : ArcGISServerOperation
     {
+        public UnregisterReplica(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public UnregisterReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.UnregisterReplica, beforeRequest, afterRequest)
         { }

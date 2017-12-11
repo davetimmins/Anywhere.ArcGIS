@@ -16,6 +16,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryAttachments : ArcGISServerOperation
     {
+        public QueryAttachments(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public QueryAttachments(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.QueryAttachments, beforeRequest, afterRequest)
         {

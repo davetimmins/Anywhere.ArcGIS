@@ -11,6 +11,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class SingleInputGeocode : GeocodeOperation
     {
+        public SingleInputGeocode(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public SingleInputGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.SingleInputGeocode), beforeRequest, afterRequest)
         {
@@ -98,6 +102,10 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class SuggestGeocode : GeocodeOperation
     {
+        public SuggestGeocode(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
+
         public SuggestGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.SuggestGeocode), beforeRequest, afterRequest)
         {

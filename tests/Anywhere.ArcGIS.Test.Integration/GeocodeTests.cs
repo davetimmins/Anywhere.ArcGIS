@@ -20,7 +20,7 @@
         public async Task CanGeocode(string rootUrl, string relativeUrl, string text, string sourceCountry = "")
         {
             var gateway = new PortalGateway(rootUrl);
-            var geocode = new SingleInputGeocode(relativeUrl.AsEndpoint())
+            var geocode = new SingleInputGeocode(relativeUrl)
             {
                 Text = text,
                 SourceCountry = sourceCountry
@@ -44,7 +44,7 @@
         public async Task CanSuggest(string rootUrl, string relativeUrl, string text)
         {
             var gateway = new PortalGateway(rootUrl);
-            var suggest = new SuggestGeocode(relativeUrl.AsEndpoint())
+            var suggest = new SuggestGeocode(relativeUrl)
             {
                 Text = text
             };
@@ -65,7 +65,7 @@
         public async Task CanReverseGeocodePoint(string rootUrl, string relativeUrl, double x, double y, int wkid)
         {
             var gateway = new PortalGateway(rootUrl);
-            var reverseGeocode = new ReverseGeocode(relativeUrl.AsEndpoint())
+            var reverseGeocode = new ReverseGeocode(relativeUrl)
             {
                 Location = new Point
                 {

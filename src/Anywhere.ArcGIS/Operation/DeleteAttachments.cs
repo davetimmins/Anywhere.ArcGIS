@@ -9,12 +9,20 @@ namespace Anywhere.ArcGIS.Operation
 {
     [DataContract]
     public class DeleteAttachments : ArcGISServerOperation
-    {        
+    {
+        public DeleteAttachments(string relativeUrl, long objectID, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), objectID, beforeRequest, afterRequest)
+        { }
+
         public DeleteAttachments(ArcGISServerEndpoint endpoint, long objectID, Action beforeRequest = null, Action afterRequest = null)
-            : this((endpoint.RelativeUrl.Trim('/') + string.Format("/{0}/{1}", objectID, Operations.DeleteAttachments)).AsEndpoint(), beforeRequest, afterRequest)
+            : this((endpoint.RelativeUrl.Trim('/') + string.Format("/{0}", objectID)).AsEndpoint(), beforeRequest, afterRequest)
         {
             AttachmentIds = new List<long>();
         }
+
+        public DeleteAttachments(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
+        { }
 
         public DeleteAttachments(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.DeleteAttachments, beforeRequest, afterRequest)
@@ -50,6 +58,10 @@ namespace Anywhere.ArcGIS.Operation
 
     public class AttachmentToPost : ArcGISServerOperation, IAttachment
     {
+        public AttachmentToPost(string relativeUrl, long objectID, string attachmentBase64Encoded, string fileName, string contentType, bool isUpdate = false)
+            : this(relativeUrl.AsEndpoint(), objectID, fileName, contentType, isUpdate)
+        { }
+
         public AttachmentToPost(ArcGISServerEndpoint endpoint, long objectID, string attachmentBase64Encoded, string fileName, string contentType, bool isUpdate = false)
             : this(endpoint, objectID, fileName, contentType, isUpdate)
         {
@@ -62,12 +74,20 @@ namespace Anywhere.ArcGIS.Operation
             Attachment = Convert.FromBase64String(AttachmentBase64Encoded);
         }
 
-        public AttachmentToPost(ArcGISServerEndpoint endpoint, long objectID, byte[] attachment, string fileName, string contentType, bool isUpdate = false)
+        public AttachmentToPost(string relativeUrl, long objectID, byte[] attachment, string fileName, string contentType, bool isUpdate = false)
+            : this(relativeUrl.AsEndpoint(), objectID, fileName, contentType, isUpdate)
+        { }
+
+         public AttachmentToPost(ArcGISServerEndpoint endpoint, long objectID, byte[] attachment, string fileName, string contentType, bool isUpdate = false)
             : this(endpoint, objectID, fileName, contentType, isUpdate)
         {
             Attachment = attachment ?? throw new ArgumentNullException(nameof(attachment));
             AttachmentBase64Encoded = Convert.ToBase64String(Attachment);
         }
+
+        AttachmentToPost(string relativeUrl, long objectID, string fileName, string contentType, bool isUpdate = false, Action beforeRequest = null, Action afterRequest = null)
+            : this(relativeUrl.AsEndpoint(), objectID, fileName, contentType, isUpdate, beforeRequest, afterRequest)
+        { }
 
         AttachmentToPost(ArcGISServerEndpoint endpoint, long objectID, string fileName, string contentType, bool isUpdate = false, Action beforeRequest = null, Action afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + string.Format("/{0}/{1}", objectID, isUpdate ? "updateAttachment" : "addAttachment"), beforeRequest, afterRequest)
