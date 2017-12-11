@@ -10,8 +10,11 @@
 
         public static ISerializer Create(Newtonsoft.Json.JsonSerializerSettings settings = null)
         {
-            _serializer = new JsonDotNetSerializer(settings);
-            return _serializer ?? new JsonDotNetSerializer(settings);
+            if (_serializer == null)
+            {
+                _serializer = new JsonDotNetSerializer(settings);
+            }
+            return _serializer;
         }
 
         readonly Newtonsoft.Json.JsonSerializerSettings _settings;
