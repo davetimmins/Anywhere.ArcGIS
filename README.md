@@ -23,6 +23,13 @@ Create an instance of that by specifying the root url of your server. The format
 
 ```c#
 var gateway = new PortalGateway("https://sampleserver3.arcgisonline.com/ArcGIS/");
+
+// If you want to access secure resources then pass in a username / password
+// this assumes the token service is in the default location for the ArcGIS Server
+var secureGateway = new PortalGateway("https://sampleserver3.arcgisonline.com/ArcGIS/", "username", "password");
+
+// Or use the static Create method which will discover the token service Url from the server Info endpoint
+var autoTokenProviderLocationGateway = await PortalGateway.Create("https://sampleserver3.arcgisonline.com/ArcGIS/", "username", "password");
 ```
 
 Now you have access to the various operations supported by it. For example to call a query against a service
