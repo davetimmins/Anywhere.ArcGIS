@@ -472,6 +472,25 @@
             return Get<QueryDomainsResponse, QueryDomains>(queryDomains, ct);
         }
 
+        /// <summary>
+        /// The export operation is performed on a map service resource. 
+        /// The result of this operation is a map image resource. 
+        /// This resource provides information about the exported map image such as its URL, its width and height, extent and scale.
+        /// 
+        /// Note that the extent displayed in the exported map image may not exactly match the extent sent in the bbox parameter when the aspect ratio of the image size does not match the aspect ratio of the bbox.
+        /// The aspect ratio is the height divided by the width. 
+        /// In these cases the extent is re-sized to prevent map images from appearing stretched. 
+        /// The exported map's extent is sent along with the response and may be used in client side calculations. 
+        /// So it is important that the client-side code update its extent based on the response.
+        /// </summary>
+        /// <param name="exportMap"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<ExportMapResponse> ExportMap(ExportMap exportMap, CancellationToken ct = default(CancellationToken))
+        {
+            return Get<ExportMapResponse, ExportMap>(exportMap, ct);
+        }
+
         async Task<Token> CheckGenerateToken(CancellationToken ct)
         {
             if (TokenProvider == null)
@@ -489,6 +508,48 @@
             return token;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exportMapResponse"></param>
+        /// <param name="folderLocation"></param>
+        /// <param name="fileName">If not specified a Guid will be used for the name</param>
+        /// <returns></returns>
+        public virtual async Task<FileInfo> DownloadExportMapToLocal(ExportMapResponse exportMapResponse, string folderLocation, string fileName = null)
+        {
+            LiteGuard.Guard.AgainstNullArgument(nameof(exportMapResponse), exportMapResponse);
+
+            if (string.IsNullOrWhiteSpace(exportMapResponse.ImageUrl))
+            {
+                throw new ArgumentNullException(nameof(exportMapResponse.ImageUrl));
+            }
+
+            if (string.IsNullOrWhiteSpace(folderLocation))
+            {
+                throw new ArgumentNullException(nameof(folderLocation));
+            }
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = Guid.NewGuid().ToString();
+            }
+            
+            var response = await _httpClient.GetAsync(exportMapResponse.ImageUrl);
+            response.EnsureSuccessStatusCode();
+            await response.Content.LoadIntoBufferAsync();
+
+            var fileInfo = new FileInfo(Path.Combine(folderLocation, $"{fileName}.{exportMapResponse.ImageFormat}"));
+            
+            using (var fileStream = new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            _logger.DebugFormat("Saved export map response to {0}.", fileInfo.FullName);
+
+            return new FileInfo(fileInfo.FullName);
+        }
+        
         void CheckRefererHeader(string referrer)
         {
             if (_httpClient == null || string.IsNullOrWhiteSpace(referrer))

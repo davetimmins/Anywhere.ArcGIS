@@ -66,6 +66,7 @@ Supports the following as typed operations:
  - `DescribeLayer` return layer information
  - `HealthCheck` verify that the server is accepting requests
  - `GetFeature` return a feature from a map/feature service
+ - `ExportMap` get an image (or url to the image) of a service
 
 REST admin operations:
 

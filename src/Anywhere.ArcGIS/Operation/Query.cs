@@ -52,6 +52,7 @@ namespace Anywhere.ArcGIS.Operation
         {
             get { return Geometry == null ? null : Geometry.SpatialReference ?? null; }
         }
+
         /// <summary>
         /// The type of geometry specified by the geometry parameter.
         /// The geometry type can be an envelope, point, line, or polygon.
