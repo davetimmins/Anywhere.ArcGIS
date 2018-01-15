@@ -695,7 +695,7 @@
             Assert.True(result.AttachmentGroups.Any());
 
             var group = result.AttachmentGroups.First();
-            Assert.Equal(group.ParentGlobalId, queryAttachments.GlobalIds.First());            
+            Assert.Equal(group.ParentGlobalId, queryAttachments.GlobalIds.First());
             Assert.Equal(group.AttachmentInfos.First().ContentType, queryAttachments.AttachmentTypes);
         }
 
@@ -725,7 +725,7 @@
         public async Task CanGetHealthCheck(string rootUrl)
         {
             var gateway = new PortalGateway(rootUrl);
-            
+
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.HealthCheck();
@@ -755,6 +755,63 @@
             Assert.NotNull(result.Feature.Attributes);
             Assert.NotNull(result.Feature.Geometry);
             Assert.Equal(result.Feature.ObjectID, objectId);
+        }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.com/arcgis", "Ocean/World_Ocean_Base/MapServer")]
+        public async Task CanExportMap(string rootUrl, string relativeUrl)
+        {
+            var gateway = new PortalGateway(rootUrl);
+
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.ExportMap(new ExportMap(relativeUrl)
+                {
+                    ExportExtent = new Extent
+                    {
+                        XMin = -28695213.908633016,
+                        YMin = -32794.530181307346,
+                        XMax = 28695213.908633016,
+                        YMax = 19971868.880408566,
+                        SpatialReference = SpatialReference.WebMercator
+                    }
+                });
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.ImageUrl);
+        }
+
+        [Theory]
+        [InlineData("https://services.arcgisonline.com/arcgis/", "Ocean/World_Ocean_Base/MapServer")]
+        public async Task CanDownloadExportMapResponse(string rootUrl, string relativeUrl)
+        {
+            var gateway = new PortalGateway(rootUrl);
+
+            var exportMapResult = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.ExportMap(new ExportMap(relativeUrl)
+                {
+                    ExportExtent = new Extent
+                    {
+                        XMin = -28695213.908633016,
+                        YMin = -32794.530181307346,
+                        XMax = 28695213.908633016,
+                        YMax = 19971868.880408566,
+                        SpatialReference = SpatialReference.WebMercator
+                    }
+                });
+            });
+
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.DownloadExportMapToLocal(exportMapResult, @"c:\temp\_tests_");
+            });
+
+            Assert.NotNull(result);
+            Assert.NotNull(result.FullName);
+            Assert.True(result.Exists);
         }
     }
 }

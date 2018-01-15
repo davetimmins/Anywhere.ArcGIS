@@ -15,8 +15,7 @@
     <RepositoryUrl>https://github.com/davetimmins/Anywhere.ArcGIS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
-    <PackageReleaseNotes>Initial port of ArcGIS.PCL to netstandard</PackageReleaseNotes>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SourceLink.Create.GitHub" Version="2.6.0" PrivateAssets="All" />
-    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.6.0" />
-    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.6.0" />
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.7.4" PrivateAssets="All" />
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.7.4" />
+    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.7.4" />
   </ItemGroup>
 </Project>

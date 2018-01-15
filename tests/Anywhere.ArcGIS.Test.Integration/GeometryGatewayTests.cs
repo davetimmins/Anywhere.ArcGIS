@@ -45,14 +45,16 @@
             Assert.NotEqual(projectedFeatures[0].Geometry.Rings[0], features[0].Geometry.Rings[0]);
         }
 
-        [Fact]
-        public async Task CanBuffer()
+        [Theory]
+        [InlineData("http://sampleserver1.arcgisonline.com/ArcGIS", "Demographics/ESRI_Census_USA/MapServer/5", "STATE_NAME = 'Texas'")]
+        [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "WorldTimeZones/MapServer/2", "REGION = 'Southeastern Asia'")]
+        public async Task CanBuffer(string rootUrl, string relativeUrl, string where)
         {
-            var gateway = new PortalGateway("http://sampleserver1.arcgisonline.com/ArcGIS");
+            var gateway = new PortalGateway(rootUrl);
 
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5".AsEndpoint()) { Where = "STATE_NAME = 'Texas'" });
+                return gateway.Query<Polygon>(new Query(relativeUrl) { Where = where });
             });
 
             var features = result.Features.Where(f => f.Geometry.Rings.Any()).ToList();
@@ -72,6 +74,7 @@
             });
 
             Assert.NotNull(featuresBuffered);
+            Assert.NotNull(featuresBuffered.FirstOrDefault()?.Geometry);
             Assert.Equal(featuresCount, featuresBuffered.Count);
         }
 

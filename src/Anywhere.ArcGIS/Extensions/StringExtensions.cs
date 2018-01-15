@@ -58,7 +58,11 @@
 
         public static string UrlEncode(this string text)
         {
-            return string.IsNullOrWhiteSpace(text) ? text : Uri.EscapeDataString(text);
+            return string.IsNullOrWhiteSpace(text) 
+                ? text 
+                : text.Length > 65520
+                    ? text // this will get sent to POST anyway so don't bother escaping
+                    : Uri.EscapeDataString(text);
         }
 
         /// <summary>
