@@ -458,7 +458,7 @@
             Assert.Null(result.Error);
             Assert.True(result.NumberOfResults > 0);
         }
-
+        
         [Fact]
         public async Task CanQueryForIds()
         {

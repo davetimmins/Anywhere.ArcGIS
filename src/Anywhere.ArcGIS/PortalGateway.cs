@@ -39,7 +39,9 @@
 
             var result = new PortalGateway(
                 rootUrl,
-                tokenProvider: new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password),
+                tokenProvider: !string.IsNullOrWhiteSpace(info.OwningSystemUrl) && (info.OwningSystemUrl.StartsWith("http://www.arcgis.com", StringComparison.OrdinalIgnoreCase) || info.OwningSystemUrl.StartsWith("https://www.arcgis.com", StringComparison.OrdinalIgnoreCase))
+                    ? new ArcGISOnlineTokenProvider(username, password)
+                    : new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password),
                 serializer: serializer,
                 httpClientFunc: httpClientFunc);
 
