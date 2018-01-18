@@ -270,6 +270,17 @@
         }
 
         /// <summary>
+        /// Provides a view into the life cycle of all instances of the service on all server machines within the cluster.
+        /// </summary>
+        /// <param name="serviceDescription">Service description usually generated from a previous call to DescribeSite</param>
+        /// <param name="ct">Optional cancellation token to cancel pending request</param>
+        /// <returns>The statistics for the server</returns>
+        public virtual Task<ServiceStatisticsResponse> ServiceStatistics(ServiceDescription serviceDescription, CancellationToken ct = default(CancellationToken))
+        {
+            return Get<ServiceStatisticsResponse, ServiceStatistics>(new ServiceStatistics(serviceDescription), ct);
+        }
+
+        /// <summary>
         /// Call the reverse geocode operation.
         /// </summary>
         /// <param name="reverseGeocode"></param>

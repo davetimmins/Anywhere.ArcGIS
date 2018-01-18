@@ -9,7 +9,7 @@ var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var solution = "./Anywhere.ArcGIS.sln";
 
-var version = "1.2.1";
+var version = "1.3.0";
 var versionSuffix = Environment.GetEnvironmentVariable("VERSION_SUFFIX");
 
 //////////////////////////////////////////////////////////////////////
