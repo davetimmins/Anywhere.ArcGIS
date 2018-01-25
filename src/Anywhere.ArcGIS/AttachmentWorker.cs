@@ -15,7 +15,7 @@ namespace Anywhere.ArcGIS
 {
     public class AttachmentWorker : IPortalGateway, IDisposable
     {
-        static HttpClient _httpClient;
+        HttpClient _httpClient;
         readonly ILog _logger;
 
         /// <summary>

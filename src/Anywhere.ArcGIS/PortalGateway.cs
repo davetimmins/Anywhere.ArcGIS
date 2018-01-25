@@ -274,7 +274,7 @@
         /// </summary>
         /// <param name="serviceDescription">Service description usually generated from a previous call to DescribeSite</param>
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
-        /// <returns>The statistics for the server</returns>
+        /// <returns>The statistics for the service</returns>
         public virtual Task<ServiceStatisticsResponse> ServiceStatistics(ServiceDescription serviceDescription, CancellationToken ct = default(CancellationToken))
         {
             return Get<ServiceStatisticsResponse, ServiceStatistics>(new ServiceStatistics(serviceDescription), ct);

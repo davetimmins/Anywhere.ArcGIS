@@ -16,7 +16,7 @@ var autoTokenProviderLocationGateway = await PortalGateway.Create("https://sampl
 Now you have access to the various operations supported by it. For example to call a query against a service
 
 ```c#
-var query = new Query("Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint())
+var query = new Query("Earthquakes/EarthquakesFromLastSevenDays/MapServer/0")
 { 
     Where = "magnitude > 4.0" 
 };
@@ -63,6 +63,7 @@ REST admin operations:
  - `ServiceReport` - admin operation to get the service report
  - `StartService` - admin operation to start a service
  - `StopService` - admin operation to stop a service
+ - `ServiceStatistics` - admin operation to get the statistics of a service
 
 There are also methods to add / update and download attachments for a feature and you can extend this library by writing your own operations.
 

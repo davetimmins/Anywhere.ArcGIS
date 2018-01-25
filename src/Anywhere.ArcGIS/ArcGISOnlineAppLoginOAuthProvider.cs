@@ -12,7 +12,7 @@
     /// </summary>
     public class ArcGISOnlineAppLoginOAuthProvider : ITokenProvider, IDisposable
     {
-        static HttpClient _httpClient;
+        HttpClient _httpClient;
         protected readonly GenerateOAuthToken OAuthRequest;
         Token _token;
         readonly ILog _logger;

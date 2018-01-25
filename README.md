@@ -82,6 +82,7 @@ REST admin operations:
  - `ServiceReport` - admin operation to get the service report
  - `StartService` - admin operation to start a service
  - `StopService` - admin operation to stop a service
+ - `ServiceStatistics` - admin operation to get the statistics of a service
 
 There are also methods to add / update and download attachments for a feature and you can extend this library by writing your own operations.
 

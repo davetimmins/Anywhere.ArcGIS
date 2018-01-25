@@ -20,7 +20,7 @@
         internal const string AGOPortalUrl = "https://www.arcgis.com/sharing/rest/";
         protected const string GeometryServerUrlRelative = "/Utilities/Geometry/GeometryServer";
         protected const string GeometryServerUrl = "https://utility.arcgisonline.com/arcgis/rest/services/Geometry/GeometryServer";
-        static HttpClient _httpClient;
+        HttpClient _httpClient;
         protected IEndpoint GeometryServiceIEndpoint;
         readonly ILog _logger;
 
