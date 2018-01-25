@@ -13,7 +13,7 @@
     /// </summary>
     public class FederatedTokenProvider : ITokenProvider, IDisposable
     {
-        static HttpClient _httpClient;
+        HttpClient _httpClient;
         protected readonly GenerateFederatedToken TokenRequest;
         Token _token;
         readonly ILog _logger;

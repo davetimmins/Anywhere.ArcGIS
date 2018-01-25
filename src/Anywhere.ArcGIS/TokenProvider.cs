@@ -14,7 +14,7 @@
     /// </summary>
     public class TokenProvider : ITokenProvider, IDisposable
     {
-        static HttpClient _httpClient;
+        HttpClient _httpClient;
         protected GenerateToken TokenRequest;
         Token _token;
         PublicKeyResponse _publicKey;

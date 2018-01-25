@@ -27,6 +27,7 @@ namespace Anywhere.ArcGIS.Operation
         public const string StartService = "services/{0}.{1}/start";
         public const string StopService = "services/{0}.{1}/stop";
         public const string ServiceReport = "services/{0}/report";
+        public const string ServiceStatistics = "services/{0}.{1}/statistics";
         public const string ArcGISOnlineSearch = "search";
         public const string ServerInfoRoute = "rest/info";
         public const string ServerHealthCheckRoute = "rest/info/healthCheck";
