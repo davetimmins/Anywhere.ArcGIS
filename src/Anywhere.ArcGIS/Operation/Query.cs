@@ -380,7 +380,7 @@ namespace Anywhere.ArcGIS.Operation
 
     public static class GeometryTypes
     {
-        internal readonly static Dictionary<Type, Func<string>> TypeMap = new Dictionary<Type, Func<string>>
+        public readonly static Dictionary<Type, Func<string>> TypeMap = new Dictionary<Type, Func<string>>
         {
             { typeof(Point), () => GeometryTypes.Point },
             { typeof(MultiPoint), () => GeometryTypes.MultiPoint },
@@ -389,7 +389,7 @@ namespace Anywhere.ArcGIS.Operation
             { typeof(Polyline), () => GeometryTypes.Polyline }
         };
 
-        internal readonly static Dictionary<string, Func<Type>> ToTypeMap = new Dictionary<string, Func<Type>>
+        public readonly static Dictionary<string, Func<Type>> ToTypeMap = new Dictionary<string, Func<Type>>
         {
             { GeometryTypes.Point, () => typeof(Point) },
             { GeometryTypes.MultiPoint, () => typeof(MultiPoint) },

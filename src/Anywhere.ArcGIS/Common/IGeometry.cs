@@ -51,7 +51,7 @@ namespace Anywhere.ArcGIS.Common
         /// <summary>
         /// World Geodetic System 1984 (WGS84)
         /// </summary>
-        public static SpatialReference WGS84 = new SpatialReference
+        public readonly static SpatialReference WGS84 = new SpatialReference
         {
             Wkid = 4326,
             LatestWkid = 4326
@@ -60,7 +60,7 @@ namespace Anywhere.ArcGIS.Common
         /// <summary>
         /// WGS 1984 Web Mercator (Auxiliary Sphere)
         /// </summary>
-        public static SpatialReference WebMercator = new SpatialReference
+        public readonly static SpatialReference WebMercator = new SpatialReference
         {
             Wkid = 102100,
             LatestWkid = 3857

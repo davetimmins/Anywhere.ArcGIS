@@ -318,7 +318,7 @@
         /// the geometry string on the result set e.g.
         /// foreach (var result in response.Results.Where(r => r.Geometry != null))
         /// {
-        ///     result.Geometry = ServiceStack.Text.JsonSerializer.DeserializeFromString(result.Geometry.SerializeToString(), TypeMap[result.GeometryType]());
+        ///     result.Geometry = JsonConvert.DeserializeObject(result.Geometry.ToString(), GeometryTypes.ToTypeMap[result.GeometryType]());
         /// }
         /// </summary>
         /// <param name="findOptions"></param>

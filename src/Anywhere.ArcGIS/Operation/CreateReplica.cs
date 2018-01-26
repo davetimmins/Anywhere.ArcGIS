@@ -44,7 +44,7 @@
             {
                 return Geometry == null
                     ? GeometryTypes.Envelope
-                    : TypeMap[Geometry.GetType()]();
+                    : GeometryTypes.TypeMap[Geometry.GetType()]();
             }
         }
 
@@ -61,15 +61,6 @@
         /// </summary>
         [DataMember(Name = "geometry")]
         public IGeometry Geometry { get; set; }
-
-        internal static readonly Dictionary<Type, Func<string>> TypeMap = new Dictionary<Type, Func<string>>
-        {
-            { typeof(Point), () => GeometryTypes.Point },
-            { typeof(MultiPoint), () => GeometryTypes.MultiPoint },
-            { typeof(Extent), () => GeometryTypes.Envelope },
-            { typeof(Polygon), () => GeometryTypes.Polygon },
-            { typeof(Polyline), () => GeometryTypes.Polyline }
-        };
 
         /// <summary>
         /// Gets or sets the name of the replica on the server. The replica name is unique per feature service.
