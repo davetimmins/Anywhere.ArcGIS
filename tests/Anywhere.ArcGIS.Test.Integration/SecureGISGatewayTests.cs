@@ -114,7 +114,7 @@
         }
 
         [Theory]
-        [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "SaveTheBay/FeatureServer/0")]
+        [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "Wildfire_secure/FeatureServer/0")]
         public async Task CannotAccessSecureResourceWithoutToken(string rootUrl, string relativeUrl)
         {
             var gateway = new PortalGateway(rootUrl);
@@ -126,7 +126,7 @@
         }
 
         [Theory]
-        [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "user1", "user1", "SaveTheBay/FeatureServer/0")]
+        [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "user1", "user1", "Wildfire_secure/FeatureServer/0")]
         public async Task InvalidTokenReported(string rootUrl, string username, string password, string relativeUrl)
         {
             var tokenProvider = new TokenProvider(rootUrl, username, password);
