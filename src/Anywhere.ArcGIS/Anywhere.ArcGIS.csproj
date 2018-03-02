@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/davetimmins/Anywhere.ArcGIS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SourceLink.Create.GitHub" Version="2.7.4" PrivateAssets="All" />
-    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.7.4" />
-    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.7.4" />
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.8.0" PrivateAssets="All" />
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.8.0" />
+    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.8.0" />
   </ItemGroup>
 </Project>
