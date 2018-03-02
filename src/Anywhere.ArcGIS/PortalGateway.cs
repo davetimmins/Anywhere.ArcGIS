@@ -136,11 +136,17 @@
             result.Add(folderDescription);
 
             if (folderDescription.Folders != null)
+            {
                 foreach (var folder in folderDescription.Folders)
                 {
-                    if (ct.IsCancellationRequested) return result;
+                    if (ct.IsCancellationRequested)
+                    {
+                        return result;
+                    }
+
                     result.AddRange(await DescribeEndpoint(new ArcGISServerOperation((operation.Endpoint.RelativeUrl + folder).AsEndpoint()), ct).ConfigureAwait(false));
                 }
+            }
 
             return result;
         }
