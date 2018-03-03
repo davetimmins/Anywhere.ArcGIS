@@ -6,9 +6,9 @@
     <Authors>Dave Timmins</Authors>
     <Company>Dave Timmins</Company>
     <Title>Anywhere.ArcGIS</Title>
-    <Description>Operations and data types used with the ArcGIS Server REST API.</Description>
-    <Summary>Operations and data types used with the ArcGIS Server REST API.</Summary>
-    <Copyright>Copyright Dave Timmins (c) 2017. All rights reserved.</Copyright>
+    <Description>Operations and data types used with the ArcGIS REST API.</Description>
+    <Summary>Operations and data types used with the ArcGIS REST API.</Summary>
+    <Copyright>Copyright Dave Timmins (c) 2018. All rights reserved.</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/davetimmins/Anywhere.ArcGIS</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/logo.png</PackageIconUrl>
