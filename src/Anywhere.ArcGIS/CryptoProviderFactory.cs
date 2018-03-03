@@ -23,6 +23,11 @@ namespace Anywhere.ArcGIS
             LiteGuard.Guard.AgainstNullArgument(nameof(exponent), exponent);
             LiteGuard.Guard.AgainstNullArgument(nameof(modulus), modulus);
 
+            if (tokenRequest.Encrypted == true)
+            {
+                return tokenRequest;
+            }
+
             using (var rsa = new System.Security.Cryptography.RSACryptoServiceProvider(512))
             {
                 var rsaParms = new System.Security.Cryptography.RSAParameters
