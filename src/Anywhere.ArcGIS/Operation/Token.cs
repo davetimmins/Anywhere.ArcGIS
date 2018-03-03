@@ -86,7 +86,7 @@ namespace Anywhere.ArcGIS.Operation
 
         public string RelativeUrl
         {
-            get { return "tokens/" + Operations.GenerateToken; }
+            get { return IsFederated ? Operations.GenerateToken : $"tokens/{Operations.GenerateToken}"; }
         }
 
         public string BuildAbsoluteUrl(string rootUrl)

@@ -28,22 +28,13 @@
             return Post<QueryResponse<Tout>, Query>(queryOptions, CancellationToken.None);
         }
 
-        internal readonly static Dictionary<string, Func<Type>> TypeMap = new Dictionary<string, Func<Type>>
-            {
-                { GeometryTypes.Point, () => typeof(Point) },
-                { GeometryTypes.MultiPoint, () => typeof(MultiPoint) },
-                { GeometryTypes.Envelope, () => typeof(Extent) },
-                { GeometryTypes.Polygon, () => typeof(Polygon) },
-                { GeometryTypes.Polyline, () => typeof(Polyline) }
-            };
-
         public async Task<FindResponse> DoFind(Find findOptions)
         {
             var response = await Find(findOptions);
 
             foreach (var result in response.Results.Where(r => r.Geometry != null))
             {
-                result.Geometry = JsonConvert.DeserializeObject(result.Geometry.ToString(), TypeMap[result.GeometryType]());
+                result.Geometry = JsonConvert.DeserializeObject(result.Geometry.ToString(), GeometryTypes.ToTypeMap[result.GeometryType]());
             }
             return response;
         }

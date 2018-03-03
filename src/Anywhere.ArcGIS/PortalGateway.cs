@@ -35,17 +35,43 @@
                 throw new ArgumentNullException(nameof(rootUrl), "rootUrl is null.");
             }
 
-            var info = await new PortalGateway(rootUrl, serializer: serializer, httpClientFunc: httpClientFunc).Info(ct);
+            var gateway = new PortalGateway(rootUrl, serializer: serializer, httpClientFunc: httpClientFunc);
+            var info = await gateway.Info(ct);
 
-            var result = new PortalGateway(
+            if (info == null)
+            {
+                throw new Exception($"Unable to get ArcGIS Server information for {gateway.RootUrl}. Check the ArcGIS Server URL and try again.");
+            }
+
+            ITokenProvider tokenProvider = null;
+            if (!string.IsNullOrWhiteSpace(info.OwningSystemUrl) && (info.OwningSystemUrl.StartsWith("http://www.arcgis.com", StringComparison.OrdinalIgnoreCase) || info.OwningSystemUrl.StartsWith("https://www.arcgis.com", StringComparison.OrdinalIgnoreCase)))
+            {
+                tokenProvider = new ArcGISOnlineTokenProvider(username, password);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(info.AuthenticationInfo?.TokenServicesUrl))
+                {
+                    if (!info.AuthenticationInfo.TokenServicesUrl.StartsWith(gateway.RootUrl, StringComparison.OrdinalIgnoreCase))
+                    {
+                        tokenProvider = new FederatedTokenProvider(
+                            new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password),
+                            info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""),
+                            gateway.RootUrl,
+                            referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"));
+                    }
+                    else
+                    {
+                        tokenProvider = new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password);
+                    }
+                }
+            }
+
+            return new PortalGateway(
                 rootUrl,
-                tokenProvider: !string.IsNullOrWhiteSpace(info.OwningSystemUrl) && (info.OwningSystemUrl.StartsWith("http://www.arcgis.com", StringComparison.OrdinalIgnoreCase) || info.OwningSystemUrl.StartsWith("https://www.arcgis.com", StringComparison.OrdinalIgnoreCase))
-                    ? new ArcGISOnlineTokenProvider(username, password)
-                    : new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password),
+                tokenProvider: tokenProvider,
                 serializer: serializer,
                 httpClientFunc: httpClientFunc);
-
-            return result;
         }
 
         public PortalGateway(string rootUrl, ISerializer serializer = null, ITokenProvider tokenProvider = null, Func<HttpClient> httpClientFunc = null)
@@ -136,11 +162,17 @@
             result.Add(folderDescription);
 
             if (folderDescription.Folders != null)
+            {
                 foreach (var folder in folderDescription.Folders)
                 {
-                    if (ct.IsCancellationRequested) return result;
+                    if (ct.IsCancellationRequested)
+                    {
+                        return result;
+                    }
+
                     result.AddRange(await DescribeEndpoint(new ArcGISServerOperation((operation.Endpoint.RelativeUrl + folder).AsEndpoint()), ct).ConfigureAwait(false));
                 }
+            }
 
             return result;
         }
@@ -318,7 +350,7 @@
         /// the geometry string on the result set e.g.
         /// foreach (var result in response.Results.Where(r => r.Geometry != null))
         /// {
-        ///     result.Geometry = ServiceStack.Text.JsonSerializer.DeserializeFromString(result.Geometry.SerializeToString(), TypeMap[result.GeometryType]());
+        ///     result.Geometry = JsonConvert.DeserializeObject(result.Geometry.ToString(), GeometryTypes.ToTypeMap[result.GeometryType]());
         /// }
         /// </summary>
         /// <param name="findOptions"></param>
