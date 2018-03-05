@@ -39,7 +39,14 @@ namespace Anywhere.ArcGIS.Operation
         /// </summary>
         [DataMember(Name="forStorage")]
         public bool? ForStorage { get; set; }
+
+        /// <summary>
+        /// Specifies if the output geometry of PointAddress matches should be the rooftop point or street entrance location. Valid values are rooftop and street. The default value is street.
+        /// </summary>
+        [DataMember(Name = "locationType")]
+        public string LocationType { get; set; }
     }
+    
 
     /// <summary>
     /// Reverse geocoding is useful for applications in which a user will click a location in a map and expect the address of that location to be returned.
