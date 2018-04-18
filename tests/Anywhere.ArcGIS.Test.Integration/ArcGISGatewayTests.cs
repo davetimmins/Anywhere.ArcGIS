@@ -363,7 +363,8 @@
             var query = new Query(relativeUrl.AsEndpoint())
             {
                 OrderBy = new List<string> { orderby },
-                ReturnGeometry = false
+                ReturnGeometry = false,
+                Where = "CITY = 'WA'"
             };
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
@@ -373,7 +374,8 @@
             var queryDesc = new Query(relativeUrl)
             {
                 OrderBy = new List<string> { orderby + " DESC" },
-                ReturnGeometry = false
+                ReturnGeometry = false,
+                Where = "CITY = 'WA'"
             };
             var resultDesc = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
@@ -382,7 +384,9 @@
 
             Assert.True(result.Features.Any());
             Assert.True(resultDesc.Features.Any());
-            Assert.NotEqual(result.Features, resultDesc.Features);
+            Assert.True(result.Features.Count() == resultDesc.Features.Count());
+            Assert.Equal(result.Features.First().Attributes[orderby], resultDesc.Features.Last().Attributes[orderby]);
+            Assert.Equal(result.Features.Last().Attributes[orderby], resultDesc.Features.First().Attributes[orderby]);
         }
 
         [Theory]

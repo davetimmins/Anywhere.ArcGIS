@@ -446,7 +446,7 @@
             int i = 1;
             while (fileInfo.Exists)
             {
-                fileInfo = new FileInfo(Path.Combine(documentLocation, $"rev-{i}-" + attachment.SafeFileName));
+                fileInfo = new FileInfo(Path.Combine(documentLocation, $"rev-{i}-{attachment.SafeFileName}"));
                 i++;
             }
 
