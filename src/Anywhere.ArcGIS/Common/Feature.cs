@@ -15,10 +15,21 @@ namespace Anywhere.ArcGIS.Common
     {
         const string ObjectIDName = "objectid";
         const string GlobalIDName = "globalid";
+        readonly string _idFieldName;
 
         public Feature()
         {
             Attributes = new Dictionary<string, object>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idFieldName">Name of the field to use to return the Id of the feature. Used when ObjectId is not on the layer e.g. query layer uses ESRI_OID</param>
+        public Feature(string idFieldName)
+            : this()
+        {
+            _idFieldName = idFieldName;
         }
 
         [DataMember(Name = "geometry")]
@@ -66,6 +77,25 @@ namespace Anywhere.ArcGIS.Common
                 }
 
                 return _globalID;
+            }
+        }
+
+        long _id = 0;
+        /// <summary>
+        /// Get the UniqueID for the feature when the layer doesn't contain an ObjectID. 
+        /// Will return 0 if not found or if the id field name is not set
+        /// </summary>
+        public long UniqueID
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_idFieldName) && Attributes != null && Attributes.Any() && _id == 0)
+                {
+                    var copy = new Dictionary<string, object>(Attributes, StringComparer.OrdinalIgnoreCase);
+                    if (copy.ContainsKey(_idFieldName)) long.TryParse(copy[_idFieldName].ToString(), out _id);
+                }
+
+                return _id;
             }
         }
 

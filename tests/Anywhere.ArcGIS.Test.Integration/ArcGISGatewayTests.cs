@@ -306,11 +306,11 @@
 
             Assert.True(resultPoint.Features.Any());
             Assert.True(resultPoint.Features.All(i => i.Geometry == null));
-
+            
             var queryPointByOID = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint())
             {
                 ReturnGeometry = false,
-                ObjectIds = resultPoint.Features.Take(10).Select(f => long.Parse(f.Attributes["objectid"].ToString())).ToList()
+                ObjectIds = resultPoint.Features.Take(10).Select(f => long.Parse(f.Attributes[resultPoint.ObjectIdFieldName ?? "objectid"].ToString())).ToList()
             };
             var resultPointByOID = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
