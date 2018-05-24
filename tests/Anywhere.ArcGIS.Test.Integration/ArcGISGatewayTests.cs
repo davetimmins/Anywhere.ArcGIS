@@ -218,7 +218,7 @@
         {
             var gateway = new ArcGISGateway();
 
-            var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { Where = "magnitude > 4.5" };
+            var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { Where = "magnitude > 2.5" };
             var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.QueryAsPost<Point>(queryPoint);

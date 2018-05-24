@@ -27,6 +27,23 @@ namespace ArcGIS.Test
         }
 
         [Fact]
+        public void FeatureCanUseUniqueID()
+        {
+            var feature1 = new Feature<Point>
+            {
+                Geometry = new Point { X = 50.342, Y = -30.331, SpatialReference = SpatialReference.WGS84 }
+            };
+            feature1.Attributes.Add("random", "rtcxbvbx");
+            feature1.Attributes.Add("something", 45445);
+
+            var feature2 = new Feature<Point>(feature1, "something");
+
+            Assert.True(feature1.UniqueID == 0);
+            Assert.True(feature2.UniqueID > 0);
+            Assert.Equal(45445, feature2.UniqueID);
+        }
+
+        [Fact]
         public void FeaturesAreNotTheSame()
         {
             var feature1 = new Feature<Point>
@@ -198,6 +215,22 @@ namespace ArcGIS.Test
             feature.Attributes.Add(key, guid);
 
             Assert.Equal(Guid.Empty, feature.GlobalID);
+        }
+
+        [Theory]    
+        [InlineData("dfds", 3443)]
+        [InlineData("blahblah", 34.3)]
+        [InlineData("Global_id", "ewe")]
+        [InlineData("ESRI_OID", 's')]
+        [InlineData("something something darkside", 453f)]
+        public void CanGetAttributeValue(string key, object value)
+        {
+            var feature = new Feature<Point>();
+            feature.Attributes.Add(key, value);
+
+            var expected = feature.AttributeValue(key.ToLowerInvariant());
+
+            Assert.Equal(expected, value);
         }
 
         [Fact]
