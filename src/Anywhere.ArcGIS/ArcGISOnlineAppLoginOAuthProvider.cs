@@ -39,9 +39,7 @@
                 throw new ArgumentNullException(nameof(clientSecret), "clientSecret is null.");
             }
 
-            Serializer = serializer ?? SerializerFactory.Get();
-            LiteGuard.Guard.AgainstNullArgument(nameof(Serializer), Serializer);
-
+            Serializer = serializer ?? SerializerFactory.Get();     
             OAuthRequest = new GenerateOAuthToken(clientId, clientSecret);
             _httpClient = HttpClientFactory.Get();
 

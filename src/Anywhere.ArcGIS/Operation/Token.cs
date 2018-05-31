@@ -68,13 +68,34 @@ namespace Anywhere.ArcGIS.Operation
 
         public void Encrypt(string username, string password, string expiration = "", string client = "", string referer = "")
         {
-            LiteGuard.Guard.AgainstNullArgument("username", username);
-            LiteGuard.Guard.AgainstNullArgument("password", password);
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException(nameof(username), "username is null.");
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentNullException(nameof(password), "password is null.");
+            }
+
             Username = username;
             Password = password;
-            if (!string.IsNullOrWhiteSpace(expiration)) _expiration = expiration;
-            if (!string.IsNullOrWhiteSpace(client)) _client = client;
-            if (!string.IsNullOrWhiteSpace(referer)) _referer = referer;
+
+            if (!string.IsNullOrWhiteSpace(expiration))
+            {
+                _expiration = expiration;
+            }
+
+            if (!string.IsNullOrWhiteSpace(client))
+            {
+                _client = client;
+            }
+
+            if (!string.IsNullOrWhiteSpace(referer))
+            {
+                _referer = referer;
+            }
+
             Encrypted = true;
             DontForceHttps = false;
         }

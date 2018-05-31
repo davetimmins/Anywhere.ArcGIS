@@ -52,7 +52,7 @@
             }
 
             Serializer = serializer ?? SerializerFactory.Get();
-            LiteGuard.Guard.AgainstNullArgument("Serializer", Serializer);
+            
             RootUrl = rootUrl.AsRootUrl();
             CryptoProvider = cryptoProvider ?? CryptoProviderFactory.Get();
             _httpClient = HttpClientFactory.Get();
