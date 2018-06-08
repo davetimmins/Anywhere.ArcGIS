@@ -20,9 +20,10 @@ namespace Anywhere.ArcGIS.Operation
         { }
 
         /// <summary>
-        /// Specifies the location to be searched for.
+        /// Specifies the location to be geocoded. This can be a street address, place-name, postal code, or POI. 
+        /// The input address components need to be formatted as a single string
         /// </summary>
-        [DataMember(Name = "text")]
+        [DataMember(Name = "singleLine")]
         public string Text { get; set; }
 
         /// <summary>
@@ -75,5 +76,8 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "attributes")]
         public Dictionary<string, object> Attributes { get; set; }
+
+        [DataMember(Name = "extent")]
+        public Extent Extent { get; set; }
     }
 }
