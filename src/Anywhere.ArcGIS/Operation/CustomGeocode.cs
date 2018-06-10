@@ -51,25 +51,25 @@ namespace Anywhere.ArcGIS.Operation
         [DataMember(Name = "outFields")]
         public string OutFieldsValue { get { return OutFields == null ? string.Empty : string.Join(",", OutFields); } }
     }
-
+    
     [DataContract]
-    public class SingleInputCustomGeocodeResponse : PortalResponse
+    public class SingleInputCustomGeocodeResponse<T> : PortalResponse where T : IGeometry
     {
         [DataMember(Name = "spatialReference")]
         public SpatialReference SpatialReference { get; set; }
 
         [DataMember(Name = "candidates")]
-        public Candidate[] Candidates { get; set; }
+        public Candidate<T>[] Candidates { get; set; }
     }
-
+    
     [DataContract]
-    public class Candidate
+    public class Candidate<T> where T : IGeometry
     {
         [DataMember(Name = "address")]
         public string Address { get; set; }
 
         [DataMember(Name = "location")]
-        public Point Location { get; set; }
+        public T Location { get; set; }
 
         [DataMember(Name = "score")]
         public double Score { get; set; }
