@@ -19,7 +19,10 @@
         public ServiceDescriptionDetails(ServiceDescription serviceDescription, Action beforeRequest = null, Action afterRequest = null)
             : base(serviceDescription.ArcGISServerEndpoint, beforeRequest, afterRequest)
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(serviceDescription), serviceDescription);
+            if (serviceDescription == null)
+            {
+                throw new ArgumentNullException(nameof(serviceDescription));
+            }
         }
         
         /// <summary>

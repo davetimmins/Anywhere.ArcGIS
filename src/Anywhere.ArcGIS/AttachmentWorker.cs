@@ -35,7 +35,6 @@ namespace Anywhere.ArcGIS
             RootUrl = rootUrl.AsRootUrl();
             TokenProvider = tokenProvider;
             Serializer = serializer ?? SerializerFactory.Get();
-            LiteGuard.Guard.AgainstNullArgument(nameof(Serializer), Serializer);
 
             var httpFunc = httpClientFunc ?? HttpClientFactory.Get;
             _httpClient = httpFunc();
@@ -105,8 +104,15 @@ namespace Anywhere.ArcGIS
             where TRequest : ArcGISServerOperation, IAttachment
             where T : IPortalResponse
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(requestObject), requestObject);
-            LiteGuard.Guard.AgainstNullArgumentProperty(nameof(requestObject), nameof(requestObject.Endpoint), requestObject.Endpoint);
+            if (requestObject == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject));
+            }
+
+            if (requestObject.Endpoint == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject.Endpoint));
+            }
 
             requestObject.BeforeRequest?.Invoke();
 

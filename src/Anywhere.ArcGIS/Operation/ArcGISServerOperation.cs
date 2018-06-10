@@ -11,9 +11,7 @@ namespace Anywhere.ArcGIS.Operation
     {
         public ArcGISServerOperation(IEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(endpoint), endpoint);
-
-            Endpoint = endpoint;
+            Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             BeforeRequest = beforeRequest;
             AfterRequest = afterRequest;
         }

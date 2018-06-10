@@ -15,7 +15,7 @@ namespace Anywhere.ArcGIS.Common
     /// Envelopes
     /// </summary>
     /// <remarks>Starting at ArcGIS Server 10.1, geometries containing m and z values are supported</remarks>
-    public interface IGeometry
+    public interface IGeometry : ICloneable
     {
         /// <summary>
         /// The spatial reference can be defined using a well-known ID (wkid) or well-known text (wkt)
@@ -46,7 +46,7 @@ namespace Anywhere.ArcGIS.Common
     /// Spatial reference used for operations. If WKT is set then other properties are nulled
     /// </summary>
     [DataContract]
-    public class SpatialReference : IEquatable<SpatialReference>
+    public class SpatialReference : IEquatable<SpatialReference>, ICloneable
     {
         /// <summary>
         /// World Geodetic System 1984 (WGS84)
@@ -136,6 +136,18 @@ namespace Anywhere.ArcGIS.Common
                 return hashCode;
             }
         }
+
+        public object Clone()
+        {
+            return new SpatialReference
+            {
+                LatestVCSWkid = LatestVCSWkid,
+                LatestWkid = LatestWkid,
+                VCSWkid = VCSWkid,
+                Wkid = Wkid,
+                Wkt = string.IsNullOrWhiteSpace(Wkt) ? null : string.Copy(Wkt)
+            };
+        }
     }
 
     [DataContract]
@@ -198,6 +210,18 @@ namespace Anywhere.ArcGIS.Common
         {
             return new GeoJsonPoint { Type = "Point", Coordinates = new[] { X, Y } };
         }
+
+        public object Clone()
+        {
+            return new Point
+            {
+                X = X,
+                Y = Y,
+                M = M,
+                Z = Z,
+                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+            };
+        }
     }
 
     [DataContract]
@@ -255,6 +279,17 @@ namespace Anywhere.ArcGIS.Common
         public IGeoJsonGeometry ToGeoJson()
         {
             return new GeoJsonLineString { Type = "MultiPoint", Coordinates = Points };
+        }
+
+        public object Clone()
+        {
+            return new MultiPoint
+            {
+                HasM = HasM,
+                HasZ = HasZ,
+                Points = (PointCollection) Points?.Clone(),
+                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+            };
         }
     }
 
@@ -324,6 +359,17 @@ namespace Anywhere.ArcGIS.Common
         {
             return Paths.Any() ? new GeoJsonLineString { Type = "LineString", Coordinates = Paths.First() } : null;
         }
+
+        public object Clone()
+        {
+            return new Polyline
+            {
+                HasM = HasM,
+                HasZ = HasZ,
+                Paths = Paths?.Clone(),
+                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+            };
+        }
     }
 
     public class PointCollection : List<double[]>
@@ -356,10 +402,19 @@ namespace Anywhere.ArcGIS.Common
             get { return this.Select(point => point != null ? new Point { X = point.First(), Y = point.Last() } : null).ToList(); }
         }
 
+        public List<double[]> Clone()
+        {
+            return Points.Select(x => new double[] { x.X, x.Y }).ToList();
+        }
     }
 
     public class PointCollectionList : List<PointCollection>
-    { }
+    {
+        public PointCollectionList Clone()
+        {
+            return this;
+        }
+    }
 
     [DataContract]
     public class Polygon : IGeometry, IEquatable<Polygon>
@@ -426,6 +481,17 @@ namespace Anywhere.ArcGIS.Common
         public IGeoJsonGeometry ToGeoJson()
         {
             return new GeoJsonPolygon { Type = "Polygon", Coordinates = Rings };
+        }
+
+        public object Clone()
+        {
+            return new Polygon
+            {
+                HasM = HasM,
+                HasZ = HasZ,
+                Rings = Rings?.Clone(),
+                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+            };
         }
     }
 
@@ -539,6 +605,18 @@ namespace Anywhere.ArcGIS.Common
                         new[]{ XMin, YMin }
                     }
                 }
+            };
+        }
+
+        public object Clone()
+        {
+            return new Extent
+            {
+                XMax = XMax,
+                XMin = XMin,
+                YMax = YMax,
+                YMin = YMin,
+                SpatialReference = (SpatialReference) SpatialReference?.Clone()
             };
         }
     }

@@ -104,7 +104,7 @@
             RootUrl = rootUrl.AsRootUrl();
             TokenProvider = tokenProvider;
             Serializer = serializer ?? SerializerFactory.Get();
-            LiteGuard.Guard.AgainstNullArgument("Serializer", Serializer);
+
             var httpFunc = httpClientFunc ?? HttpClientFactory.Get;
             _httpClient = httpFunc();
             MaximumGetRequestLength = 2047;
@@ -446,7 +446,7 @@
             int i = 1;
             while (fileInfo.Exists)
             {
-                fileInfo = new FileInfo(Path.Combine(documentLocation, $"rev-{i}-" + attachment.SafeFileName));
+                fileInfo = new FileInfo(Path.Combine(documentLocation, $"rev-{i}-{attachment.SafeFileName}"));
                 i++;
             }
 
@@ -545,8 +545,11 @@
         /// <returns></returns>
         public virtual async Task<FileInfo> DownloadExportMapToLocal(ExportMapResponse exportMapResponse, string folderLocation, string fileName = null)
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(exportMapResponse), exportMapResponse);
-
+            if (exportMapResponse == null)
+            {
+                throw new ArgumentNullException(nameof(exportMapResponse));
+            }
+            
             if (string.IsNullOrWhiteSpace(exportMapResponse.ImageUrl))
             {
                 throw new ArgumentNullException(nameof(exportMapResponse.ImageUrl));
@@ -597,8 +600,15 @@
             where TRequest : ArcGISServerOperation
             where T : IPortalResponse
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(requestObject), requestObject);
-            LiteGuard.Guard.AgainstNullArgumentProperty(nameof(requestObject), nameof(requestObject.Endpoint), requestObject.Endpoint);
+            if (requestObject == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject));
+            }
+
+            if (requestObject.Endpoint == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject.Endpoint));
+            }
 
             var endpoint = requestObject.Endpoint;
             var url = endpoint.BuildAbsoluteUrl(RootUrl) + AsRequestQueryString(Serializer, requestObject);
@@ -678,8 +688,15 @@
             where TRequest : ArcGISServerOperation
             where T : IPortalResponse
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(requestObject), requestObject);
-            LiteGuard.Guard.AgainstNullArgumentProperty(nameof(requestObject), nameof(requestObject.Endpoint), requestObject.Endpoint);
+            if (requestObject == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject));
+            }
+
+            if (requestObject.Endpoint == null)
+            {
+                throw new ArgumentNullException(nameof(requestObject.Endpoint));
+            }
 
             requestObject.BeforeRequest?.Invoke();
 
@@ -770,8 +787,15 @@
 
         internal static string AsRequestQueryString<T>(ISerializer serializer, T objectToConvert) where T : ArcGISServerOperation
         {
-            LiteGuard.Guard.AgainstNullArgument(nameof(serializer), serializer);
-            LiteGuard.Guard.AgainstNullArgument(nameof(objectToConvert), objectToConvert);
+            if (serializer == null)
+            {
+                throw new ArgumentNullException(nameof(serializer));
+            }
+
+            if (objectToConvert == null)
+            {
+                throw new ArgumentNullException(nameof(objectToConvert));
+            }
 
             var dictionary = serializer.AsDictionary(objectToConvert);
 
