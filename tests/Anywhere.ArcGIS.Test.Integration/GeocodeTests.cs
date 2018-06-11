@@ -85,6 +85,7 @@
         }
 
         [Theory]
+        [InlineData("https://energovgis-dev.tylerhost.net/arcgis", "SLO/Crisco/GeocodeServer/", "052-201-003")]
         public async Task CanCustomGeocodePolygon(string rootUrl, string relativeUrl, string searchText)
         {
             var gateway = new PortalGateway(rootUrl);
