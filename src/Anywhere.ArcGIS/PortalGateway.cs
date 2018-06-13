@@ -346,8 +346,33 @@
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns></returns>
         public virtual Task<SingleInputGeocodeResponse> Geocode(SingleInputGeocode geocode, CancellationToken ct = default(CancellationToken))
-        {
+        {            
             return Get<SingleInputGeocodeResponse, SingleInputGeocode>(geocode, ct);
+        }
+
+        /// <summary>
+        /// The CustomGeocode (FindAddressCandidates) operation supports searching for places and addresses in single-field format.
+        /// This method assumes the results are points.
+        /// </summary>
+        /// <param name="geocode"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<SingleInputCustomGeocodeResponse<Point>> CustomGeocode(SingleInputCustomGeocode geocode, CancellationToken ct = default(CancellationToken))
+        {
+            return CustomGeocode<Point>(geocode, ct);
+        }
+
+        /// <summary>
+        /// The CustomGeocode (FindAddressCandidates) operation supports searching for places and addresses in single-field format
+        /// </summary>
+        /// <typeparam name="T">The geometry type for the result set</typeparam>
+        /// <param name="geocode"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<SingleInputCustomGeocodeResponse<T>> CustomGeocode<T>(SingleInputCustomGeocode geocode, CancellationToken ct = default(CancellationToken))
+            where T : IGeometry
+        {
+            return Get<SingleInputCustomGeocodeResponse<T>, SingleInputCustomGeocode>(geocode, ct);
         }
 
         /// <summary>
