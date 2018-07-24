@@ -192,6 +192,27 @@
         }
 
         [Theory]
+        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
+        public async Task QueryCanGetBatchFeatures(string rootUrl, string relativeUrl)
+        {
+            var gateway = new PortalGateway(rootUrl);
+
+            var query = new Query(relativeUrl);
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.BatchQuery<Point>(query);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.SpatialReference);
+            Assert.True(result.Features.Any());
+            Assert.Null(result.Links);
+            Assert.True(result.Features.All(i => i.Geometry != null));
+            Assert.Equal(typeof(Point), result.GeometryType);
+        }
+
+        [Theory]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
         public async Task QueryCanReturnPointFeatures(string rootUrl, string relativeUrl)

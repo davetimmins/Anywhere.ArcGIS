@@ -238,8 +238,10 @@
 
                     if (innerResult != null && innerResult.Error == null && innerResult.Features != null && innerResult.Features.Any())
                     {
-                        result.Features.ToList().AddRange(innerResult.Features);
-                        exceeded = result.ExceededTransferLimit.HasValue && innerResult.ExceededTransferLimit.Value;
+                        result.Features = result.Features.Concat(innerResult.Features);
+                        exceeded = result.ExceededTransferLimit.HasValue 
+                            && innerResult.ExceededTransferLimit.HasValue 
+                            && innerResult.ExceededTransferLimit.Value;
                     }
                     else
                     {
