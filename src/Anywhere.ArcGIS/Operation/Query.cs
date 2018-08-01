@@ -437,5 +437,6 @@ namespace Anywhere.ArcGIS.Operation
         public const string EsriInteger = "esriFieldTypeInteger";
         public const string EsriDouble = "esriFieldTypeDouble";
         public const string EsriDate = "esriFieldTypeDate";
+        public const string EsriOID = "esriFieldTypeOID";
     }
 }
