@@ -853,5 +853,39 @@
             Assert.NotNull(result.FullName);
             Assert.True(result.Exists);
         }
+
+        [Fact]
+        public async Task QueryForOutputStatistics()
+        {
+            var gateway = new PortalGateway("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS");
+            var outStats = new List<OutputStatistic>();
+            outStats.Add(new OutputStatistic()
+            {
+                StatisticType = StatisticTypes.Average,
+                OnField = "MALES",
+                OutField = "AVE_MALES"
+            });
+            outStats.Add(new OutputStatistic()
+            {
+                StatisticType = StatisticTypes.Sum,
+                OnField = "MALES",
+                OutField = "SUM_MALES"
+            });
+            var query = new Query("USA_Major_Cities/FeatureServer/0")
+            {
+                GroupByFields = new List<string>(new string[] { "ST" }),
+                OutputStatistics = outStats
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.Query<Point>(query);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.Features.Any());
+            Assert.NotNull(result.Fields);
+            Assert.True(result.Fields.Where(x => x.Name == "SUM_MALES").Any());
+        }
     }
 }
