@@ -240,7 +240,7 @@
             if (result != null && result.Error == null && result.Features != null && result.Features.Any() && result.ExceededTransferLimit.HasValue && result.ExceededTransferLimit.Value == true)
             {
                 // need to get the remaining data since we went over the limit
-                var endpoint = queryOptions.Endpoint.RelativeUrl.Replace("/query", "").AsEndpoint();
+                var endpoint = queryOptions.Endpoint.RelativeUrl.Replace($"/{Operations.Query}", "").AsEndpoint();
                 var layerDesc = await DescribeLayer(endpoint, ct);
                 var batchSize = result.Features.Count();
                 var loop = 1;
