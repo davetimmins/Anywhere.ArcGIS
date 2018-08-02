@@ -191,25 +191,49 @@
             Assert.Equal("POST", result.Links.First().Method);
         }
 
-        [Theory]
+        [Theory] 
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
-        public async Task QueryCanGetBatchFeatures(string rootUrl, string relativeUrl)
+        [InlineData("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
+        public async Task QueryCanGetBatchFeaturesPoint(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Point>(rootUrl, relativeUrl, true);
+        }
+
+        [Theory]
+        [InlineData("http://services.arcgisonline.com/arcgis/", "Demographics/USA_Diversity_Index/MapServer/4")]
+        public async Task QueryCanGetBatchFeaturesPolygon(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Polygon>(rootUrl, relativeUrl, false);
+        }
+
+        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry)
+            where T:IGeometry
         {
             var gateway = new PortalGateway(rootUrl);
+            var query = new Query(relativeUrl)
+            {
+                ReturnGeometry = returnGeometry
+            };
 
-            var query = new Query(relativeUrl);
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.BatchQuery<Point>(query);
+                return gateway.BatchQuery<T>(query);
             });
 
+            // Get total count of features to check that batch query returned everything
+            var queryCount = new QueryForCount(relativeUrl);
+            var countResult = await gateway.QueryForCount(queryCount);
             Assert.NotNull(result);
             Assert.Null(result.Error);
-            Assert.NotNull(result.SpatialReference);
             Assert.True(result.Features.Any());
             Assert.Null(result.Links);
-            Assert.True(result.Features.All(i => i.Geometry != null));
-            Assert.Equal(typeof(Point), result.GeometryType);
+            Assert.Equal(result.Features.Count(), countResult.NumberOfResults);
+            if (returnGeometry)
+            {
+                Assert.NotNull(result.SpatialReference);
+                Assert.True(result.Features.All(i => i.Geometry != null));
+                Assert.Equal(typeof(T), result.GeometryType);
+            }
         }
 
         [Theory]

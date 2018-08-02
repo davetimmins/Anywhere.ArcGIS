@@ -191,6 +191,22 @@
         }
 
         /// <summary>
+        /// Return the layer description details for the requested endpoint
+        /// </summary>
+        /// <param name="layerEndpoint"></param>
+        /// <param name="ct"></param>
+        /// <returns>The layer description details</returns>
+        public virtual Task<ServiceLayerDescriptionResponse> DescribeLayer(IEndpoint layerEndpoint, CancellationToken ct = default(CancellationToken))
+        {
+            if (layerEndpoint == null)
+            {
+                throw new ArgumentNullException(nameof(layerEndpoint));
+            }
+
+            return Get<ServiceLayerDescriptionResponse, ServiceLayerDescription>(new ServiceLayerDescription(layerEndpoint), ct);
+        }
+
+        /// <summary>
         /// The feature resource represents a single feature in a layer in a map service.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -224,20 +240,37 @@
             if (result != null && result.Error == null && result.Features != null && result.Features.Any() && result.ExceededTransferLimit.HasValue && result.ExceededTransferLimit.Value == true)
             {
                 // need to get the remaining data since we went over the limit
+                var endpoint = queryOptions.Endpoint.RelativeUrl.Replace("/query", "").AsEndpoint();
+                var layerDesc = await DescribeLayer(endpoint, ct);
                 var batchSize = result.Features.Count();
                 var loop = 1;
                 var exceeded = true;
+
+                // if pagination isn't supported, need to track objectids returned
+                var originalWhere = queryOptions.Where;
+                var oidField = layerDesc.ObjectIdField ?? layerDesc.Fields.Where(a => a.Type == FieldDataTypes.EsriOID).Select(a => a.Name).First();
+                var oidList = result.Features.Select(x => x.ObjectID.ToString());
 
                 while (exceeded == true)
                 {
                     _logger.InfoFormat("Exceeded query transfer limit (found {0}), batching query for {1} - loop {2}", batchSize, queryOptions.RelativeUrl, loop);
                     var innerQueryOptions = queryOptions;
-                    innerQueryOptions.ResultOffset = batchSize * loop;
-                    innerQueryOptions.ResultRecordCount = batchSize;
+                    if (layerDesc.AdvancedQueryCapabilities.SupportsPagination)
+                    {
+                        // use Pagination
+                        innerQueryOptions.ResultOffset = batchSize * loop;
+                        innerQueryOptions.ResultRecordCount = batchSize;
+                    }
+                    else
+                    {
+                        // use list of OIDs to exclude
+                        innerQueryOptions.Where = $"({originalWhere}) AND ({oidField} not in ({string.Join(",", oidList)}))";
+                    }
                     var innerResult = await Get<QueryResponse<T>, Query>(queryOptions, ct).ConfigureAwait(false);
 
                     if (innerResult != null && innerResult.Error == null && innerResult.Features != null && innerResult.Features.Any())
                     {
+                        oidList = oidList.Concat(innerResult.Features.Select(x => x.ObjectID.ToString()));
                         result.Features = result.Features.Concat(innerResult.Features);
                         exceeded = result.ExceededTransferLimit.HasValue 
                             && innerResult.ExceededTransferLimit.HasValue 
