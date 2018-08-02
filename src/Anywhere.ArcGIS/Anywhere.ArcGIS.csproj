@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/davetimmins/Anywhere.ArcGIS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
-    <Version>1.6.0</Version>
+    <Version>1.7.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

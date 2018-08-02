@@ -115,7 +115,7 @@ namespace Anywhere.ArcGIS.Operation
             if (string.IsNullOrWhiteSpace(rootUrl)) throw new ArgumentNullException("rootUrl", "rootUrl is null.");
 
             return IsFederated
-                ? (DontForceHttps ? rootUrl.Replace("sharing/rest/", "") + "sharing/rest/" : rootUrl.Replace("http://", "https://").Replace("sharing/rest/", "") + "sharing/rest/") + RelativeUrl.Replace("tokens/", "")
+                ? (DontForceHttps ? rootUrl.Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/" : rootUrl.Replace("http://", "https://").Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/") + RelativeUrl.Replace("tokens/", "")
                 : (DontForceHttps ? rootUrl : rootUrl.Replace("http://", "https://")) + RelativeUrl;
         }
     }

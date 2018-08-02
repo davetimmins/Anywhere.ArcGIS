@@ -66,7 +66,11 @@ namespace Anywhere.ArcGIS
             foreach (var feature in features)
             {
                 var geoJsonGeometry = feature.Geometry.ToGeoJson();
-                if (geoJsonGeometry == null) continue;
+                if (geoJsonGeometry == null)
+                {
+                    continue;
+                }
+
                 featureCollection.Features.Add(new GeoJsonFeature<IGeoJsonGeometry>
                 {
                     Type = "Feature",

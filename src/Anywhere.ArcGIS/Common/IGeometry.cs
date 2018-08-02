@@ -219,7 +219,7 @@ namespace Anywhere.ArcGIS.Common
                 Y = Y,
                 M = M,
                 Z = Z,
-                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+                SpatialReference = (SpatialReference)SpatialReference?.Clone()
             };
         }
     }
@@ -287,8 +287,8 @@ namespace Anywhere.ArcGIS.Common
             {
                 HasM = HasM,
                 HasZ = HasZ,
-                Points = (PointCollection) Points?.Clone(),
-                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+                Points = (PointCollection)Points?.Clone(),
+                SpatialReference = (SpatialReference)SpatialReference?.Clone()
             };
         }
     }
@@ -357,7 +357,22 @@ namespace Anywhere.ArcGIS.Common
 
         public IGeoJsonGeometry ToGeoJson()
         {
-            return Paths.Any() ? new GeoJsonLineString { Type = "LineString", Coordinates = Paths.First() } : null;
+            if (Paths == null || !Paths.Any())
+            {
+                return null;
+            }
+
+            var coordinates = new PointCollection();
+
+            foreach (PointCollection path in Paths)
+            {
+                foreach (var point in path)
+                {
+                    coordinates.Add(point);
+                }                
+            }
+
+            return new GeoJsonLineString { Type = "LineString", Coordinates = coordinates };
         }
 
         public object Clone()
@@ -367,7 +382,7 @@ namespace Anywhere.ArcGIS.Common
                 HasM = HasM,
                 HasZ = HasZ,
                 Paths = Paths?.Clone(),
-                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+                SpatialReference = (SpatialReference)SpatialReference?.Clone()
             };
         }
     }
@@ -490,7 +505,7 @@ namespace Anywhere.ArcGIS.Common
                 HasM = HasM,
                 HasZ = HasZ,
                 Rings = Rings?.Clone(),
-                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+                SpatialReference = (SpatialReference)SpatialReference?.Clone()
             };
         }
     }
@@ -616,7 +631,7 @@ namespace Anywhere.ArcGIS.Common
                 XMin = XMin,
                 YMax = YMax,
                 YMin = YMin,
-                SpatialReference = (SpatialReference) SpatialReference?.Clone()
+                SpatialReference = (SpatialReference)SpatialReference?.Clone()
             };
         }
     }

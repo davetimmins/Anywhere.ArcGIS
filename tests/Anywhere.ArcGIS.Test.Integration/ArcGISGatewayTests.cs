@@ -191,6 +191,51 @@
             Assert.Equal("POST", result.Links.First().Method);
         }
 
+        [Theory] 
+        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
+        [InlineData("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
+        public async Task QueryCanGetBatchFeaturesPoint(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Point>(rootUrl, relativeUrl, true);
+        }
+
+        [Theory]
+        [InlineData("http://services.arcgisonline.com/arcgis/", "Demographics/USA_Diversity_Index/MapServer/4")]
+        public async Task QueryCanGetBatchFeaturesPolygon(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Polygon>(rootUrl, relativeUrl, false);
+        }
+
+        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry)
+            where T:IGeometry
+        {
+            var gateway = new PortalGateway(rootUrl);
+            var query = new Query(relativeUrl)
+            {
+                ReturnGeometry = returnGeometry
+            };
+
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.BatchQuery<T>(query);
+            });
+
+            // Get total count of features to check that batch query returned everything
+            var queryCount = new QueryForCount(relativeUrl);
+            var countResult = await gateway.QueryForCount(queryCount);
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.Features.Any());
+            Assert.Null(result.Links);
+            Assert.Equal(result.Features.Count(), countResult.NumberOfResults);
+            if (returnGeometry)
+            {
+                Assert.NotNull(result.SpatialReference);
+                Assert.True(result.Features.All(i => i.Geometry != null));
+                Assert.Equal(typeof(T), result.GeometryType);
+            }
+        }
+
         [Theory]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
@@ -807,6 +852,40 @@
             Assert.NotNull(result);
             Assert.NotNull(result.FullName);
             Assert.True(result.Exists);
+        }
+
+        [Fact]
+        public async Task QueryForOutputStatistics()
+        {
+            var gateway = new PortalGateway("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS");
+            var outStats = new List<OutputStatistic>();
+            outStats.Add(new OutputStatistic()
+            {
+                StatisticType = StatisticTypes.Average,
+                OnField = "MALES",
+                OutField = "AVE_MALES"
+            });
+            outStats.Add(new OutputStatistic()
+            {
+                StatisticType = StatisticTypes.Sum,
+                OnField = "MALES",
+                OutField = "SUM_MALES"
+            });
+            var query = new Query("USA_Major_Cities/FeatureServer/0")
+            {
+                GroupByFields = new List<string>(new string[] { "ST" }),
+                OutputStatistics = outStats
+            };
+            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.Query<Point>(query);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.True(result.Features.Any());
+            Assert.NotNull(result.Fields);
+            Assert.True(result.Fields.Where(x => x.Name == "SUM_MALES").Any());
         }
     }
 }

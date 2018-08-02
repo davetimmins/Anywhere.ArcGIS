@@ -217,6 +217,26 @@ namespace Anywhere.ArcGIS.Operation
         /// </summary>
         [DataMember(Name = "resultRecordCount")]
         public int? ResultRecordCount { get; set; }
+
+        /// <summary>
+        ///  The names of the fields to group by for output statistics.
+        /// </summary>
+        [IgnoreDataMember]
+        public List<string> GroupByFields { get; set; }
+
+        /// <summary>
+        /// The list of fields to be included in the group by clause. This list is a comma delimited list of field names.
+        /// </summary>
+        /// <remarks>Default is ''</remarks>
+        [DataMember(Name = "groupByFieldsForStatistics")]
+        public string GroupByFieldsValue { get { return GroupByFields == null || !GroupByFields.Any() ? "" : string.Join(",", GroupByFields); } }
+
+
+        /// <summary>
+        /// The list of output statistics.
+        /// </summary>
+        [DataMember(Name = "outStatistics")]
+        public List<OutputStatistic> OutputStatistics { get; set; }
     }
 
     [DataContract]
@@ -437,5 +457,30 @@ namespace Anywhere.ArcGIS.Operation
         public const string EsriInteger = "esriFieldTypeInteger";
         public const string EsriDouble = "esriFieldTypeDouble";
         public const string EsriDate = "esriFieldTypeDate";
+        public const string EsriOID = "esriFieldTypeOID";
+    }
+
+    [DataContract]
+    public class OutputStatistic
+    {
+        [DataMember(Name = "statisticType")]
+        public string StatisticType { get; set; }
+
+        [DataMember(Name = "onStatisticField")]
+        public string OnField { get; set; }
+
+        [DataMember(Name = "outStatisticFieldName")]
+        public string OutField { get; set; }
+    }
+
+    public static class StatisticTypes
+    {
+        public const string Count = "count";
+        public const string Sum = "sum";
+        public const string Min = "min";
+        public const string Max = "max";
+        public const string Average = "avg";
+        public const string StandardDeviation = "stddev";
+        public const string Variance = "var";
     }
 }
