@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -235,9 +236,9 @@
                 Assert.Equal(typeof(T), result.GeometryType);
             }
         }
-
+        
         [Theory]
-        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0")]
+        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "/Petroleum/KSWells/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
         public async Task QueryCanReturnPointFeatures(string rootUrl, string relativeUrl)
         {

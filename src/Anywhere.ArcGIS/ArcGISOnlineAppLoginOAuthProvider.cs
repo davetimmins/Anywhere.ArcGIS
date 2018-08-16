@@ -23,11 +23,11 @@
         /// <param name="clientId">The Client Id from your API access section of your application from developers.arcgis.com</param>
         /// <param name="clientSecret">The Client Secret from your API access section of your application from developers.arcgis.com</param>
         /// <param name="serializer">Used to (de)serialize requests and responses</param>
-        public ArcGISOnlineAppLoginOAuthProvider(string clientId, string clientSecret, ISerializer serializer = null)
+        public ArcGISOnlineAppLoginOAuthProvider(string clientId, string clientSecret, ISerializer serializer = null, Func<HttpClient> httpClientFunc = null)
             : this(() => LogProvider.For<ArcGISOnlineAppLoginOAuthProvider>(), clientId, clientSecret, serializer)
         { }
 
-        internal ArcGISOnlineAppLoginOAuthProvider(Func<ILog> log, string clientId, string clientSecret, ISerializer serializer = null)
+        internal ArcGISOnlineAppLoginOAuthProvider(Func<ILog> log, string clientId, string clientSecret, ISerializer serializer = null, Func<HttpClient> httpClientFunc = null)
         {
             if (string.IsNullOrWhiteSpace(clientId))
             {
@@ -41,7 +41,8 @@
 
             Serializer = serializer ?? SerializerFactory.Get();     
             OAuthRequest = new GenerateOAuthToken(clientId, clientSecret);
-            _httpClient = HttpClientFactory.Get();
+            var httpFunc = httpClientFunc ?? HttpClientFactory.Get;
+            _httpClient = httpFunc();
 
             _logger = log() ?? LogProvider.For<ArcGISOnlineAppLoginOAuthProvider>();
             _logger.DebugFormat("Created new token provider for {0}", RootUrl);
