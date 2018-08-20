@@ -222,6 +222,9 @@ namespace Anywhere.ArcGIS.Operation
         [DataMember(Name = "expires_in")]
         public long Expiry { get; set; }
 
+        [DataMember(Name = "error")]
+        public new ArcGISErrorDetail Error { get; set; }
+
         public Token AsToken()
         {
             return new Token
@@ -275,5 +278,29 @@ namespace Anywhere.ArcGIS.Operation
         /// </summary>
         [DataMember(Name = "ssl")]
         public bool AlwaysUseSsl { get; set; }
+
+        [DataMember(Name = "error")]
+        public new ArcGISErrorDetail Error { get; set; }
+    }
+
+    [DataContract]
+    public class ArcGISErrorDetail
+    {
+        [DataMember(Name = "code")]
+        public int Code { get; set; }
+
+        [DataMember(Name = "message")]
+        public string Message { get; set; }
+
+        [DataMember(Name = "details")]
+        public string Details { get; set; }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Code {0}: {1}.{2}\n{3}", Code, Message, Description, Details == null ? "" : string.Join(" ", Details));
+        }
     }
 }

@@ -199,20 +199,31 @@
             string resultString = string.Empty;
             try
             {
+                _logger.DebugFormat("HTTP call: {0} {1}", uri, content);
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, content, ct).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
 
                 resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                _logger.DebugFormat("HTTP call response: {0}", resultString);
             }
             catch (TaskCanceledException tce)
             {
                 _logger.WarnException("Token request cancelled (exception swallowed)", tce);
                 return default(Token);
             }
+            // TODO ; add verbose logging
+            Token result = null;
 
-            var result = Serializer.AsPortalResponse<Token>(resultString);
+            try
+            {
+                result = Serializer.AsPortalResponse<Token>(resultString);
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("unable to deserialize token", ex);
+            }
 
-            if (result.Error != null)
+            if (result?.Error != null)
             {
                 throw new InvalidOperationException(result.Error.ToString());
             }
