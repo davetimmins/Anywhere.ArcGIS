@@ -211,6 +211,11 @@
                 _logger.WarnException("Token request cancelled (exception swallowed)", tce);
                 return default(Token);
             }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Token request failed", ex);
+                return default(Token);
+            }
             // TODO ; add verbose logging
             Token result = null;
 
@@ -221,6 +226,7 @@
             catch (Exception ex)
             {
                 _logger.WarnException("unable to deserialize token", ex);
+                return default(Token);
             }
 
             if (result?.Error != null)

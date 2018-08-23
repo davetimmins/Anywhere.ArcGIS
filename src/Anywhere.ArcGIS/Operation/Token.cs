@@ -205,8 +205,8 @@ namespace Anywhere.ArcGIS.Operation
             if (string.IsNullOrWhiteSpace(rootUrl)) throw new ArgumentNullException("rootUrl", "rootUrl is null.");
 
             return (DontForceHttps ?
-                rootUrl.Replace("sharing/rest/", "") + "sharing/rest/" :
-                rootUrl.Replace("http://", "https://").Replace("sharing/rest/", "") + "sharing/rest/") + RelativeUrl;
+                rootUrl.Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/" :
+                rootUrl.Replace("http://", "https://").Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/") + RelativeUrl;
         }
     }
 
