@@ -30,11 +30,11 @@
         /// <param name="serializer">Used to (de)serialize requests and responses</param>
         /// <param name="referer">Referer url to use for the token generation</param>
         /// <param name="cryptoProvider">Used to encrypt the token reuqest. If not set it will use the default from CryptoProviderFactory</param>
-        public TokenProvider(string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null)
+        public TokenProvider(string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null, Func<HttpClient> httpClientFunc = null)
             : this (() => LogProvider.For<TokenProvider>(), rootUrl, username, password, serializer, referer, cryptoProvider)
         { }
 
-        internal TokenProvider(Func<ILog> log, string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null)
+        internal TokenProvider(Func<ILog> log, string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null, Func<HttpClient> httpClientFunc = null)
         {
             if (string.IsNullOrWhiteSpace(rootUrl))
             {
@@ -55,7 +55,8 @@
             
             RootUrl = rootUrl.AsRootUrl();
             CryptoProvider = cryptoProvider ?? CryptoProviderFactory.Get();
-            _httpClient = HttpClientFactory.Get();
+            var httpFunc = httpClientFunc ?? HttpClientFactory.Get;
+            _httpClient = httpFunc();
             TokenRequest = new GenerateToken(username, password) { Referer = referer };
             UserName = username;
 
@@ -198,20 +199,37 @@
             string resultString = string.Empty;
             try
             {
+                _logger.DebugFormat("HTTP call: {0} {1}", uri, content);
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, content, ct).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
 
                 resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                _logger.DebugFormat("HTTP call response: {0}", resultString);
             }
             catch (TaskCanceledException tce)
             {
                 _logger.WarnException("Token request cancelled (exception swallowed)", tce);
                 return default(Token);
             }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Token request failed", ex);
+                return default(Token);
+            }
+            // TODO ; add verbose logging
+            Token result = null;
 
-            var result = Serializer.AsPortalResponse<Token>(resultString);
+            try
+            {
+                result = Serializer.AsPortalResponse<Token>(resultString);
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("unable to deserialize token", ex);
+                return default(Token);
+            }
 
-            if (result.Error != null)
+            if (result?.Error != null)
             {
                 throw new InvalidOperationException(result.Error.ToString());
             }
