@@ -72,6 +72,9 @@
         [DataMember(Name = "extent")]
         public Extent Extent { get; set; }
 
+        [DataMember(Name = "timeInfo")]
+        public LayerTimeInfo TimeInfo { get; set; }
+
         [DataMember(Name = "hasAttachments")]
         public bool HasAttachments { get; set; }
 
@@ -190,5 +193,62 @@
 
         [DataMember(Name = "supportsQueryWithDistance")]
         public bool SupportsQueryWithDistance { get; set; }
+    }
+
+    [DataContract]
+    public class LayerTimeInfo
+    {
+        [DataMember(Name = "startTimeField")]
+        public string startTimeField { get; set; }
+
+        [DataMember(Name = "endTimeField")]
+        public string endTimeField { get; set; }
+
+        [DataMember(Name = "trackIdField")]
+        public string trackIdField { get; set; }
+
+        [DataMember(Name = "timeExtent")]
+        public List<long> timeExtent { get; set; }
+
+        [DataMember(Name = "timeReference")]
+        public TimeReference timeReference { get; set; }
+
+        [DataMember(Name = "timeInterval")]
+        public int timeInterval { get; set; }
+
+        [DataMember(Name = "timeIntervalUnits")]
+        public string timeIntervalUnits { get; set; }
+
+        [DataMember(Name = "exportOptions")]
+        public ExportOptions exportOptions { get; set; }
+
+        [DataMember(Name = "hasLiveData")]
+        public bool hasLiveData { get; set; }
+    }
+
+    [DataContract]
+    public class ExportOptions
+    {
+        [DataMember(Name = "useTime")]
+        public bool useTime { get; set; }
+
+        [DataMember(Name = "timeDataCumulative")]
+        public bool timeDataCumulative { get; set; }
+
+        [DataMember(Name = "timeOffset")]
+        public int timeOffset { get; set; }
+
+        [DataMember(Name = "timeOffsetUnits")]
+        public string timeOffsetUnits { get; set; }
+    }
+
+    [DataContract]
+    public class TimeReference
+    {
+        [DataMember(Name = "timeZone")]
+        public string timeZone { get; set; }
+
+        [DataMember(Name = "respectsDaylightSaving")]
+        public bool respectsDaylightSaving { get; set; }
     }
 }
