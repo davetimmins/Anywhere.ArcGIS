@@ -436,7 +436,7 @@
         }
 
         [Theory]
-        [InlineData("http://services.arcgis.com/hMYNkrKaydBeWRXE/arcgis", "TestReturnExtentOnly/FeatureServer/0")]
+        [InlineData("https://services.arcgis.com/hMYNkrKaydBeWRXE/arcgis", "TestReturnExtentOnly/FeatureServer/0")]
         public async Task CanQueryExtent(string rootUrl, string relativeUrl)
         {
             var gateway = new PortalGateway(rootUrl);
@@ -456,7 +456,7 @@
         }
 
         [Theory]
-        [InlineData("http://services.arcgis.com/hMYNkrKaydBeWRXE/arcgis", "TestReturnExtentOnly/FeatureServer/0", 1, 2)]
+        [InlineData("https://services.arcgis.com/hMYNkrKaydBeWRXE/arcgis", "TestReturnExtentOnly/FeatureServer/0", 1, 2)]
         public async Task CanPagePointQuery(string rootUrl, string relativeUrl, int start, int numberToReturn)
         {
             var gateway = new PortalGateway(rootUrl);
