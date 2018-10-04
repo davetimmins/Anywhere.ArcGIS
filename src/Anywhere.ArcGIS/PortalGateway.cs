@@ -25,10 +25,10 @@
         /// <param name="httpClientFunc"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public new static async Task<PortalGateway> Create(
+        public static new async Task<PortalGateway> Create(
             string rootUrl, string username, string password,
             ISerializer serializer = null, Func<HttpClient> httpClientFunc = null,
-            CancellationToken ct = default(CancellationToken))
+            CancellationToken ct = default(CancellationToken), string referer = null)
         {
             if (string.IsNullOrWhiteSpace(rootUrl))
             {
@@ -46,7 +46,7 @@
             ITokenProvider tokenProvider = null;
             if (!string.IsNullOrWhiteSpace(info.OwningSystemUrl) && (info.OwningSystemUrl.StartsWith("http://www.arcgis.com", StringComparison.OrdinalIgnoreCase) || info.OwningSystemUrl.StartsWith("https://www.arcgis.com", StringComparison.OrdinalIgnoreCase)))
             {
-                tokenProvider = new ArcGISOnlineTokenProvider(username, password, serializer: serializer, httpClientFunc: httpClientFunc);
+                tokenProvider = new ArcGISOnlineTokenProvider(username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer);
             }
             else
             {
@@ -55,16 +55,16 @@
                     if (!info.AuthenticationInfo.TokenServicesUrl.StartsWith(gateway.RootUrl, StringComparison.OrdinalIgnoreCase))
                     {
                         tokenProvider = new FederatedTokenProvider(
-                            new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password, serializer: serializer, httpClientFunc: httpClientFunc),
+                            new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer),
                             info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""),
                             gateway.RootUrl,
                             referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"),
-                            serializer: serializer, 
+                            serializer: serializer,
                             httpClientFunc: httpClientFunc);
                     }
                     else
                     {
-                        tokenProvider = new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password, serializer: serializer, httpClientFunc: httpClientFunc);
+                        tokenProvider = new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer);
                     }
                 }
             }
@@ -80,11 +80,11 @@
             : base(rootUrl, serializer, tokenProvider, httpClientFunc)
         { }
 
-        public PortalGateway(string rootUrl, string username, string password, ISerializer serializer = null, Func<HttpClient> httpClientFunc = null)
+        public PortalGateway(string rootUrl, string username, string password, ISerializer serializer = null, Func<HttpClient> httpClientFunc = null, string referer = null)
             : this(rootUrl, serializer,
             (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 ? null
-                : new TokenProvider(rootUrl, username, password, serializer),
+                : new TokenProvider(rootUrl, username, password, serializer, referer: referer),
             httpClientFunc)
         { }
 
@@ -112,7 +112,7 @@
             return result;
         }
 
-        async Task<List<SiteFolderDescription>> DescribeEndpoint(ArcGISServerOperation operation, CancellationToken ct = default(CancellationToken))
+        private async Task<List<SiteFolderDescription>> DescribeEndpoint(ArcGISServerOperation operation, CancellationToken ct = default(CancellationToken))
         {
             SiteFolderDescription folderDescription = null;
             var result = new List<SiteFolderDescription>();
@@ -196,7 +196,7 @@
             {
                 throw new ArgumentNullException(nameof(siteDescription.Services));
             }
-          
+
             return DescribeServices(siteDescription.Services.ToList(), ct);
         }
 
@@ -332,7 +332,7 @@
         /// <param name="ct">Optional cancellation token to cancel pending request</param>
         /// <returns></returns>
         public virtual Task<SingleInputGeocodeResponse> Geocode(SingleInputGeocode geocode, CancellationToken ct = default(CancellationToken))
-        {            
+        {
             return Get<SingleInputGeocodeResponse, SingleInputGeocode>(geocode, ct);
         }
 

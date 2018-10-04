@@ -20,9 +20,9 @@
         internal const string AGOPortalUrl = "https://www.arcgis.com/sharing/rest/";
         protected const string GeometryServerUrlRelative = "/Utilities/Geometry/GeometryServer";
         protected const string GeometryServerUrl = "https://utility.arcgisonline.com/arcgis/rest/services/Geometry/GeometryServer";
-        HttpClient _httpClient;
+        private HttpClient _httpClient;
         protected IEndpoint GeometryServiceIEndpoint;
-        readonly ILog _logger;
+        private readonly ILog _logger;
 
         /// <summary>
         /// Create a new <see cref="PortalGatewayBase"/> using the default token service as discovered using the Info operation for the server
@@ -37,7 +37,7 @@
         public static async Task<PortalGatewayBase> Create(
             string rootUrl, string username, string password,
             ISerializer serializer = null, Func<HttpClient> httpClientFunc = null,
-            CancellationToken ct = default(CancellationToken))
+            CancellationToken ct = default(CancellationToken), string referer = null)
         {
             if (string.IsNullOrWhiteSpace(rootUrl))
             {
@@ -55,7 +55,7 @@
             ITokenProvider tokenProvider = null;
             if (!string.IsNullOrWhiteSpace(info.OwningSystemUrl) && (info.OwningSystemUrl.StartsWith("http://www.arcgis.com", StringComparison.OrdinalIgnoreCase) || info.OwningSystemUrl.StartsWith("https://www.arcgis.com", StringComparison.OrdinalIgnoreCase)))
             {
-                tokenProvider = new ArcGISOnlineTokenProvider(username, password, serializer: serializer, httpClientFunc: httpClientFunc);
+                tokenProvider = new ArcGISOnlineTokenProvider(username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer);
             }
             else
             {
@@ -64,16 +64,16 @@
                     if (!info.AuthenticationInfo.TokenServicesUrl.StartsWith(gateway.RootUrl, StringComparison.OrdinalIgnoreCase))
                     {
                         tokenProvider = new FederatedTokenProvider(
-                            new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password, serializer: serializer, httpClientFunc: httpClientFunc),
+                            new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer),
                             info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""),
                             gateway.RootUrl,
-                            referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"), 
-                            serializer: serializer, 
+                            referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"),
+                            serializer: serializer,
                             httpClientFunc: httpClientFunc);
                     }
                     else
                     {
-                        tokenProvider = new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password, serializer: serializer, httpClientFunc: httpClientFunc);
+                        tokenProvider = new TokenProvider(info.AuthenticationInfo?.TokenServicesUrl, username, password, serializer: serializer, httpClientFunc: httpClientFunc, referer: referer);
                     }
                 }
             }
@@ -152,7 +152,7 @@
 
         protected virtual IEndpoint GeometryServiceEndpoint
         {
-            get { return GeometryServiceIEndpoint ?? (GeometryServiceIEndpoint = (IEndpoint)GeometryServerUrlRelative.AsEndpoint()); }
+            get { return GeometryServiceIEndpoint ?? (GeometryServiceIEndpoint = GeometryServerUrlRelative.AsEndpoint()); }
         }
 
         /// <summary>
@@ -274,8 +274,8 @@
                     {
                         oidList = oidList.Concat(innerResult.Features.Select(x => x.ObjectID.ToString()));
                         result.Features = result.Features.Concat(innerResult.Features);
-                        exceeded = result.ExceededTransferLimit.HasValue 
-                            && innerResult.ExceededTransferLimit.HasValue 
+                        exceeded = result.ExceededTransferLimit.HasValue
+                            && innerResult.ExceededTransferLimit.HasValue
                             && innerResult.ExceededTransferLimit.Value;
                     }
                     else
@@ -556,7 +556,7 @@
             return Get<ExportMapResponse, ExportMap>(exportMap, ct);
         }
 
-        async Task<Token> CheckGenerateToken(CancellationToken ct)
+        private async Task<Token> CheckGenerateToken(CancellationToken ct)
         {
             if (TokenProvider == null)
             {
@@ -586,7 +586,7 @@
             {
                 throw new ArgumentNullException(nameof(exportMapResponse));
             }
-            
+
             if (string.IsNullOrWhiteSpace(exportMapResponse.ImageUrl))
             {
                 throw new ArgumentNullException(nameof(exportMapResponse.ImageUrl));
@@ -618,7 +618,7 @@
             return new FileInfo(fileInfo.FullName);
         }
 
-        void CheckRefererHeader(string referrer)
+        private void CheckRefererHeader(string referrer)
         {
             if (_httpClient == null || string.IsNullOrWhiteSpace(referrer))
             {
