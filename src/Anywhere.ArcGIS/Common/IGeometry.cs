@@ -314,11 +314,19 @@ namespace Anywhere.ArcGIS.Common
             foreach (PointCollection path in Paths)
             {
                 if (extent == null)
+                {
                     extent = path.CalculateExtent(SpatialReference);
+                }
                 else
+                {
                     extent = extent.Union(path.CalculateExtent(SpatialReference));
+                }
             }
-            if (extent != null) extent.SpatialReference = SpatialReference;
+
+            if (extent != null)
+            {
+                extent.SpatialReference = SpatialReference;
+            }
 
             return extent;
         }
@@ -398,23 +406,43 @@ namespace Anywhere.ArcGIS.Common
 
             foreach (var point in Points.Where(p => p != null))
             {
-                if (point.X < x || double.IsNaN(x)) x = point.X;
+                if (point.X < x || double.IsNaN(x))
+                {
+                    x = point.X;
+                }
 
-                if (point.Y < y || double.IsNaN(y)) y = point.Y;
+                if (point.Y < y || double.IsNaN(y))
+                {
+                    y = point.Y;
+                }
 
-                if (point.X > x1 || double.IsNaN(x1)) x1 = point.X;
+                if (point.X > x1 || double.IsNaN(x1))
+                {
+                    x1 = point.X;
+                }
 
-                if (point.Y > y1 || double.IsNaN(y1)) y1 = point.Y;
+                if (point.Y > y1 || double.IsNaN(y1))
+                {
+                    y1 = point.Y;
+                }
             }
+
             if (double.IsNaN(x) || double.IsNaN(y) || double.IsNaN(x1) || double.IsNaN(y1))
+            {
                 return null;
+            }
 
             return new Extent { XMin = x, YMin = y, XMax = x1, YMax = y1, SpatialReference = spatialReference };
         }
 
         public List<Point> Points
         {
-            get { return this.Select(point => point != null ? new Point { X = point.First(), Y = point.Last() } : null).ToList(); }
+            get
+            {
+                return this.Select(point => point != null ? new Point { X = point.First(), Y = point.Last() } : null)
+                    .Where(p => p != null)
+                    .ToList();
+            }
         }
 
         public List<double[]> Clone()
@@ -452,11 +480,19 @@ namespace Anywhere.ArcGIS.Common
             foreach (var ring in Rings.Where(r => r != null))
             {
                 if (extent == null)
+                {
                     extent = ring.CalculateExtent(SpatialReference);
+                }
                 else
+                {
                     extent = extent.Union(ring.CalculateExtent(SpatialReference));
+                }
             }
-            if (extent != null && extent.SpatialReference == null) extent.SpatialReference = SpatialReference;
+
+            if (extent != null && extent.SpatialReference == null)
+            {
+                extent.SpatialReference = SpatialReference;
+            }
 
             return extent;
         }
@@ -540,38 +576,68 @@ namespace Anywhere.ArcGIS.Common
 
         public Extent Union(Extent extent)
         {
-            if (extent == null) extent = this;
+            if (extent == null)
+            {
+                extent = this;
+            }
+
             if (!SpatialReference.Equals(extent.SpatialReference))
+            {
                 throw new ArgumentException("Spatial references must match for union operation.");
+            }
 
             var envelope = new Extent { SpatialReference = SpatialReference ?? extent.SpatialReference };
             if (double.IsNaN(XMin))
+            {
                 envelope.XMin = extent.XMin;
+            }
             else if (!double.IsNaN(extent.XMin))
+            {
                 envelope.XMin = Math.Min(extent.XMin, XMin);
+            }
             else
+            {
                 envelope.XMin = XMin;
+            }
 
             if (double.IsNaN(XMax))
+            {
                 envelope.XMax = extent.XMax;
+            }
             else if (!double.IsNaN(extent.XMax))
+            {
                 envelope.XMax = Math.Max(extent.XMax, XMax);
+            }
             else
+            {
                 envelope.XMax = XMax;
+            }
 
             if (double.IsNaN(YMin))
+            {
                 envelope.YMin = extent.YMin;
+            }
             else if (!double.IsNaN(extent.YMin))
+            {
                 envelope.YMin = Math.Min(extent.YMin, YMin);
+            }
             else
+            {
                 envelope.YMin = YMin;
+            }
 
             if (double.IsNaN(YMax))
+            {
                 envelope.YMax = extent.YMax;
+            }
             else if (!double.IsNaN(extent.YMax))
+            {
                 envelope.YMax = Math.Max(extent.YMax, YMax);
+            }
             else
+            {
                 envelope.YMax = YMax;
+            }
 
             return envelope;
         }

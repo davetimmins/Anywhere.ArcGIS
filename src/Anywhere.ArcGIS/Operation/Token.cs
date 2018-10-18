@@ -112,7 +112,10 @@ namespace Anywhere.ArcGIS.Operation
 
         public string BuildAbsoluteUrl(string rootUrl)
         {
-            if (string.IsNullOrWhiteSpace(rootUrl)) throw new ArgumentNullException("rootUrl", "rootUrl is null.");
+            if (string.IsNullOrWhiteSpace(rootUrl))
+            {
+                throw new ArgumentNullException("rootUrl", "rootUrl is null.");
+            }
 
             return IsFederated
                 ? (DontForceHttps ? rootUrl.Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/" : rootUrl.Replace("http://", "https://").Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/") + RelativeUrl.Replace("tokens/", "")
@@ -202,7 +205,10 @@ namespace Anywhere.ArcGIS.Operation
 
         public string BuildAbsoluteUrl(string rootUrl)
         {
-            if (string.IsNullOrWhiteSpace(rootUrl)) throw new ArgumentNullException("rootUrl", "rootUrl is null.");
+            if (string.IsNullOrWhiteSpace(rootUrl))
+            {
+                throw new ArgumentNullException("rootUrl", "rootUrl is null.");
+            }
 
             return (DontForceHttps ?
                 rootUrl.Replace("sharing/rest/", "").Replace("sharing/", "") + "sharing/rest/" :
