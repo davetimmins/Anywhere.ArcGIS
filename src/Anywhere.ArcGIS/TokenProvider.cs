@@ -31,7 +31,7 @@
         /// <param name="referer">Referer url to use for the token generation</param>
         /// <param name="cryptoProvider">Used to encrypt the token reuqest. If not set it will use the default from CryptoProviderFactory</param>
         public TokenProvider(string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null, Func<HttpClient> httpClientFunc = null)
-            : this (() => LogProvider.For<TokenProvider>(), rootUrl, username, password, serializer, referer, cryptoProvider)
+            : this (() => LogProvider.For<TokenProvider>(), rootUrl, username, password, serializer, referer, cryptoProvider, httpClientFunc)
         { }
 
         internal TokenProvider(Func<ILog> log, string rootUrl, string username, string password, ISerializer serializer = null, string referer = "", ICryptoProvider cryptoProvider = null, Func<HttpClient> httpClientFunc = null)
