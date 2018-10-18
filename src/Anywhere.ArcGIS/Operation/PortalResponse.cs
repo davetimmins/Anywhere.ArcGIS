@@ -45,7 +45,7 @@ namespace Anywhere.ArcGIS.Operation
 
         public override string ToString()
         {
-            return string.Format("Code {0}: {1}.{2}\n{3}", Code, Message, Description, Details == null ? "" : string.Join(" ", Details));
+            return string.Format("Code {0}: {1}. {2}\n{3}", Code, Message, Description, Details == null ? "" : string.Join(" ", Details));
         }
     }
 

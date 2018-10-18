@@ -30,14 +30,20 @@ namespace Anywhere.ArcGIS
         public static List<Feature<IGeometry>> ToFeatures<TGeometry>(this FeatureCollection<TGeometry> featureCollection)
             where TGeometry : IGeoJsonGeometry
         {
-            if (featureCollection == null || featureCollection.Features == null || !featureCollection.Features.Any()) return null;
+            if (featureCollection == null || featureCollection.Features == null || !featureCollection.Features.Any())
+            {
+                return null;
+            }
 
             var features = new List<Feature<IGeometry>>();
 
             foreach (var geoJson in featureCollection.Features)
             {
                 var geometry = geoJson.Geometry.ToGeometry(_typeMap[geoJson.Geometry.Type]());
-                if (geometry == null) continue;
+                if (geometry == null)
+                {
+                    continue;
+                }
 
                 features.Add(new Feature<IGeometry> { Geometry = geometry, Attributes = geoJson.Properties });
             }
@@ -53,15 +59,20 @@ namespace Anywhere.ArcGIS
         public static FeatureCollection<IGeoJsonGeometry> ToFeatureCollection<TGeometry>(this List<Feature<TGeometry>> features)
             where TGeometry : IGeometry
         {
-            if (features == null || !features.Any()) return null;
+            if (features == null || !features.Any())
+            {
+                return null;
+            }
 
             var featureCollection = new FeatureCollection<IGeoJsonGeometry> { Features = new List<GeoJsonFeature<IGeoJsonGeometry>>() };
             if (features.First().Geometry.SpatialReference != null)
+            {
                 featureCollection.CoordinateReferenceSystem = new Crs
                 {
                     Type = "EPSG",
                     Properties = new CrsProperties { Wkid = (int)features.First().Geometry.SpatialReference.Wkid }
                 };
+            }
 
             foreach (var feature in features)
             {
@@ -96,11 +107,16 @@ namespace Anywhere.ArcGIS
             {
                 var attr = i < features.Count ? features[i].Attributes : null;
                 var feature = new Feature<T> { Attributes = attr };
-                if (i < geometries.Count) feature.Geometry = geometries[i];
+                if (i < geometries.Count)
+                {
+                    feature.Geometry = geometries[i];
+                }
                 result.Insert(i, feature);
             }
             if (geometries.Count > features.Count)
+            {
                 result.InsertRange(features.Count, geometries.Skip(features.Count).Select(g => new Feature<T> { Geometry = g }));
+            }
 
             return result;
         }

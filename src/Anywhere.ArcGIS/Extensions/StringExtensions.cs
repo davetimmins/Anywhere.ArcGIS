@@ -72,7 +72,10 @@
         /// <returns>Byte representation of the hex-encoded input</returns>
         public static byte[] HexToBytes(this string hex)
         {
-            if (string.IsNullOrWhiteSpace(hex)) return null;
+            if (string.IsNullOrWhiteSpace(hex))
+            {
+                return null;
+            }
 
             int length = hex.Length;
 
