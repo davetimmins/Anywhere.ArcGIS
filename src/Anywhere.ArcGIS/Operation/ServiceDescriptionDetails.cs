@@ -67,6 +67,9 @@
         [IgnoreDataMember]
         public List<string> Capabilities { get { return string.IsNullOrWhiteSpace(CapabilitiesValue) ? null : CapabilitiesValue.Split(',').ToList(); } }
 
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
         [DataMember(Name = "description")]
         public string Description { get; set; }
 
