@@ -61,10 +61,10 @@
         public List<RelatedLayer> SubLayers { get; set; }
 
         [DataMember(Name = "minScale")]
-        public int MinimumScale { get; set; }
+        public double? MinimumScale { get; set; }
 
         [DataMember(Name = "maxScale")]
-        public int MaximumScale { get; set; }
+        public double? MaximumScale { get; set; }
 
         [DataMember(Name = "defaultVisibility")]
         public bool DefaultVisibility { get; set; }
