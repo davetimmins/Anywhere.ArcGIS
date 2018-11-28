@@ -137,6 +137,7 @@
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/1")]
         [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer/0")]
+        [InlineData("http://services1.arcgis.com/dOFzdrPdRgtU4fRo/ArcGIS", "ServiceDefDouble/FeatureServer/0")]
         public async Task CanDescribeLayer(string rootUrl, string layerUrl)
         {
             var gateway = new PortalGateway(rootUrl);
