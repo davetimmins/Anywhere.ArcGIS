@@ -236,7 +236,7 @@
             return Get<QueryResponse<T>, Query>(queryOptions, ct);
         }
 
-       public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken), Polly.Retry.AsyncRetryPolicy policy = null)
+       public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken), AsyncPolicy policy = null)
             where T : IGeometry
         {
             var result = await Get<QueryResponse<T>, Query>(queryOptions, ct);

@@ -214,11 +214,6 @@
         [InlineData("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
         public async Task QueryCanGetBatchFeaturesPointWithPolicy(string rootUrl, string relativeUrl)
         {
-            // Polly.Retry.AsyncRetryPolicy TestPolicy = Polly.Retry.RetryPolicy
-            //     .Handle<InvalidOperationException>()
-            //     .Or<System.Net.Http.HttpRequestException>()
-            //     .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
             await QueryCanGetBatchFeatures<Point>(rootUrl, relativeUrl, true, IntegrationTestFixture.TestPolicy);
         }
 
@@ -229,7 +224,7 @@
             await QueryCanGetBatchFeatures<Polygon>(rootUrl, relativeUrl, false, IntegrationTestFixture.TestPolicy);
         }
 
-        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry, Polly.Retry.AsyncRetryPolicy policy = null)
+        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry, AsyncPolicy policy = null)
             where T:IGeometry
         {
             var gateway = new PortalGateway(rootUrl);
