@@ -1,6 +1,7 @@
 ﻿namespace Anywhere.ArcGIS.Test.Integration
 {
     using Polly;
+    using Polly.Retry;
     using Serilog;
     using Serilog.Events;
     using System;
@@ -10,7 +11,7 @@
 
     public class IntegrationTestFixture : IDisposable
     {
-        public static Policy TestPolicy { get; private set; }
+        public static AsyncRetryPolicy TestPolicy { get; private set; }
         IDisposable _logCapture;
 
         static IntegrationTestFixture()

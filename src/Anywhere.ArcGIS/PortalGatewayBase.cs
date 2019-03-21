@@ -12,6 +12,8 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Polly;
+
     /// <summary>
     /// ArcGIS Server gateway base. Contains code to make HTTP(S) calls and operations available to all gateway types
     /// </summary>
@@ -234,7 +236,7 @@
             return Get<QueryResponse<T>, Query>(queryOptions, ct);
         }
 
-        public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken))
+       public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken), Polly.Retry.AsyncRetryPolicy policy = null)
             where T : IGeometry
         {
             var result = await Get<QueryResponse<T>, Query>(queryOptions, ct);
@@ -268,7 +270,18 @@
                         // use list of OIDs to exclude
                         innerQueryOptions.Where = $"({originalWhere}) AND ({oidField} not in ({string.Join(",", oidList)}))";
                     }
-                    var innerResult = await Get<QueryResponse<T>, Query>(queryOptions, ct).ConfigureAwait(false);
+
+                    QueryResponse<T> innerResult;
+                    if(policy != null)
+                    {
+                        innerResult = await policy.ExecuteAsync(() => {
+                            return Get<QueryResponse<T>, Query>(queryOptions, ct);
+                        });
+                    }
+                    else
+                    {
+                        innerResult = await Get<QueryResponse<T>, Query>(queryOptions, ct).ConfigureAwait(false);
+                    }
 
                     if (innerResult != null && innerResult.Error == null && innerResult.Features != null && innerResult.Features.Any())
                     {
