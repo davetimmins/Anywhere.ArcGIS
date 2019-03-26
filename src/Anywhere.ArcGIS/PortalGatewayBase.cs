@@ -753,8 +753,6 @@
             var endpoint = requestObject.Endpoint;
             var parameters = Serializer.AsDictionary(requestObject);
 
-            // Console.WriteLine(parameters["deletes"]);
-
             var url = endpoint.BuildAbsoluteUrl(RootUrl).Split('?').FirstOrDefault();
 
             var token = await CheckGenerateToken(ct).ConfigureAwait(false);

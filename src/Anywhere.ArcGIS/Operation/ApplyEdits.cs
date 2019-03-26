@@ -55,10 +55,12 @@ namespace Anywhere.ArcGIS.Operation
         [DataMember(Name = "deletes")]
         public string DeleteIds { 
             get {
+                /* Return in form array of quoted, braced GUIDS - examples:
+                []
+                ['{509caea1-7a3f-444d-a0ef-81c942474624}']
+                ['{509caea1-7a3f-444d-a0ef-81c942474624}','{701a68ab-86df-4244-a9cb-dda10028f528}']
+                */
                 if(UseGlobalIds){
-                    // Console.WriteLine("string.Join(',', DeleteGlobalIds)");
-                    // Console.WriteLine(string.Join(",", DeleteGlobalIds));
-
                     string deleteIds = "[";
                     if(DeleteGlobalIds!=null){
                         foreach(Guid deleteGlobalId in DeleteGlobalIds){
@@ -67,12 +69,9 @@ namespace Anywhere.ArcGIS.Operation
                         // Remove trailing comma if present.
                         if(deleteIds.Substring(deleteIds.Length-1)==","){
                             deleteIds = deleteIds.Substring(0, deleteIds.Length-1);
-                        }                    }
+                        }                    
+                    }
                     deleteIds += "]";
-                    // Console.WriteLine("DeleteIds get()");
-                    // Console.WriteLine("deleteIds");
-                    // Console.WriteLine(deleteIds);
-//                    return DeleteGlobalIds == null ? string.Empty : string.Join(",", DeleteGlobalIds);
                     return deleteIds;
                 } else {
                     return Deletes == null ? string.Empty : string.Join(",", Deletes);

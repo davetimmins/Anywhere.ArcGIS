@@ -709,9 +709,6 @@
                 return gateway.ApplyEdits(adds);
             });
 
-            // Console.WriteLine("newGlobalId");
-            // Console.WriteLine(newGlobalId);
-
             Assert.True(resultAdd.Adds.Any());
             Assert.True(resultAdd.Adds.First().Success);
             Assert.Equal(resultAdd.ExpectedAdds, resultAdd.ActualAdds);
@@ -722,8 +719,6 @@
 
             feature.Attributes.Add("comments", "something"); // problem with serialization means we need single quotes around string values
             feature.Attributes.Add("editor", "Anywhere.ArcGIS");
-
-            // feature.Attributes.Add("objectId", id);
 
             var updates = new ApplyEdits<Point>(@"Sync/SaveTheBaySync/FeatureServer/0")
             {
@@ -737,42 +732,36 @@
 
             Assert.True(resultUpdate.Updates.Any());
 
-            // Success returns false, even though it's worked.
-            // Assert.True(resultUpdate.Updates.First().Success);
+            // Note - Success returns false, even though it's worked.
+            Assert.True(resultUpdate.Updates.First().Success);
             Assert.Equal(resultUpdate.ExpectedUpdates, resultUpdate.ActualUpdates);
-            // Assert.Equal(resultUpdate.ActualUpdates, resultUpdate.ActualUpdatesThatSucceeded);
+            Assert.Equal(resultUpdate.ActualUpdates, resultUpdate.ActualUpdatesThatSucceeded);
 
             // Not sure why, but GlobalId in Updates is in D format, not B format.
             Assert.Equal(newGlobalId.ToString("D"), resultUpdate.Updates.First().GlobalId);
 
             var deletes = new ApplyEdits<Point>(@"Sync/SaveTheBaySync/FeatureServer/0".AsEndpoint())
             {
-                // Adds = new List<Feature<Point>>(),
-                // Updates = new List<Feature<Point>>(),
-                // Deletes = new List<long>(),
                 DeleteGlobalIds = new List<Guid> { newGlobalId },
                 UseGlobalIds = true
             };
-
-            // Console.WriteLine("deletes.DeleteIds");
-            // Console.WriteLine(deletes.DeleteIds);
 
             var resultDelete = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
                 return gateway.ApplyEdits(deletes);
             });
 
-            // // resultDelete.ExpectedDeletes returns 0 - not expected value (1).
-            // Console.WriteLine("resultDelete.ExpectedDeletes");
-            // Console.WriteLine(resultDelete.ExpectedDeletes);
-            // Console.WriteLine("resultDelete.ActualDeletes");
-            // Console.WriteLine(resultDelete.ActualDeletes);
-            // Console.WriteLine("resultDelete.ActualDeletesThatSucceeded");
-            // Console.WriteLine(resultDelete.ActualDeletesThatSucceeded);
+            // resultDelete.ExpectedDeletes returns 0 - not expected value (1).
+            Console.WriteLine("resultDelete.ExpectedDeletes");
+            Console.WriteLine(resultDelete.ExpectedDeletes);
+            Console.WriteLine("resultDelete.ActualDeletes");
+            Console.WriteLine(resultDelete.ActualDeletes);
+            Console.WriteLine("resultDelete.ActualDeletesThatSucceeded");
+            Console.WriteLine(resultDelete.ActualDeletesThatSucceeded);
 
             Assert.True(resultDelete.Deletes.Any());
             Assert.True(resultDelete.Deletes.First().Success);
-            // esultDelete.ExpectedDeletes returns 0 - not expected value (1).
+            // resultDelete.ExpectedDeletes returns 0 - not expected value (1).
             // Assert.Equal(resultDelete.ExpectedDeletes, resultDelete.ActualDeletes);
             Assert.Equal(resultDelete.ActualDeletes, resultDelete.ActualDeletesThatSucceeded);
             Assert.Equal(resultDelete.Deletes.First().GlobalId, id);
