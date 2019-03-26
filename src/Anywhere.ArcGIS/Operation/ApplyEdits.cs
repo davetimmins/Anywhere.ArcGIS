@@ -56,7 +56,24 @@ namespace Anywhere.ArcGIS.Operation
         public string DeleteIds { 
             get {
                 if(UseGlobalIds){
-                    return DeleteGlobalIds == null ? string.Empty : string.Join(",", DeleteGlobalIds);
+                    // Console.WriteLine("string.Join(',', DeleteGlobalIds)");
+                    // Console.WriteLine(string.Join(",", DeleteGlobalIds));
+
+                    string deleteIds = "[";
+                    if(DeleteGlobalIds!=null){
+                        foreach(Guid deleteGlobalId in DeleteGlobalIds){
+                            deleteIds += "'" + deleteGlobalId.ToString("B") + "',";
+                        }
+                        // Remove trailing comma if present.
+                        if(deleteIds.Substring(deleteIds.Length-1)==","){
+                            deleteIds = deleteIds.Substring(0, deleteIds.Length-1);
+                        }                    }
+                    deleteIds += "]";
+                    // Console.WriteLine("DeleteIds get()");
+                    // Console.WriteLine("deleteIds");
+                    // Console.WriteLine(deleteIds);
+//                    return DeleteGlobalIds == null ? string.Empty : string.Join(",", DeleteGlobalIds);
+                    return deleteIds;
                 } else {
                     return Deletes == null ? string.Empty : string.Join(",", Deletes);
                 }
