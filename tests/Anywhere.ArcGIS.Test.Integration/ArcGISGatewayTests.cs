@@ -733,8 +733,8 @@
             Assert.True(resultUpdate.Updates.Any());
             // Note - Success returns false, even though it's worked.
             // Assert.True(resultUpdate.Updates.First().Success);
-            Assert.Equal(resultUpdate.ExpectedUpdates, 1);
-            Assert.Equal(resultUpdate.ActualUpdates, 1);
+            Assert.Equal(1, resultUpdate.ExpectedUpdates);
+            Assert.Equal(1, resultUpdate.ActualUpdates);
             Assert.Equal(resultUpdate.ExpectedUpdates, resultUpdate.ActualUpdates);
             // Note - resultUpdate.ActualUpdatesThatSucceeded returns 0, even though it's worked.
             // Assert.Equal(resultUpdate.ActualUpdates, resultUpdate.ActualUpdatesThatSucceeded);
@@ -757,8 +757,8 @@
             Assert.True(resultDelete.Deletes.First().Success);
             // resultDelete.ExpectedDeletes returns 0 - not expected value (1).
             // Assert.Equal(resultDelete.ExpectedDeletes, resultDelete.ActualDeletes);
-            Assert.Equal(resultDelete.ActualDeletes, 1);
-            Assert.Equal(resultDelete.ActualDeletesThatSucceeded, 1);
+            Assert.Equal(1, resultDelete.ActualDeletes);
+            Assert.Equal(1, resultDelete.ActualDeletesThatSucceeded);
             Assert.Equal(resultDelete.ActualDeletes, resultDelete.ActualDeletesThatSucceeded);
             Assert.Equal(resultDelete.Deletes.First().GlobalId, id);
         }
