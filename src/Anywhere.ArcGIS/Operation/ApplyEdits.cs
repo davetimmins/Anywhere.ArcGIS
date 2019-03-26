@@ -24,6 +24,7 @@ namespace Anywhere.ArcGIS.Operation
             Adds = new List<Feature<T>>();
             Updates = new List<Feature<T>>();
             Deletes = new List<long>();
+            DeleteGlobalIds = new List<Guid>();
             RollbackOnFailure = true;
         }
 
@@ -45,8 +46,22 @@ namespace Anywhere.ArcGIS.Operation
         [IgnoreDataMember]
         public List<long> Deletes { get; set; }
 
+        /// <summary>
+        ///  The Global IDs of this layer / table to be deleted. Use if useGlobalIds is true
+        /// </summary>
+        [IgnoreDataMember]
+        public List<Guid> DeleteGlobalIds { get; set; }
+
         [DataMember(Name = "deletes")]
-        public string DeleteIds { get { return Deletes == null ? string.Empty : string.Join(",", Deletes); } }
+        public string DeleteIds { 
+            get {
+                if(UseGlobalIds){
+                    return DeleteGlobalIds == null ? string.Empty : string.Join(",", DeleteGlobalIds);
+                } else {
+                    return Deletes == null ? string.Empty : string.Join(",", Deletes);
+                }
+            }
+        }
 
         /// <summary>
         /// Geodatabase version to apply the edits. This parameter applies only if the isDataVersioned property of the layer is true.
