@@ -309,7 +309,7 @@ namespace Anywhere.ArcGIS.Operation
         public string SqlType { get; set; }
 
         [DataMember(Name = "domain")]
-        public string Domain { get; set; }
+        public Domain Domain { get; set; }
 
         [DataMember(Name = "defaultValue")]
         public string DefaultValue { get; set; }
