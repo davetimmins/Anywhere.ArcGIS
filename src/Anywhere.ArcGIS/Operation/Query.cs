@@ -313,6 +313,12 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "defaultValue")]
         public string DefaultValue { get; set; }
+
+        [DataMember(Name = "nullable")]
+        public bool Nullable { get; set; }
+
+        [DataMember(Name = "editable")]
+        public bool Editable { get; set; }
     }
 
     /// <summary>
