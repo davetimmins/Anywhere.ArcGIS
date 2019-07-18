@@ -9,13 +9,14 @@
     <Description>Operations and data types used with the ArcGIS REST API.</Description>
     <Summary>Operations and data types used with the ArcGIS REST API.</Summary>
     <Copyright>Copyright Dave Timmins (c) 2018. All rights reserved.</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/davetimmins/Anywhere.ArcGIS</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/davetimmins/Anywhere.ArcGIS/master/logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/davetimmins/Anywhere.ArcGIS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ArcGIS ArcGISServer ArcGISOnline Esri REST netstandard anywhere GIS Mapping Map Location GeoLocation OAuth</PackageTags>
     <Version>1.10.0</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,5 +36,12 @@
     <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.8.3" />
     <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.8.3" />
     <PackageReference Include="dotMorten.OmdGenerator" Version="0.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
