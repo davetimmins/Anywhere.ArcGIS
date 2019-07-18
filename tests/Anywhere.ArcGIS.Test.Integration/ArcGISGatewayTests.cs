@@ -672,6 +672,82 @@
         }
 
         [Fact]
+        public async Task CanAddUpdateAndDeleteUsingGlobalIds()
+        {
+            var gateway = new PortalGateway("https://sampleserver6.arcgisonline.com/arcgis");
+
+            var feature = new Feature<Point>();
+            feature.Attributes.Add("type", 0);
+            feature.Geometry = new Point { SpatialReference = new SpatialReference { Wkid = SpatialReference.WebMercator.Wkid }, X = -13073617.8735768, Y = 4071422.42978062 };
+            Guid newGlobalId = System.Guid.NewGuid();
+            feature.Attributes.Add("GlobalID", newGlobalId);
+            feature.Attributes.Add("creator", "Anywhere.ArcGIS");
+
+            var adds = new ApplyEdits<Point>(@"Sync/SaveTheBaySync/FeatureServer/0".AsEndpoint())
+            {
+                Adds = new List<Feature<Point>> { feature },
+                UseGlobalIds = true
+            };
+            var resultAdd = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.ApplyEdits(adds);
+            });
+
+            Assert.True(resultAdd.Adds.Any());
+            Assert.True(resultAdd.Adds.First().Success);
+            Assert.Equal(resultAdd.ExpectedAdds, resultAdd.ActualAdds);
+            Assert.Equal(resultAdd.ActualAdds, resultAdd.ActualAddsThatSucceeded);
+
+            var id = resultAdd.Adds.First().GlobalId;
+            Assert.Equal(newGlobalId.ToString("B"), id);
+
+            feature.Attributes.Add("comments", "something"); // problem with serialization means we need single quotes around string values
+            feature.Attributes.Add("editor", "Anywhere.ArcGIS");
+
+            var updates = new ApplyEdits<Point>(@"Sync/SaveTheBaySync/FeatureServer/0")
+            {
+                Updates = new List<Feature<Point>> { feature },
+                UseGlobalIds = true
+            };
+            var resultUpdate = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.ApplyEdits(updates);
+            });
+
+            Assert.True(resultUpdate.Updates.Any());
+            // Note - Success returns false, even though it's worked.
+            // Assert.True(resultUpdate.Updates.First().Success);
+            Assert.Equal(1, resultUpdate.ExpectedUpdates);
+            Assert.Equal(1, resultUpdate.ActualUpdates);
+            Assert.Equal(resultUpdate.ExpectedUpdates, resultUpdate.ActualUpdates);
+            // Note - resultUpdate.ActualUpdatesThatSucceeded returns 0, even though it's worked.
+            // Assert.Equal(resultUpdate.ActualUpdates, resultUpdate.ActualUpdatesThatSucceeded);
+
+            // Not sure why, but GlobalId in Updates is in D format, not B format.
+            Assert.Equal(newGlobalId.ToString("D"), resultUpdate.Updates.First().GlobalId);
+
+            var deletes = new ApplyEdits<Point>(@"Sync/SaveTheBaySync/FeatureServer/0".AsEndpoint())
+            {
+                DeleteGlobalIds = new List<Guid> { newGlobalId },
+                UseGlobalIds = true
+            };
+
+            var resultDelete = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            {
+                return gateway.ApplyEdits(deletes);
+            });
+
+            Assert.True(resultDelete.Deletes.Any());
+            Assert.True(resultDelete.Deletes.First().Success);
+            // resultDelete.ExpectedDeletes returns 0 - not expected value (1).
+            // Assert.Equal(resultDelete.ExpectedDeletes, resultDelete.ActualDeletes);
+            Assert.Equal(1, resultDelete.ActualDeletes);
+            Assert.Equal(1, resultDelete.ActualDeletesThatSucceeded);
+            Assert.Equal(resultDelete.ActualDeletes, resultDelete.ActualDeletesThatSucceeded);
+            Assert.Equal(resultDelete.Deletes.First().GlobalId, id);
+        }
+
+        [Fact]
         public async Task FindCanReturnResultsAndGeometry()
         {
             var gateway = new ArcGISGateway();

@@ -181,7 +181,7 @@ namespace Anywhere.ArcGIS.Operation
         public string Request { get { return "getToken"; } }
 
         [DataMember(Name = "token")]
-        public string TokenValue { get { return FederatedToken.Value; } }
+        public string TokenValue { get { return FederatedToken?.Value; } }
 
         [DataMember(Name = "referer")]
         public string Referer { get; set; }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace Anywhere.ArcGIS.Operation
 {
@@ -24,6 +25,7 @@ namespace Anywhere.ArcGIS.Operation
             Adds = new List<Feature<T>>();
             Updates = new List<Feature<T>>();
             Deletes = new List<long>();
+            DeleteGlobalIds = new List<Guid>();
             RollbackOnFailure = true;
         }
 
@@ -45,8 +47,42 @@ namespace Anywhere.ArcGIS.Operation
         [IgnoreDataMember]
         public List<long> Deletes { get; set; }
 
+        /// <summary>
+        ///  The Global IDs of this layer / table to be deleted. Use if useGlobalIds is true
+        /// </summary>
+        [IgnoreDataMember]
+        public List<Guid> DeleteGlobalIds { get; set; }
+
         [DataMember(Name = "deletes")]
-        public string DeleteIds { get { return Deletes == null ? string.Empty : string.Join(",", Deletes); } }
+        public string DeleteIds
+        {
+            get
+            {
+                /* Return in form array of quoted, braced GUIDS - examples:
+                []
+                ['{509caea1-7a3f-444d-a0ef-81c942474624}']
+                ['{509caea1-7a3f-444d-a0ef-81c942474624}','{701a68ab-86df-4244-a9cb-dda10028f528}']
+                */
+                if (UseGlobalIds)
+                {
+                    var deleteIds = new StringBuilder("[");
+                    if (DeleteGlobalIds != null && DeleteGlobalIds.Any())
+                    {
+                        foreach (var deleteGlobalId in DeleteGlobalIds)
+                        {
+                            deleteIds.AppendFormat("'{0:B}',", deleteGlobalId);
+                        }
+                        deleteIds.Remove(deleteIds.Length - 1, 1);
+                    }
+                    deleteIds.Append("]");
+                    return deleteIds.ToString();
+                }
+                else
+                {
+                    return Deletes == null ? string.Empty : string.Join(",", Deletes);
+                }
+            }
+        }
 
         /// <summary>
         /// Geodatabase version to apply the edits. This parameter applies only if the isDataVersioned property of the layer is true.

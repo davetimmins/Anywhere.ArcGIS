@@ -309,10 +309,16 @@ namespace Anywhere.ArcGIS.Operation
         public string SqlType { get; set; }
 
         [DataMember(Name = "domain")]
-        public string Domain { get; set; }
+        public Domain Domain { get; set; }
 
         [DataMember(Name = "defaultValue")]
         public string DefaultValue { get; set; }
+
+        [DataMember(Name = "nullable")]
+        public bool Nullable { get; set; }
+
+        [DataMember(Name = "editable")]
+        public bool Editable { get; set; }
     }
 
     /// <summary>
