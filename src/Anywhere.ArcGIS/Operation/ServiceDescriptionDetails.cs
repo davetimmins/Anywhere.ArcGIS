@@ -24,7 +24,7 @@
                 throw new ArgumentNullException(nameof(serviceDescription));
             }
         }
-        
+
         /// <summary>
         /// Request for the details of an ArcGIS Server service
         /// </summary>
@@ -93,6 +93,9 @@
 
         [DataMember(Name = "layers")]
         public List<LayerDetails> Layers { get; set; }
+
+        [DataMember(Name = "tables")]
+        public List<LayerDetails> Tables { get; set; }
     }
 
     [DataContract]
@@ -174,5 +177,15 @@
 
         [IgnoreDataMember]
         public bool IsGroupLayer { get { return SubLayerIds != null && SubLayerIds.Any() && SubLayerIds.FirstOrDefault() > -1; } }
+    }
+
+    [DataContract]
+    public class TableDetails
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
     }
 }
