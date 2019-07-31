@@ -95,7 +95,7 @@
         public List<LayerDetails> Layers { get; set; }
 
         [DataMember(Name = "tables")]
-        public List<LayerDetails> Tables { get; set; }
+        public List<TableDetails> Tables { get; set; }
     }
 
     [DataContract]
