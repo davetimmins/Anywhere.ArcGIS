@@ -13,6 +13,7 @@
     using System.Threading.Tasks;
     using Xunit;
     using Xunit.Abstractions;
+    using Polly;
 
     public class ArcGISGateway : PortalGateway
     {
@@ -208,7 +209,22 @@
             await QueryCanGetBatchFeatures<Polygon>(rootUrl, relativeUrl, false);
         }
 
-        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry)
+        [Theory] 
+        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
+        [InlineData("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
+        public async Task QueryCanGetBatchFeaturesPointWithPolicy(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Point>(rootUrl, relativeUrl, true, IntegrationTestFixture.TestPolicy);
+        }
+
+        [Theory]
+        [InlineData("http://services.arcgisonline.com/arcgis/", "Demographics/USA_Diversity_Index/MapServer/4")]
+        public async Task QueryCanGetBatchFeaturesPolygonWithPolicy(string rootUrl, string relativeUrl)
+        {
+            await QueryCanGetBatchFeatures<Polygon>(rootUrl, relativeUrl, false, IntegrationTestFixture.TestPolicy);
+        }
+
+        private async Task QueryCanGetBatchFeatures<T>(string rootUrl, string relativeUrl, bool returnGeometry, AsyncPolicy policy = null)
             where T:IGeometry
         {
             var gateway = new PortalGateway(rootUrl);
@@ -219,7 +235,7 @@
 
             var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
             {
-                return gateway.BatchQuery<T>(query);
+                return gateway.BatchQuery<T>(query, policy:policy);
             });
 
             // Get total count of features to check that batch query returned everything

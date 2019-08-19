@@ -10,7 +10,7 @@
 
     public class IntegrationTestFixture : IDisposable
     {
-        public static Policy TestPolicy { get; private set; }
+        public static AsyncPolicy TestPolicy { get; private set; }
         IDisposable _logCapture;
 
         static IntegrationTestFixture()
