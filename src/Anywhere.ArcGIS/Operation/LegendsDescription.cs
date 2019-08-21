@@ -95,7 +95,7 @@ namespace Anywhere.ArcGIS.Operation
 	public class Layer
 	{
 		[DataMember(Name = "layerId")]
-		public long LayerId { get; set; }
+		public int LayerId { get; set; }
 
 		[DataMember(Name = "layerName")]
 		public string LayerName { get; set; }
@@ -107,10 +107,10 @@ namespace Anywhere.ArcGIS.Operation
 		public Legend[] Legend { get; set; }
 
 		[DataMember(Name = "maxScale")]
-		public long MaxScale { get; set; }
+		public double MaxScale { get; set; }
 
 		[DataMember(Name = "minScale")]
-		public long MinScale { get; set; }
+		public double MinScale { get; set; }
 	}
 
 	[DataContract]

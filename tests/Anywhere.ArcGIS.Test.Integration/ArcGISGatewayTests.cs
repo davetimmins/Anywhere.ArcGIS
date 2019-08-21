@@ -169,7 +169,7 @@
 		[Theory]
 		[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer", 192, 32)]
 		[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer", 396, 64)]
-		public async Task CanDescribeLegendComplex(string rootUrl, string mapUrl, int? dpi, int? size)
+		public async Task CanDescribeLegend2(string rootUrl, string mapUrl, int? dpi, int? size)
 		{
 			var gateway = new PortalGateway(rootUrl);
 			var request = new LegendsDescription(mapUrl.AsEndpoint());
