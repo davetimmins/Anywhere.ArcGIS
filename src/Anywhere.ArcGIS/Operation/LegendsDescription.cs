@@ -136,11 +136,8 @@ namespace Anywhere.ArcGIS.Operation
 		[DataMember(Name = "url")]
 		public string Url { get; set; }
 
-		[IgnoreDataMember]
-		public List<string> Values => string.IsNullOrWhiteSpace(ValuesValue) ? null : ValuesValue.Split(',').ToList();
-
 		[DataMember(Name = "values")]
-		public string ValuesValue { get; set; }
+		public string[] Values { get; set; }
 
 		[DataMember(Name = "width")]
 		public int Width { get; set; }
