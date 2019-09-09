@@ -128,8 +128,7 @@ namespace Anywhere.ArcGIS.Operation
 
 		[DataMember(Name = "imageData")]
 		public string ImageDataValue { get; set; }
-
-
+        
 		[DataMember(Name = "label")]
 		public string Label { get; set; }
 

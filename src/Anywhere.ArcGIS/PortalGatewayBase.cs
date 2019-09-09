@@ -219,8 +219,9 @@
 		        throw new ArgumentNullException(nameof(mapServiceEndpoint));
 	        }
 
-	        return Get<LegendsDescriptionResponse, LegendsDescription>(new LegendsDescription(mapServiceEndpoint), ct);
+	        return DescribeLegends(new LegendsDescription(mapServiceEndpoint), ct);
         }
+
         /// <summary>
         /// Return the legend descriptions details for the requested endpoint
         /// </summary>
@@ -234,6 +235,7 @@
 
 			return Get<LegendsDescriptionResponse, LegendsDescription>(legendDescriptionRequest, ct);
         }
+
 		/// <summary>
 		/// The feature resource represents a single feature in a layer in a map service.
 		/// </summary>
