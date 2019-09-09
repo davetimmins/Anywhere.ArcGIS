@@ -69,6 +69,7 @@ Supports the following as typed operations:
  - `DeleteAttachments` delete attachments that are associated with a feature
  - `Ping` verify that the server can be accessed
  - `Info` return the server information such as version and token authentication settings
+ - `DescribeLegends` return legend information of layers
  - `DescribeServices` return services information (name, sublayers etc.)
  - `DescribeService` return service information (name, sublayers etc.)
  - `DescribeLayer` return layer information
