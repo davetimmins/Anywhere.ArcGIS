@@ -258,7 +258,7 @@
 
         [Theory] 
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS", "Earthquakes/Since_1970/MapServer/0")]
-        [InlineData("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
+        [InlineData("https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS", "USA_Major_Cities/FeatureServer/0")]
         public async Task QueryCanGetBatchFeaturesPoint(string rootUrl, string relativeUrl)
         {
             await QueryCanGetBatchFeatures<Point>(rootUrl, relativeUrl, true);
@@ -998,7 +998,7 @@
         [Fact]
         public async Task QueryForOutputStatistics()
         {
-            var gateway = new PortalGateway("http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS");
+            var gateway = new PortalGateway("https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS");
             var outStats = new List<OutputStatistic>();
             outStats.Add(new OutputStatistic()
             {
