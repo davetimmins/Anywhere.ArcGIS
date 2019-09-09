@@ -132,8 +132,30 @@
                 Assert.NotNull(serviceDescription.ServiceDescription);
             }
         }
-
         [Theory]
+        [InlineData("http://services.arcgisonline.co.nz/arcgis", "Generic/newzealand/MapServer")]
+        public async Task CanGetServiceTileInfo(string rootUrl, string serviceId)
+        {
+	        var gateway = new PortalGateway(rootUrl);
+
+			var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+	        {
+		        return gateway.DescribeService(serviceId.AsEndpoint());
+	        });
+
+			Assert.NotNull(response.SingleFusedMapCache);
+			Assert.NotNull(response.TileInfo);
+			Assert.NotNull(response.TileInfo.Lods);
+			Assert.NotNull(response.TileInfo.Origin);
+			Assert.NotNull(response.TileInfo.SpatialReference);
+			Assert.NotNull(response.TileInfo.SpatialReference.Wkid);
+			Assert.Equal(512, response.TileInfo.Rows);
+			Assert.Equal(512, response.TileInfo.Cols);
+			Assert.Equal(96, response.TileInfo.Dpi);
+
+        }
+
+		[Theory]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/1")]
         [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer/0")]
