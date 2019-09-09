@@ -21,8 +21,8 @@ namespace Anywhere.ArcGIS.Operation
         public const string Simplify = "simplify";
         public const string Buffer = "buffer";
         public const string Project = "project";
-        public const string ExportMap = "export";
-        public const string PublicKey = "publicKey";
+        public const string ExportMap = "export"; 
+		public const string PublicKey = "publicKey";
         public const string ServiceStatus = "services/{0}.{1}/status";
         public const string StartService = "services/{0}.{1}/start";
         public const string StopService = "services/{0}.{1}/stop";
@@ -31,6 +31,7 @@ namespace Anywhere.ArcGIS.Operation
         public const string ArcGISOnlineSearch = "search";
         public const string ServerInfoRoute = "rest/info";
         public const string ServerHealthCheckRoute = "rest/info/healthCheck";
+        public const string Legend = "legend";
     }
 
     /// <summary>
