@@ -78,7 +78,7 @@
 
         [DataMember(Name = "spatialReference")]
         public SpatialReference SpatialReference { get; set; }
-        
+
         [DataMember(Name = "singleFusedMapCache")]
         public bool? SingleFusedMapCache { get; set; }
 
@@ -194,7 +194,7 @@
         [DataMember(Name = "name")]
         public string Name { get; set; }
     }
-    
+
     [DataContract]
     public class TileInfo
     {
@@ -221,8 +221,8 @@
 
         [DataMember(Name = "lods")]
         public List<Lod> Lods { get; set; }
-	  }
-    
+    }
+
     [DataContract]
     public class Lod
     {
@@ -234,5 +234,5 @@
 
         [DataMember(Name = "scale")]
         public double Scale { get; set; }
-    }    
+    }
 }
