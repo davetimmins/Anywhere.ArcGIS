@@ -78,14 +78,14 @@
 
         [DataMember(Name = "spatialReference")]
         public SpatialReference SpatialReference { get; set; }
-
+        
         [DataMember(Name = "singleFusedMapCache")]
         public bool? SingleFusedMapCache { get; set; }
 
         [DataMember(Name = "tileInfo")]
         public TileInfo TileInfo { get; set; }
 
-		[DataMember(Name = "initialExtent")]
+        [DataMember(Name = "initialExtent")]
         public Extent InitialExtent { get; set; }
 
         [DataMember(Name = "fullExtent")]
@@ -105,47 +105,6 @@
     }
 
     [DataContract]
-    public class TileInfo
-    {
-	    [DataMember(Name = "rows")]
-	    public int Rows { get; set; }
-
-	    [DataMember(Name = "cols")]
-	    public int Cols { get; set; }
-
-	    [DataMember(Name = "dpi")]
-	    public int Dpi { get; set; }
-
-	    [DataMember(Name = "format")]
-	    public string Format { get; set; }
-
-	    [DataMember(Name = "compressionQuality")]
-	    public int CompressionQuality { get; set; }
-
-	    [DataMember(Name = "origin")]
-	    public Point Origin { get; set; }
-
-	    [DataMember(Name = "spatialReference")]
-	    public SpatialReference SpatialReference { get; set; }
-
-	    [DataMember(Name = "lods")]
-	    public List<Lod> Lods { get; set; }
-	}
-    [DataContract]
-    public class Lod
-    {
-	    [DataMember(Name = "level")]
-	    public int Level { get; set; }
-
-	    [DataMember(Name = "resolution")]
-	    public double Resolution { get; set; }
-
-	    [DataMember(Name = "scale")]
-	    public double Scale { get; set; }
-    }
-
-
-	[DataContract]
     public class TimeInfo
     {
         [DataMember(Name = "timeExtent")]
@@ -235,4 +194,45 @@
         [DataMember(Name = "name")]
         public string Name { get; set; }
     }
+    
+    [DataContract]
+    public class TileInfo
+    {
+        [DataMember(Name = "rows")]
+        public int Rows { get; set; }
+
+        [DataMember(Name = "cols")]
+        public int Cols { get; set; }
+
+        [DataMember(Name = "dpi")]
+        public int Dpi { get; set; }
+
+        [DataMember(Name = "format")]
+        public string Format { get; set; }
+
+        [DataMember(Name = "compressionQuality")]
+        public int CompressionQuality { get; set; }
+
+        [DataMember(Name = "origin")]
+        public Point Origin { get; set; }
+
+        [DataMember(Name = "spatialReference")]
+        public SpatialReference SpatialReference { get; set; }
+
+        [DataMember(Name = "lods")]
+        public List<Lod> Lods { get; set; }
+	  }
+    
+    [DataContract]
+    public class Lod
+    {
+        [DataMember(Name = "level")]
+        public int Level { get; set; }
+
+        [DataMember(Name = "resolution")]
+        public double Resolution { get; set; }
+
+        [DataMember(Name = "scale")]
+        public double Scale { get; set; }
+    }    
 }

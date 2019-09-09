@@ -172,8 +172,49 @@
             Assert.Null(layerResponse.Error);
             Assert.NotNull(layerResponse.GeometryType);
         }
+        [Theory]
+        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer")]
+        [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer")]
+		public async Task CanDescribeLegend(string rootUrl, string mapUrl)
+        {
+	        var gateway = new PortalGateway(rootUrl);
+	        var layerResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+	        {
+		        return gateway.DescribeLegends(mapUrl.AsEndpoint());
+	        });
 
-        [Fact]
+	        Assert.NotNull(layerResponse);
+	        Assert.Null(layerResponse.Error);
+	        Assert.NotNull(layerResponse.Layers);
+	        Assert.True(layerResponse.Layers.Any());
+        }
+		[Theory]
+		[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer", 192, 32)]
+		[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer", 396, 64)]
+		public async Task CanDescribeLegend2(string rootUrl, string mapUrl, int? dpi, int? size)
+		{
+			var gateway = new PortalGateway(rootUrl);
+			var request = new LegendsDescription(mapUrl.AsEndpoint());
+			request.Dpi = dpi;
+			if (size.HasValue)
+			{
+				request.Size = new List<int>();
+				request.Size.Add(size.Value);
+				request.Size.Add(size.Value);
+			}
+			var layerResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+			{
+				return gateway.DescribeLegends(request);
+			});
+
+			Assert.NotNull(layerResponse);
+			Assert.Null(layerResponse.Error);
+			Assert.NotNull(layerResponse.Layers);
+			Assert.True(layerResponse.Layers.Any());
+		}
+
+
+		[Fact]
         public async Task GatewayDoesAutoPost()
         {
             var gateway = new ArcGISGateway() { IncludeHypermediaWithResponse = true };

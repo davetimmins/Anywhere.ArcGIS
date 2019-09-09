@@ -209,13 +209,41 @@
         }
 
         /// <summary>
-        /// The feature resource represents a single feature in a layer in a map service.
+        /// Return the legend descriptions details for the requested endpoint
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="layerFeature"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
-        public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
+        /// <returns>The legend descriptions details</returns>
+        public virtual Task<LegendsDescriptionResponse> DescribeLegends(IEndpoint mapServiceEndpoint, CancellationToken ct = default(CancellationToken))
+        {
+	        if (mapServiceEndpoint == null)
+	        {
+		        throw new ArgumentNullException(nameof(mapServiceEndpoint));
+	        }
+
+	        return DescribeLegends(new LegendsDescription(mapServiceEndpoint), ct);
+        }
+
+        /// <summary>
+        /// Return the legend descriptions details for the requested endpoint
+        /// </summary>
+        /// <returns>The legend descriptions details</returns>
+        public virtual Task<LegendsDescriptionResponse> DescribeLegends(LegendsDescription legendDescriptionRequest, CancellationToken ct = default(CancellationToken))
+        {
+	        if (legendDescriptionRequest == null)
+	        {
+		        throw new ArgumentNullException(nameof(legendDescriptionRequest));
+			}
+
+			return Get<LegendsDescriptionResponse, LegendsDescription>(legendDescriptionRequest, ct);
+        }
+
+		/// <summary>
+		/// The feature resource represents a single feature in a layer in a map service.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="layerFeature"></param>
+		/// <param name="ct"></param>
+		/// <returns></returns>
+		public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
             where T : IGeometry
         {
             return Get<LayerFeatureResponse<T>, LayerFeature>(layerFeature, ct);
