@@ -56,7 +56,7 @@
             var gateway = new PortalGateway(rootUrl);
             var endpoint = new ArcGISServerEndpoint("/");
 
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Ping(endpoint);
             });
@@ -72,7 +72,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Info();
             });
@@ -88,7 +88,7 @@
         public async Task CanDescribeSite(string rootUrl)
         {
             var gateway = new PortalGateway(rootUrl);
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeSite();
             });
@@ -98,7 +98,7 @@
 
             foreach (var resource in response.ArcGISServerEndpoints.Where(e => e.RelativeUrl.EndsWith("server", StringComparison.OrdinalIgnoreCase) && !e.RelativeUrl.EndsWith("searchserver", StringComparison.OrdinalIgnoreCase)))
             {
-                var ping = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+                var ping = await IntegrationTestFixture.TestPolicy.Execute(() =>
                 {
                     return gateway.Ping(resource);
                 });
@@ -112,7 +112,7 @@
         public async Task CanDescribeSiteServices(string rootUrl)
         {
             var gateway = new PortalGateway(rootUrl);
-            var siteResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var siteResponse = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeSite();
             });
@@ -120,7 +120,7 @@
             Assert.NotNull(siteResponse);
             Assert.True(siteResponse.Version > 0);
 
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeServices(siteResponse);
             });
@@ -138,7 +138,7 @@
         {
 	        var gateway = new PortalGateway(rootUrl);
 
-			var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+			var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
 	        {
 		        return gateway.DescribeService(serviceId.AsEndpoint());
 	        });
@@ -163,7 +163,7 @@
         public async Task CanDescribeLayer(string rootUrl, string layerUrl)
         {
             var gateway = new PortalGateway(rootUrl);
-            var layerResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var layerResponse = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeLayer(layerUrl.AsEndpoint());
             });
@@ -178,7 +178,7 @@
 		public async Task CanDescribeLegend(string rootUrl, string mapUrl)
         {
 	        var gateway = new PortalGateway(rootUrl);
-	        var layerResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+	        var layerResponse = await IntegrationTestFixture.TestPolicy.Execute(() =>
 	        {
 		        return gateway.DescribeLegends(mapUrl.AsEndpoint());
 	        });
@@ -202,7 +202,7 @@
 				request.Size.Add(size.Value);
 				request.Size.Add(size.Value);
 			}
-			var layerResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+			var layerResponse = await IntegrationTestFixture.TestPolicy.Execute(() =>
 			{
 				return gateway.DescribeLegends(request);
 			});
@@ -225,7 +225,7 @@
 
             var query = new Query(@"/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0") { Where = longWhere + "'" };
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });
@@ -244,7 +244,7 @@
 
             var query = new Query(@"/Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint());
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });
@@ -280,7 +280,7 @@
                 ReturnGeometry = returnGeometry
             };
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.BatchQuery<T>(query);
             });
@@ -309,7 +309,7 @@
             var gateway = new PortalGateway(rootUrl);
 
             var query = new Query(relativeUrl);
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });
@@ -329,7 +329,7 @@
             var gateway = new ArcGISGateway();
 
             var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { Where = "magnitude > 2.5" };
-            var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPoint = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryAsPost<Point>(queryPoint);
             });
@@ -338,7 +338,7 @@
             Assert.True(resultPoint.Features.All(i => i.Geometry != null));
 
             var queryPolyline = new Query(@"Hydrography/Watershed173811/MapServer/1".AsEndpoint()) { OutFields = new List<string> { "lengthkm" } };
-            var resultPolyline = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPolyline = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polyline>(queryPolyline);
             });
@@ -349,7 +349,7 @@
             gateway = new ArcGISGateway();
 
             var queryPolygon = new Query(@"/Hydrography/Watershed173811/MapServer/0") { Where = "areasqkm = 0.012", OutFields = new List<string> { "areasqkm" } };
-            var resultPolygon = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPolygon = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryAsPost<Polygon>(queryPolygon);
             });
@@ -364,7 +364,7 @@
             var gateway = new ArcGISGateway();
 
             var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0".AsEndpoint()) { ReturnGeometry = false };
-            var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPoint = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPoint);
             });
@@ -373,7 +373,7 @@
             Assert.True(resultPoint.Features.All(i => i.Geometry == null));
 
             var queryPolyline = new Query(@"Hydrography/Watershed173811/MapServer/1") { OutFields = new List<string> { "lengthkm" }, ReturnGeometry = false };
-            var resultPolyline = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPolyline = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryAsPost<Polyline>(queryPolyline);
             });
@@ -393,7 +393,7 @@
                 Where = "UPPER(Name) LIKE UPPER('New Zea%')"
             };
             queryPoint.OutFields.Add("Name");
-            var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPoint = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPoint);
             });
@@ -409,7 +409,7 @@
             var gateway = new ArcGISGateway();
 
             var queryPoint = new Query(@"Earthquakes/EarthquakesFromLastSevenDays/MapServer/0") { ReturnGeometry = false };
-            var resultPoint = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPoint = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPoint);
             });
@@ -422,7 +422,7 @@
                 ReturnGeometry = false,
                 ObjectIds = resultPoint.Features.Take(10).Select(f => long.Parse(f.Attributes[resultPoint.ObjectIdFieldName ?? "objectid"].ToString())).ToList()
             };
-            var resultPointByOID = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPointByOID = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPointByOID);
             });
@@ -440,7 +440,7 @@
             var gateway = new ArcGISGateway();
 
             var queryPolyline = new Query(@"Hydrography/Watershed173811/MapServer/1".AsEndpoint()) { OutFields = new List<string> { "lengthkm" }, ReturnGeometry = false };
-            var resultPolyline = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPolyline = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polyline>(queryPolyline);
             });
@@ -454,7 +454,7 @@
                 Where = "areasqkm = 0.012",
                 OutFields = new List<string> { "areasqkm", "elevation", "resolution", "reachcode" }
             };
-            var resultPolygon = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPolygon = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polygon>(queryPolygon);
             });
@@ -476,7 +476,7 @@
                 ReturnGeometry = false,
                 Where = "CITY = 'WA'"
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });
@@ -487,7 +487,7 @@
                 ReturnGeometry = false,
                 Where = "CITY = 'WA'"
             };
-            var resultDesc = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultDesc = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryDesc);
             });
@@ -506,7 +506,7 @@
             var gateway = new PortalGateway(rootUrl);
 
             var query = new QueryForExtent(relativeUrl.AsEndpoint());
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryForExtent(query);
             });
@@ -526,7 +526,7 @@
             var gateway = new PortalGateway(rootUrl);
 
             var queryCount = new QueryForCount(relativeUrl);
-            var resultCount = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultCount = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryForCount(queryCount);
             });
@@ -537,7 +537,7 @@
             Assert.True(numberToReturn < resultCount.NumberOfResults);
 
             var query = new Query(relativeUrl.AsEndpoint()) { ResultOffset = start, ResultRecordCount = numberToReturn };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });
@@ -554,7 +554,7 @@
             var gateway = new PortalGateway("http://services.arcgisonline.com/arcgis/");
 
             var query = new QueryForCount(@"/Specialty/Soil_Survey_Map/MapServer/2".AsEndpoint());
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryForCount(query);
             });
@@ -570,7 +570,7 @@
             var gateway = new PortalGateway("http://services.arcgisonline.com/arcgis/");
 
             var query = new QueryForIds(@"/Specialty/Soil_Survey_Map/MapServer/2");
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryForIds(query);
             });
@@ -584,7 +584,7 @@
             {
                 ObjectIds = result.ObjectIds.Take(100).ToList()
             };
-            var resultFiltered = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultFiltered = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryForIds(queryFiltered);
             });
@@ -612,7 +612,7 @@
 
             var queryPointAllResults = new Query(serviceUrl.AsEndpoint());
 
-            var resultPointAllResults = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPointAllResults = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPointAllResults);
             });
@@ -623,7 +623,7 @@
                 OutputSpatialReference = SpatialReference.WebMercator
             };
 
-            var resultPointExtentResults = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPointExtentResults = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPointExtentResults);
             });
@@ -641,7 +641,7 @@
             {
                 Geometry = new Polygon { Rings = rings }
             };
-            var resultPointPolygonResults = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultPointPolygonResults = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(queryPointPolygonResults);
             });
@@ -688,7 +688,7 @@
             {
                 Adds = new List<Feature<Point>> { feature }
             };
-            var resultAdd = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultAdd = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(adds);
             });
@@ -707,7 +707,7 @@
             {
                 Updates = new List<Feature<Point>> { feature }
             };
-            var resultUpdate = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultUpdate = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(updates);
             });
@@ -722,7 +722,7 @@
             {
                 Deletes = new List<long> { id }
             };
-            var resultDelete = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultDelete = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(deletes);
             });
@@ -751,7 +751,7 @@
                 Adds = new List<Feature<Point>> { feature },
                 UseGlobalIds = true
             };
-            var resultAdd = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultAdd = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(adds);
             });
@@ -772,7 +772,7 @@
                 Updates = new List<Feature<Point>> { feature },
                 UseGlobalIds = true
             };
-            var resultUpdate = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultUpdate = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(updates);
             });
@@ -795,7 +795,7 @@
                 UseGlobalIds = true
             };
 
-            var resultDelete = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var resultDelete = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ApplyEdits(deletes);
             });
@@ -821,7 +821,7 @@
                 LayerIdsToSearch = new List<int> { 1, 2, 3 },
                 SearchFields = new List<string> { "Name", "RouteName" }
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Find(find);
             });
@@ -844,7 +844,7 @@
                 SearchFields = new List<string> { "Name", "RouteName" },
                 ReturnGeometry = false
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Find(find);
             });
@@ -866,7 +866,7 @@
                 DefinitionExpression = "ASSET_R_ID = 44",
                 GlobalIds = new List<string> { "2aa7a8fd-6f6c-44e4-827d-14b4acc2123a" }
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryAttachments(queryAttachments);
             });
@@ -889,7 +889,7 @@
             {
                 LayerIdsToSearch = new List<int> { 0 }
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.QueryDomains(queryDomains);
             });
@@ -907,7 +907,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.HealthCheck();
             });
@@ -925,7 +925,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.GetFeature<Polygon>(new LayerFeature(relativeUrl, objectId));
             });
@@ -944,7 +944,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ExportMap(new ExportMap(relativeUrl)
                 {
@@ -970,7 +970,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var exportMapResult = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var exportMapResult = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ExportMap(new ExportMap(relativeUrl)
                 {
@@ -985,7 +985,7 @@
                 });
             });
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DownloadExportMapToLocal(exportMapResult, @"c:\temp\_tests_");
             });
@@ -1017,7 +1017,7 @@
                 GroupByFields = new List<string>(new string[] { "ST" }),
                 OutputStatistics = outStats
             };
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Point>(query);
             });

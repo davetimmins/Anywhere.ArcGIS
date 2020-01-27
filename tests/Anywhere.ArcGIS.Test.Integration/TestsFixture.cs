@@ -2,7 +2,6 @@
 {
     using Polly;
     using Serilog;
-    using Serilog.Events;
     using System;
     using System.Net;
     using System.Net.Http;
@@ -20,7 +19,7 @@
             TestPolicy = Policy
                 .Handle<InvalidOperationException>()
                 .Or<HttpRequestException>()
-                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()

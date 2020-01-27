@@ -20,7 +20,7 @@
         public async Task CanProject()
         {
             var gateway = new PortalGateway("http://sampleserver1.arcgisonline.com/ArcGIS");
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5") { Where = "STATE_NAME = 'Oregon'" });
             });
@@ -31,7 +31,7 @@
             Assert.True(features[0].Geometry.Rings.Count > 0);
             features[0].Geometry.SpatialReference = result.SpatialReference;
 
-            var projectedFeatures = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var projectedFeatures = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return new ArcGISOnlineGateway().Project<Polygon>(features, SpatialReference.WGS84);
             });
@@ -52,7 +52,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
 
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polygon>(new Query(relativeUrl) { Where = where });
             });
@@ -68,7 +68,7 @@
             int featuresCount = features.Count;
 
             double distance = 10.0;
-            var featuresBuffered = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var featuresBuffered = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return new ArcGISOnlineGateway().Buffer<Polygon>(features, spatialReference, distance);
             });
@@ -82,7 +82,7 @@
         public async Task CanSimplify()
         {
             var gateway = new PortalGateway("http://sampleserver1.arcgisonline.com/ArcGIS");
-            var result = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Query<Polygon>(new Query("Demographics/ESRI_Census_USA/MapServer/5") { Where = "STATE_NAME = 'Oregon'" });
             });
@@ -94,7 +94,7 @@
             Assert.True(features[0].Geometry.Rings.Count > 0);
             features[0].Geometry.SpatialReference = result.SpatialReference;
 
-            var simplifiedFeatures = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var simplifiedFeatures = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return new ArcGISOnlineGateway().Simplify<Polygon>(features, result.SpatialReference);
             });
