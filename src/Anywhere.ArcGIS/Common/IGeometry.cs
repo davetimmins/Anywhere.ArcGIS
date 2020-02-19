@@ -377,7 +377,7 @@ namespace Anywhere.ArcGIS.Common
                 foreach (var point in path)
                 {
                     coordinates.Add(point);
-                }                
+                }
             }
 
             return new GeoJsonLineString { Type = "LineString", Coordinates = coordinates };
@@ -439,9 +439,37 @@ namespace Anywhere.ArcGIS.Common
         {
             get
             {
-                return this.Select(point => point != null ? new Point { X = point.First(), Y = point.Last() } : null)
-                    .Where(p => p != null)
+
+                return this.Select(point =>
+                {
+                    if (point != null)
+                    {
+                        //If point has Z coordinate. Use it.
+                        if (point.Length == 3)
+                        {
+                            return new Point
+                            {
+                                X = point[0],
+                                Y = point[1],
+                                Z = point[2]
+                            };
+                        }
+
+                        else
+                        {
+                            //Why use "First()" and "Last()" instead of [0] and [1]?
+                            return new Point
+                            {
+                                X = point.First(),
+                                Y = point.Last(),
+                            };
+                        }
+                    }
+                    return null;
+                }).Where(p => p != null)
                     .ToList();
+
+
             }
         }
 
