@@ -442,40 +442,44 @@ namespace Anywhere.ArcGIS.Common
 
                 return this.Select(point =>
                 {
-                    if (point != null)
+                    Point result = null;
+                    if (point != null && point.Length >= 2)
                     {
-                        //If point has Z coordinate. Use it.
-                        if (point.Length == 3)
+                        result = new Point { X = point[0], Y = point[1] };
+                        //Assumption: if point has length 3 it has a Z coordinate.
+                        if (point.Length >= 3)
                         {
-                            return new Point
-                            {
-                                X = point[0],
-                                Y = point[1],
-                                Z = point[2]
-                            };
+                            result.Z = point[2];
                         }
-
-                        else
+                        //Assumption: if point has length 4 it has a Z and M coordinate. 
+                        if (point.Length == 4)
                         {
-                            //Why use "First()" and "Last()" instead of [0] and [1]?
-                            return new Point
-                            {
-                                X = point.First(),
-                                Y = point.Last(),
-                            };
+                            result.M = point[3];
                         }
                     }
-                    return null;
-                }).Where(p => p != null)
-                    .ToList();
-
-
+                    return result;
+                }).Where(p => p != null).ToList();
             }
         }
 
         public List<double[]> Clone()
         {
-            return Points.Select(x => new double[] { x.X, x.Y }).ToList();
+            return Points.Select(x =>
+            {
+                if (x.Z != null && x.M != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.Z, (double)x.M };
+                }
+                else if (x.Z != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.Z };
+                }
+                else if (x.M != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.M };
+                }
+                return new double[] { x.X, x.Y };
+            }).ToList();
         }
     }
 
