@@ -677,15 +677,7 @@
 
             var endpoint = requestObject.Endpoint;
             var url = endpoint.BuildAbsoluteUrl(RootUrl) + AsRequestQueryString(Serializer, requestObject);
-
-            if (url.Length > MaximumGetRequestLength)
-            {
-                _logger.DebugFormat("Url length {0} is greater than maximum configured {1}, switching to POST.", url.Length, MaximumGetRequestLength);
-                return await Post<T, TRequest>(requestObject, ct).ConfigureAwait(false);
-            }
-
-            requestObject.BeforeRequest?.Invoke();
-
+                                   
             var token = await CheckGenerateToken(ct).ConfigureAwait(false);
             if (ct.IsCancellationRequested)
             {
@@ -700,6 +692,7 @@
             if (token != null && !string.IsNullOrWhiteSpace(token.Value) && !url.Contains("token="))
             {
                 url += (url.Contains("?") ? "&" : "?") + "token=" + token.Value;
+                requestObject.Token = token.Value;
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token.Value);
                 if (token.AlwaysUseSsl)
                 {
@@ -712,7 +705,15 @@
             {
                 throw new HttpRequestException(string.Format("Not a valid url: {0}", url));
             }
+
+            if (url.Length > MaximumGetRequestLength)
+            {                
+                _logger.DebugFormat("Url length {0} is greater than maximum configured {1}, switching to POST.", url.Length, MaximumGetRequestLength);
+                return await Post<T, TRequest>(requestObject, ct).ConfigureAwait(false);
+            }
+            
             _logger.DebugFormat("GET {0}", uri.AbsoluteUri);
+            requestObject.BeforeRequest?.Invoke();
 
             if (CancelPendingRequests)
             {
