@@ -377,7 +377,7 @@ namespace Anywhere.ArcGIS.Common
                 foreach (var point in path)
                 {
                     coordinates.Add(point);
-                }                
+                }
             }
 
             return new GeoJsonLineString { Type = "LineString", Coordinates = coordinates };
@@ -439,15 +439,47 @@ namespace Anywhere.ArcGIS.Common
         {
             get
             {
-                return this.Select(point => point != null ? new Point { X = point.First(), Y = point.Last() } : null)
-                    .Where(p => p != null)
-                    .ToList();
+
+                return this.Select(point =>
+                {
+                    Point result = null;
+                    if (point != null && point.Length >= 2)
+                    {
+                        result = new Point { X = point[0], Y = point[1] };
+                        //Assumption: if point has length 3 it has a Z coordinate.
+                        if (point.Length >= 3)
+                        {
+                            result.Z = point[2];
+                        }
+                        //Assumption: if point has length 4 it has a Z and M coordinate. 
+                        if (point.Length == 4)
+                        {
+                            result.M = point[3];
+                        }
+                    }
+                    return result;
+                }).Where(p => p != null).ToList();
             }
         }
 
         public List<double[]> Clone()
         {
-            return Points.Select(x => new double[] { x.X, x.Y }).ToList();
+            return Points.Select(x =>
+            {
+                if (x.Z != null && x.M != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.Z, (double)x.M };
+                }
+                else if (x.Z != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.Z };
+                }
+                else if (x.M != null)
+                {
+                    return new double[] { x.X, x.Y, (double)x.M };
+                }
+                return new double[] { x.X, x.Y };
+            }).ToList();
         }
     }
 
