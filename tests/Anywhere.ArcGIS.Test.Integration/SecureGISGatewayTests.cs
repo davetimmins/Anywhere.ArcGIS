@@ -22,7 +22,7 @@
         public async Task CanGenerateToken(string rootUrl, string username, string password)
         {
             var tokenProvider = new TokenProvider(rootUrl, username, password);
-            var token = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var token = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return tokenProvider.CheckGenerateToken(CancellationToken.None);
             });
@@ -38,13 +38,13 @@
         public async Task CanUseServerInfoToGenerateToken(string rootUrl, string username, string password)
         {
             var gateway = new PortalGateway(rootUrl);
-            var serverInfo = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var serverInfo = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Info();
             });
 
             var tokenProvider = new TokenProvider(serverInfo.AuthenticationInfo.TokenServicesUrl, username, password);
-            var token = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var token = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return tokenProvider.CheckGenerateToken(CancellationToken.None);
             });
@@ -59,12 +59,12 @@
         [InlineData("https://sampleserver6.arcgisonline.com/arcgis", "user1", "user1")]
         public async Task CanDescribeSecureSite(string rootUrl, string username, string password)
         {
-            var gateway = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var gateway = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return PortalGateway.Create(rootUrl, username, password);
             });
 
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeSite();
             });
@@ -74,7 +74,7 @@
 
             foreach (var resource in response.ArcGISServerEndpoints.Where(x => !x.RelativeUrl.ToLowerInvariant().Contains("utilities")))
             {
-                var ping = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+                var ping = await IntegrationTestFixture.TestPolicy.Execute(() =>
                 {
                     return gateway.Ping(resource);
                 });
@@ -87,7 +87,7 @@
         public async Task CanDescribeSecureSiteServices(string rootUrl, string username, string password)
         {
             var gateway = new PortalGateway(rootUrl, username, password);
-            var siteResponse = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var siteResponse = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeSite();
             });
@@ -100,7 +100,7 @@
                 Resources = siteResponse.Resources.Where(x => !x.Path.ToLowerInvariant().Contains("utilities")).ToList()
             };
 
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.DescribeServices(filteredSite);
             });
@@ -133,7 +133,7 @@
             var gateway = new PortalGateway(rootUrl, tokenProvider: tokenProvider);
             var endpoint = new ArcGISServerEndpoint(relativeUrl);
 
-            var token = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var token = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return tokenProvider.CheckGenerateToken(CancellationToken.None);
             });

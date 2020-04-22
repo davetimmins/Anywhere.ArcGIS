@@ -25,7 +25,7 @@
                 Text = text,
                 SourceCountry = sourceCountry
             };
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Geocode(geocode);
             });
@@ -48,7 +48,7 @@
             {
                 Text = text
             };
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.Suggest(suggest);
             });
@@ -74,7 +74,7 @@
                     SpatialReference = new SpatialReference { Wkid = wkid }
                 }
             };
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.ReverseGeocode(reverseGeocode);
             });
@@ -90,7 +90,7 @@
         {
             var gateway = new PortalGateway(rootUrl);
             var customGeocode = new SingleInputCustomGeocode(relativeUrl) { Text = searchText };
-            var response = await IntegrationTestFixture.TestPolicy.ExecuteAsync(() =>
+            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
             {
                 return gateway.CustomGeocode<Polygon>(customGeocode);
             });
