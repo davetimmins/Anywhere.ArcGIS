@@ -9,7 +9,7 @@
   init:
     - git config --global core.autocrlf true
 
-  image: Visual Studio 2017
+  image: Visual Studio 2019
 
   version: "{build}"
 
@@ -33,7 +33,7 @@
   init:
     - git config --global core.autocrlf true
 
-  image: Visual Studio 2017
+  image: Visual Studio 2019
 
   version: "{build}"
 
@@ -61,7 +61,7 @@
   init:
     - git config --global core.autocrlf true
 
-  image: Visual Studio 2017
+  image: Visual Studio 2019
   
   version: "{build}"
 
