@@ -428,7 +428,10 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries<T>(buffered.Geometries);
-            if (result.First().Geometry.SpatialReference == null) result.First().Geometry.SpatialReference = spatialReference;
+            if (result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
+            {
+                result.First().Geometry.SpatialReference = spatialReference;
+            }
             return result;
         }
 

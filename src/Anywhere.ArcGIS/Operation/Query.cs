@@ -237,6 +237,27 @@ namespace Anywhere.ArcGIS.Operation
         /// </summary>
         [DataMember(Name = "outStatistics")]
         public List<OutputStatistic> OutputStatistics { get; set; }
+
+        /// <summary>
+        /// The buffer distance for the input geometries. 
+        /// The distance unit is specified by units. 
+        /// For example, if the distance is 100, the query geometry is a point, units is set to meters, and all points within 100 meters of the point are returned. 
+        /// The geodesic buffer is created based on the datum of the output spatial reference if it exists. 
+        /// If there is no output spatial reference, the input geometry spatial reference is used. 
+        /// Otherwise, the native layer spatial reference is used to generate the geometry buffer used in the query. 
+        /// This parameter only applies if supportsQueryWithDistance is true.
+        /// </summary>
+        [DataMember(Name = "distance")]
+        public double Distance { get; set; }
+
+        /// <summary>
+        /// The unit for calculating the buffer distance. 
+        /// If unit is not specified, the default will be esriSRUnit_Foot when querying feature services in ArcGIS Enterprise, and esriSRUnit_Meter when querying feature services in ArcGIS Online. 
+        /// This parameter only applies if supportsQueryWithDistance is true.
+        /// Values: esriSRUnit_Meter | esriSRUnit_StatuteMile | esriSRUnit_Foot | esriSRUnit_Kilometer | esriSRUnit_NauticalMile | esriSRUnit_USNauticalMile
+        /// </summary>
+        [DataMember(Name = "units")]
+        public string DistanceUnits { get; set; }
     }
 
     [DataContract]
@@ -442,6 +463,16 @@ namespace Anywhere.ArcGIS.Operation
         public const string Touches = "esriSpatialRelTouches";
         public const string Within = "esriSpatialRelWithin";
         public const string Relation = "esriSpatialRelRelation";
+    }
+
+    public static class BufferDistanceUnits
+    {
+        public const string Meters = "esriSRUnit_Meter";
+        public const string Miles = "esriSRUnit_StatuteMile";
+        public const string Feet = "esriSRUnit_Foot";
+        public const string Kilometers = "esriSRUnit_Kilometer";
+        public const string NauticalMiles = "esriSRUnit_NauticalMile";
+        public const string USNauticalMiles = "esriSRUnit_USNauticalMile";
     }
 
     public static class FieldDataTypes
