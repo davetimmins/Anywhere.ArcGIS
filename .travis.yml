@@ -1,7 +1,7 @@
 language: csharp
 sudo: required
-dist: trusty
-dotnet: 2.0.0
+dist: xenial
+dotnet: 3.1.300
 os:
   - linux
 branches:
