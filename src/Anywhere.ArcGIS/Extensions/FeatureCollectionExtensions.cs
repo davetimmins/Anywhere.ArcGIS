@@ -65,7 +65,7 @@ namespace Anywhere.ArcGIS
             }
 
             var featureCollection = new FeatureCollection<IGeoJsonGeometry> { Features = new List<GeoJsonFeature<IGeoJsonGeometry>>() };
-            if (features.First().Geometry.SpatialReference != null)
+            if (features?.First()?.Geometry?.SpatialReference != null)
             {
                 featureCollection.CoordinateReferenceSystem = new Crs
                 {
@@ -76,7 +76,7 @@ namespace Anywhere.ArcGIS
 
             foreach (var feature in features)
             {
-                var geoJsonGeometry = feature.Geometry.ToGeoJson();
+                var geoJsonGeometry = feature?.Geometry?.ToGeoJson();
                 if (geoJsonGeometry == null)
                 {
                     continue;

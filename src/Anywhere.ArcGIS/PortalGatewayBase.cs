@@ -67,8 +67,8 @@
                             new ServerFederatedWithPortalTokenProvider(info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""), username, password, serializer: serializer, httpClientFunc: httpClientFunc),
                             info.AuthenticationInfo.TokenServicesUrl.Replace("/generateToken", ""),
                             gateway.RootUrl,
-                            referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"), 
-                            serializer: serializer, 
+                            referer: info.AuthenticationInfo.TokenServicesUrl.Replace("/sharing/rest/generateToken", "/rest"),
+                            serializer: serializer,
                             httpClientFunc: httpClientFunc);
                     }
                     else
@@ -214,12 +214,12 @@
         /// <returns>The legend descriptions details</returns>
         public virtual Task<LegendsDescriptionResponse> DescribeLegends(IEndpoint mapServiceEndpoint, CancellationToken ct = default(CancellationToken))
         {
-	        if (mapServiceEndpoint == null)
-	        {
-		        throw new ArgumentNullException(nameof(mapServiceEndpoint));
-	        }
+            if (mapServiceEndpoint == null)
+            {
+                throw new ArgumentNullException(nameof(mapServiceEndpoint));
+            }
 
-	        return DescribeLegends(new LegendsDescription(mapServiceEndpoint), ct);
+            return DescribeLegends(new LegendsDescription(mapServiceEndpoint), ct);
         }
 
         /// <summary>
@@ -228,22 +228,22 @@
         /// <returns>The legend descriptions details</returns>
         public virtual Task<LegendsDescriptionResponse> DescribeLegends(LegendsDescription legendDescriptionRequest, CancellationToken ct = default(CancellationToken))
         {
-	        if (legendDescriptionRequest == null)
-	        {
-		        throw new ArgumentNullException(nameof(legendDescriptionRequest));
-			}
+            if (legendDescriptionRequest == null)
+            {
+                throw new ArgumentNullException(nameof(legendDescriptionRequest));
+            }
 
-			return Get<LegendsDescriptionResponse, LegendsDescription>(legendDescriptionRequest, ct);
+            return Get<LegendsDescriptionResponse, LegendsDescription>(legendDescriptionRequest, ct);
         }
 
-		/// <summary>
-		/// The feature resource represents a single feature in a layer in a map service.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="layerFeature"></param>
-		/// <param name="ct"></param>
-		/// <returns></returns>
-		public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
+        /// <summary>
+        /// The feature resource represents a single feature in a layer in a map service.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="layerFeature"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public virtual Task<LayerFeatureResponse<T>> GetFeature<T>(LayerFeature layerFeature, CancellationToken ct = default(CancellationToken))
             where T : IGeometry
         {
             return Get<LayerFeatureResponse<T>, LayerFeature>(layerFeature, ct);
@@ -260,6 +260,22 @@
             where T : IGeometry
         {
             return Get<QueryResponse<T>, Query>(queryOptions, ct);
+        }
+
+        /// <summary>
+        /// Call the query operation
+        /// </summary>
+        /// <param name="queryOptions">Query filter parameters</param>
+        /// <param name="ct">Optional cancellation token to cancel pending request</param>
+        /// <returns>The matching features for the query</returns>
+        public virtual Task<QueryResponse<NoGeometry>> Query(Query queryOptions, CancellationToken ct = default(CancellationToken))
+        {
+            if (queryOptions != null)
+            {
+                queryOptions.ReturnGeometry = false;
+            }
+
+            return Get<QueryResponse<NoGeometry>, Query>(queryOptions, ct);
         }
 
         public virtual async Task<QueryResponse<T>> BatchQuery<T>(Query queryOptions, CancellationToken ct = default(CancellationToken))
@@ -302,8 +318,8 @@
                     {
                         oidList = oidList.Concat(innerResult.Features.Select(x => x.ObjectID.ToString()));
                         result.Features = result.Features.Concat(innerResult.Features);
-                        exceeded = result.ExceededTransferLimit.HasValue 
-                            && innerResult.ExceededTransferLimit.HasValue 
+                        exceeded = result.ExceededTransferLimit.HasValue
+                            && innerResult.ExceededTransferLimit.HasValue
                             && innerResult.ExceededTransferLimit.Value;
                     }
                     else
@@ -394,7 +410,10 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries(projected.Geometries);
-            if (result.First().Geometry.SpatialReference == null) result.First().Geometry.SpatialReference = outputSpatialReference;
+            if (result.First().Geometry.SpatialReference == null)
+            {
+                result.First().Geometry.SpatialReference = outputSpatialReference;
+            }
             return result;
         }
 
@@ -406,7 +425,10 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = operation.Features.UpdateGeometries<T>(projected.Geometries);
-            if (result.First().Geometry.SpatialReference == null) result.First().Geometry.SpatialReference = operation.OutputSpatialReference;
+            if (result.First().Geometry.SpatialReference == null)
+            {
+                result.First().Geometry.SpatialReference = operation.OutputSpatialReference;
+            }
             return result;
         }
 
@@ -452,7 +474,10 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries<T>(simplified.Geometries);
-            if (result.First().Geometry.SpatialReference == null) result.First().Geometry.SpatialReference = spatialReference;
+            if (result.First().Geometry.SpatialReference == null)
+            {
+                result.First().Geometry.SpatialReference = spatialReference;
+            }
             return result;
         }
 
@@ -617,7 +642,7 @@
             {
                 throw new ArgumentNullException(nameof(exportMapResponse));
             }
-            
+
             if (string.IsNullOrWhiteSpace(exportMapResponse.ImageUrl))
             {
                 throw new ArgumentNullException(nameof(exportMapResponse.ImageUrl));
@@ -680,7 +705,7 @@
 
             var endpoint = requestObject.Endpoint;
             var url = endpoint.BuildAbsoluteUrl(RootUrl) + AsRequestQueryString(Serializer, requestObject);
-                                   
+
             var token = await CheckGenerateToken(ct).ConfigureAwait(false);
             if (ct.IsCancellationRequested)
             {
@@ -710,11 +735,11 @@
             }
 
             if (url.Length > MaximumGetRequestLength)
-            {                
+            {
                 _logger.DebugFormat("Url length {0} is greater than maximum configured {1}, switching to POST.", url.Length, MaximumGetRequestLength);
                 return await Post<T, TRequest>(requestObject, ct).ConfigureAwait(false);
             }
-            
+
             _logger.DebugFormat("GET {0}", uri.AbsoluteUri);
             requestObject.BeforeRequest?.Invoke();
 

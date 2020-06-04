@@ -433,7 +433,8 @@ namespace Anywhere.ArcGIS.Operation
             { typeof(MultiPoint), () => GeometryTypes.MultiPoint },
             { typeof(Extent), () => GeometryTypes.Envelope },
             { typeof(Polygon), () => GeometryTypes.Polygon },
-            { typeof(Polyline), () => GeometryTypes.Polyline }
+            { typeof(Polyline), () => GeometryTypes.Polyline },
+            { typeof(NoGeometry), () => string.Empty }
         };
 
         public readonly static Dictionary<string, Func<Type>> ToTypeMap = new Dictionary<string, Func<Type>>

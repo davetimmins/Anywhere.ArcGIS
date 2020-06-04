@@ -42,6 +42,31 @@ namespace Anywhere.ArcGIS.Common
         IGeoJsonGeometry ToGeoJson();
     }
 
+    public class NoGeometry : IGeometry
+    {
+        public SpatialReference SpatialReference { get; set; }
+
+        public object Clone()
+        {
+            return new NoGeometry();
+        }
+
+        public Point GetCenter()
+        {
+            return null;
+        }
+
+        public Extent GetExtent()
+        {
+            return null;
+        }
+
+        public IGeoJsonGeometry ToGeoJson()
+        {
+            return null;
+        }
+    }
+
     /// <summary>
     /// Spatial reference used for operations. If WKT is set then other properties are nulled
     /// </summary>

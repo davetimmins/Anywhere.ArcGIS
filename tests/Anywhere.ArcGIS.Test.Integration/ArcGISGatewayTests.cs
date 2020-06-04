@@ -596,6 +596,23 @@
             Assert.True(resultFiltered.ObjectIds.Count() == queryFiltered.ObjectIds.Count);
         }
 
+        [Fact]
+        public async Task CanQueryWithNoGeometryResponse()
+        {
+            var gateway = new PortalGateway("http://services.arcgisonline.com/arcgis/");
+
+            var query = new Query(@"/Specialty/Soil_Survey_Map/MapServer/2");
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
+            {
+                return gateway.Query(query);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.Features);
+            Assert.True(result.Features.All(x => x.Geometry == null));
+        }
+
         /// <summary>
         /// Performs unfiltered query, then filters by Extent and Polygon to SE quadrant of globe and verifies both filtered
         /// results contain same number of features as each other, and that both filtered resultsets contain fewer features than unfiltered resultset.
