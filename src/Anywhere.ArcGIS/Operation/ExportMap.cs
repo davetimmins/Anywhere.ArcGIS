@@ -10,7 +10,7 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class ExportMap : ArcGISServerOperation
     {
-        public ExportMap(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public ExportMap(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
@@ -18,7 +18,7 @@ namespace Anywhere.ArcGIS.Operation
         /// Requests an export of the map resources. Returns the image link in the response
         /// </summary>
         /// <param name="endpoint">Resource to apply the export against</param>
-        public ExportMap(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ExportMap(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.ExportMap, beforeRequest, afterRequest)
         {
             Size = new List<int> { 400, 400 };

@@ -10,11 +10,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryDomains : ArcGISServerOperation
     {
-        public QueryDomains(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public QueryDomains(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public QueryDomains(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public QueryDomains(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.QueryDomains, beforeRequest, afterRequest)
         {
             LayerIdsToSearch = new List<int>();

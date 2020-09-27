@@ -16,7 +16,7 @@
         /// Request for the details of an ArcGIS Server service layer
         /// </summary>
         /// <param name="serviceEndpoint"></param>
-        public ServiceLayerDescription(IEndpoint serviceEndpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ServiceLayerDescription(IEndpoint serviceEndpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(serviceEndpoint, beforeRequest, afterRequest)
         { }
     }

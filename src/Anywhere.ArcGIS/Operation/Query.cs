@@ -12,7 +12,7 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class Query : ArcGISServerOperation
     {
-        public Query(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public Query(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
@@ -20,7 +20,7 @@ namespace Anywhere.ArcGIS.Operation
         /// Represents a request for a query against a service resource
         /// </summary>
         /// <param name="endpoint">Resource to apply the query against</param>
-        public Query(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public Query(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Query, beforeRequest, afterRequest)
         {
             Where = "1=1";
@@ -348,12 +348,12 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForIds : Query
     {
-        public QueryForIds(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForIds(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
         // TODO : make these work with or without input geometry
-        public QueryForIds(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForIds(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         {
             ReturnGeometry = false;
@@ -379,11 +379,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForCount : Query
     {
-        public QueryForCount(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForCount(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public QueryForCount(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForCount(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         {
             ReturnGeometry = false;
@@ -406,11 +406,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class QueryForExtent : QueryForCount
     {
-        public QueryForExtent(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForExtent(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public QueryForExtent(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public QueryForExtent(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         { }
 

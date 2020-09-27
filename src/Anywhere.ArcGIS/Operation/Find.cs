@@ -11,7 +11,7 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class Find : ArcGISServerOperation
     {
-        public Find(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public Find(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
@@ -19,7 +19,7 @@ namespace Anywhere.ArcGIS.Operation
         /// Represents a request for a find against a service resource
         /// </summary>
         /// <param name="endpoint">Resource to apply the query against</param>
-        public Find(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public Find(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Find, beforeRequest, afterRequest)
         {
             FuzzySearch = true;

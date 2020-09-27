@@ -84,21 +84,21 @@
             Assert.NotNull(response.Location);
         }
 
-        [Theory]
-        [InlineData("https://energovgis-dev.tylerhost.net/arcgis", "SLO/Crisco/GeocodeServer/", "052-201-003")]
-        public async Task CanCustomGeocodePolygon(string rootUrl, string relativeUrl, string searchText)
-        {
-            var gateway = new PortalGateway(rootUrl);
-            var customGeocode = new SingleInputCustomGeocode(relativeUrl) { Text = searchText };
-            var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
-            {
-                return gateway.CustomGeocode<Polygon>(customGeocode);
-            });
+        //[Theory]
+        //[InlineData("https://energovgis-dev.tylerhost.net/arcgis", "SLO/Crisco/GeocodeServer/", "052-201-003")]
+        //public async Task CanCustomGeocodePolygon(string rootUrl, string relativeUrl, string searchText)
+        //{
+        //    var gateway = new PortalGateway(rootUrl);
+        //    var customGeocode = new SingleInputCustomGeocode(relativeUrl) { Text = searchText };
+        //    var response = await IntegrationTestFixture.TestPolicy.Execute(() =>
+        //    {
+        //        return gateway.CustomGeocode<Polygon>(customGeocode);
+        //    });
 
-            Assert.Null(response.Error);
-            Assert.NotNull(response.Candidates);
-            Assert.True(response.Candidates.Any());
-            Assert.NotNull(response.Candidates.FirstOrDefault().Location);
-        }
+        //    Assert.Null(response.Error);
+        //    Assert.NotNull(response.Candidates);
+        //    Assert.True(response.Candidates.Any());
+        //    Assert.NotNull(response.Candidates.FirstOrDefault().Location);
+        //}
     }
 }

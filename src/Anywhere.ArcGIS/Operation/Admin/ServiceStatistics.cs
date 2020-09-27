@@ -8,7 +8,7 @@ namespace Anywhere.ArcGIS.Operation.Admin
     [DataContract]
     public class ServiceStatistics : ArcGISServerOperation
     {
-        public ServiceStatistics(ServiceDescription serviceDescription, Action beforeRequest = null, Action afterRequest = null)
+        public ServiceStatistics(ServiceDescription serviceDescription, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerAdminEndpoint(string.Format(Operations.ServiceStatistics, serviceDescription.Name, serviceDescription.Type)), beforeRequest, afterRequest)
         { }
     }

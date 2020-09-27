@@ -11,11 +11,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class SingleInputCustomGeocode : ArcGISServerOperation
     {
-        public SingleInputCustomGeocode(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public SingleInputCustomGeocode(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public SingleInputCustomGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public SingleInputCustomGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.SingleInputCustomGeocode, beforeRequest, afterRequest)
         { }
 

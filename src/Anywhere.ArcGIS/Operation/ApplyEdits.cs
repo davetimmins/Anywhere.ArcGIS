@@ -15,11 +15,11 @@ namespace Anywhere.ArcGIS.Operation
     public class ApplyEdits<T> : ArcGISServerOperation
         where T : IGeometry
     {
-        public ApplyEdits(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public ApplyEdits(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public ApplyEdits(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ApplyEdits(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.ApplyEdits, beforeRequest, afterRequest)
         {
             Adds = new List<Feature<T>>();

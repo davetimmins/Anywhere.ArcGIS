@@ -10,7 +10,7 @@
     [DataContract]
     public class ServerInfo : ArcGISServerOperation
     {
-        public ServerInfo(Action beforeRequest = null, Action afterRequest = null)
+        public ServerInfo(Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new RootServerEndpoint(Operations.ServerInfoRoute), beforeRequest, afterRequest)
         { }   
     }
@@ -61,7 +61,7 @@
     [DataContract]
     public class HealthCheck : ArcGISServerOperation
     {
-        public HealthCheck(Action beforeRequest = null, Action afterRequest = null)
+        public HealthCheck(Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new RootServerEndpoint(Operations.ServerHealthCheckRoute), beforeRequest, afterRequest)
         { }
     }

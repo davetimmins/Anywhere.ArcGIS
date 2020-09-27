@@ -773,7 +773,7 @@
                 result.Links = new List<Link> { new Link(uri.AbsoluteUri) };
             }
 
-            requestObject.AfterRequest?.Invoke();
+            requestObject.AfterRequest?.Invoke(resultString);
 
             return result;
         }
@@ -874,7 +874,7 @@
                 result.Links = new List<Link> { new Link(uri.AbsoluteUri, requestObject) };
             }
 
-            requestObject.AfterRequest?.Invoke();
+            requestObject.AfterRequest?.Invoke(resultString);
 
             return result;
         }

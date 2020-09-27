@@ -8,6 +8,6 @@
 
         Action BeforeRequest { get; }
 
-        Action AfterRequest { get; }
+        Action<string> AfterRequest { get; }
     }
 }

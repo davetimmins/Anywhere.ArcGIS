@@ -9,14 +9,14 @@ namespace Anywhere.ArcGIS.Operation
     /// </summary>
     public class ArcGISServerOperation : CommonParameters, IHttpOperation
     {
-        public ArcGISServerOperation(IEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ArcGISServerOperation(IEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
         {
             Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             BeforeRequest = beforeRequest;
             AfterRequest = afterRequest;
         }
 
-        public ArcGISServerOperation(string endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ArcGISServerOperation(string endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(new ArcGISServerEndpoint(endpoint), beforeRequest, afterRequest)
         { }        
 
@@ -24,7 +24,7 @@ namespace Anywhere.ArcGIS.Operation
         public Action BeforeRequest { get; }
 
         [IgnoreDataMember]
-        public Action AfterRequest { get; }
+        public Action<string> AfterRequest { get; }
         
         [IgnoreDataMember]
         public IEndpoint Endpoint { get; }

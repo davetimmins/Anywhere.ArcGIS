@@ -7,7 +7,7 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public abstract class GeocodeOperation : ArcGISServerOperation
     {
-        public GeocodeOperation(IEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public GeocodeOperation(IEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint, beforeRequest, afterRequest)
         { }
 
@@ -56,11 +56,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class ReverseGeocode : GeocodeOperation
     {
-        public ReverseGeocode(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public ReverseGeocode(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public ReverseGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ReverseGeocode(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.ReverseGeocode), beforeRequest, afterRequest)
         {
             Distance = 100;

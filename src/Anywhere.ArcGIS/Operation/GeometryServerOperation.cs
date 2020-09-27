@@ -18,7 +18,7 @@ namespace Anywhere.ArcGIS.Operation
     public class SimplifyGeometry<T> : ArcGISServerOperation
         where T : IGeometry
     {
-        public SimplifyGeometry(IEndpoint endpoint, List<Feature<T>> features = null, SpatialReference spatialReference = null, Action beforeRequest = null, Action afterRequest = null)
+        public SimplifyGeometry(IEndpoint endpoint, List<Feature<T>> features = null, SpatialReference spatialReference = null, Action beforeRequest = null, Action<string> afterRequest = null)
             : base((endpoint is AbsoluteEndpoint)
                 ? (IEndpoint)new AbsoluteEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Simplify)
                 : (IEndpoint)new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Simplify),
@@ -150,7 +150,7 @@ namespace Anywhere.ArcGIS.Operation
             List<Feature<T>> features,
             SpatialReference outputSpatialReference,
             string operation,
-            Action beforeRequest = null, Action afterRequest = null)
+            Action beforeRequest = null, Action<string> afterRequest = null)
             : base((endpoint is AbsoluteEndpoint)
                 ? (IEndpoint)new AbsoluteEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + operation)
                 : (IEndpoint)new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + operation),
