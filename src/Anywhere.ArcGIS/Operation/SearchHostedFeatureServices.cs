@@ -35,7 +35,7 @@ namespace Anywhere.ArcGIS.Operation
         /// SSearch against ArcGISOnline / Portal
         /// </summary>
         /// <param name="query">The search query to execute</param>
-        public SearchArcGISOnline(string query, Action beforeRequest = null, Action afterRequest = null)
+        public SearchArcGISOnline(string query, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISOnlineEndpoint(Operations.ArcGISOnlineSearch), beforeRequest, afterRequest)
         {
             Query = query;

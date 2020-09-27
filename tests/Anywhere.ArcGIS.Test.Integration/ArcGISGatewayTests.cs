@@ -83,7 +83,7 @@
         }
 
         [Theory]
-        [InlineData("http://mapserv.utah.gov/arcgis/")]
+        //[InlineData("http://mapserv.utah.gov/arcgis/")]
         [InlineData("https://services.arcgisonline.com/arcgis")]
         public async Task CanDescribeSite(string rootUrl)
         {
@@ -159,7 +159,7 @@
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/0")]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/1")]
         [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer/0")]
-        [InlineData("http://services1.arcgis.com/dOFzdrPdRgtU4fRo/ArcGIS", "ServiceDefDouble/FeatureServer/0")]
+        [InlineData("https://services1.arcgis.com/dOFzdrPdRgtU4fRo/ArcGIS", "ServiceDefDouble/FeatureServer/0")]
         public async Task CanDescribeLayer(string rootUrl, string layerUrl)
         {
             var gateway = new PortalGateway(rootUrl);
@@ -596,6 +596,23 @@
             Assert.True(resultFiltered.ObjectIds.Count() == queryFiltered.ObjectIds.Count);
         }
 
+        [Fact]
+        public async Task CanQueryWithNoGeometryResponse()
+        {
+            var gateway = new PortalGateway("http://services.arcgisonline.com/arcgis/");
+
+            var query = new Query(@"/Specialty/Soil_Survey_Map/MapServer/2");
+            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
+            {
+                return gateway.Query(query);
+            });
+
+            Assert.NotNull(result);
+            Assert.Null(result.Error);
+            Assert.NotNull(result.Features);
+            Assert.True(result.Features.All(x => x.Geometry == null));
+        }
+
         /// <summary>
         /// Performs unfiltered query, then filters by Extent and Polygon to SE quadrant of globe and verifies both filtered
         /// results contain same number of features as each other, and that both filtered resultsets contain fewer features than unfiltered resultset.
@@ -858,7 +875,7 @@
         [Fact]
         public async Task CanQueryAttachments()
         {
-            var gateway = new PortalGateway("http://services1.arcgis.com/YFRZ5T5eRL3tLQNK/ArcGIS/");
+            var gateway = new PortalGateway("https://services1.arcgis.com/YFRZ5T5eRL3tLQNK/ArcGIS/");
 
             var queryAttachments = new QueryAttachments(@"test_sync/FeatureServer/0")
             {
@@ -880,24 +897,24 @@
             Assert.Equal(group.AttachmentInfos.First().ContentType, queryAttachments.AttachmentTypes);
         }
 
-        [Fact]
-        public async Task CanQueryDomains()
-        {
-            var gateway = new PortalGateway("http://gis.stlouiscountymn.gov/arcgis");
+        //[Fact]
+        //public async Task CanQueryDomains()
+        //{
+        //    var gateway = new PortalGateway("http://gis.stlouiscountymn.gov/arcgis");
 
-            var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/")
-            {
-                LayerIdsToSearch = new List<int> { 0 }
-            };
-            var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
-            {
-                return gateway.QueryDomains(queryDomains);
-            });
+        //    var queryDomains = new QueryDomains(@"PublicWorks/SignInventory/MapServer/")
+        //    {
+        //        LayerIdsToSearch = new List<int> { 0 }
+        //    };
+        //    var result = await IntegrationTestFixture.TestPolicy.Execute(() =>
+        //    {
+        //        return gateway.QueryDomains(queryDomains);
+        //    });
 
-            Assert.NotNull(result);
-            Assert.Null(result.Error);
-            Assert.True(result.Domains.Any());
-        }
+        //    Assert.NotNull(result);
+        //    Assert.Null(result.Error);
+        //    Assert.True(result.Domains.Any());
+        //}
 
         [Theory]
         [InlineData("https://services.arcgisonline.co.nz/arcgis")]

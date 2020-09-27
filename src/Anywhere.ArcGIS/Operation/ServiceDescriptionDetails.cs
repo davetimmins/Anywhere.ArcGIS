@@ -16,7 +16,7 @@
         /// Request for the details of an ArcGIS Server service
         /// </summary>
         /// <param name="serviceDescription">A <see cref="ServiceDescription"/> from a previous call to DescribeSite</param>
-        public ServiceDescriptionDetails(ServiceDescription serviceDescription, Action beforeRequest = null, Action afterRequest = null)
+        public ServiceDescriptionDetails(ServiceDescription serviceDescription, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(serviceDescription.ArcGISServerEndpoint, beforeRequest, afterRequest)
         {
             if (serviceDescription == null)
@@ -29,7 +29,7 @@
         /// Request for the details of an ArcGIS Server service
         /// </summary>
         /// <param name="serviceEndpoint"></param>
-        public ServiceDescriptionDetails(IEndpoint serviceEndpoint, Action beforeRequest = null, Action afterRequest = null)
+        public ServiceDescriptionDetails(IEndpoint serviceEndpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(serviceEndpoint, beforeRequest, afterRequest)
         { }
     }

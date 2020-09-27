@@ -34,7 +34,7 @@ namespace Anywhere.ArcGIS.Operation.Admin
 
     public class ServiceReport : ArcGISServerOperation
     {
-        public ServiceReport(string path, Action beforeRequest = null, Action afterRequest = null)
+        public ServiceReport(string path, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerAdminEndpoint(string.Format(Operations.ServiceReport, path.Replace("/", "")).Replace("//", "/")), beforeRequest, afterRequest)
         { }
     }

@@ -7,7 +7,7 @@ namespace Anywhere.ArcGIS.Operation.Admin
     [DataContract]
     public class StartService : ArcGISServerOperation
     {
-        public StartService(ServiceDescription serviceDescription, Action beforeRequest = null, Action afterRequest = null)
+        public StartService(ServiceDescription serviceDescription, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerAdminEndpoint(string.Format(Operations.StartService, serviceDescription.Name, serviceDescription.Type)), beforeRequest, afterRequest)
         { }
     }
@@ -15,7 +15,7 @@ namespace Anywhere.ArcGIS.Operation.Admin
     [DataContract]
     public class StopService : ArcGISServerOperation
     {
-        public StopService(ServiceDescription serviceDescription, Action beforeRequest = null, Action afterRequest = null)
+        public StopService(ServiceDescription serviceDescription, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerAdminEndpoint(string.Format(Operations.StopService, serviceDescription.Name, serviceDescription.Type)), beforeRequest, afterRequest)
         { }
     }

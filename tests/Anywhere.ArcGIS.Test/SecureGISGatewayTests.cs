@@ -3,14 +3,13 @@
     using Anywhere.ArcGIS;
     using System;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Xunit;
 
     public class SecureGISGatewayTests
     {
         [Fact]
-        public void TokenIsExpiredHasCorrectValue()
+        public async Task TokenIsExpiredHasCorrectValue()
         {
             var expiry = DateTime.UtcNow.AddSeconds(1).ToUnixTime();
             var token = new Anywhere.ArcGIS.Operation.Token { Value = "blah", Expiry = expiry };
@@ -18,7 +17,7 @@
             Assert.NotNull(token);
             Assert.NotNull(token.Value);
             Assert.False(token.IsExpired);
-            Thread.Sleep(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(2));
             Assert.True(token.IsExpired);
         }
 

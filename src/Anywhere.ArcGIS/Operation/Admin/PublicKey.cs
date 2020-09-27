@@ -7,7 +7,7 @@ namespace Anywhere.ArcGIS.Operation.Admin
     [DataContract]
     public class PublicKey : ArcGISServerOperation
     {
-        public PublicKey(Action beforeRequest = null, Action afterRequest = null)
+        public PublicKey(Action beforeRequest = null, Action<string> afterRequest = null)
             : base(new ArcGISServerAdminEndpoint(Operations.PublicKey), beforeRequest, afterRequest)
         { }
     }

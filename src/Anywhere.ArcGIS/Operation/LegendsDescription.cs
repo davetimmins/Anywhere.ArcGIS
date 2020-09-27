@@ -11,7 +11,7 @@ namespace Anywhere.ArcGIS.Operation
 	{
 		public LegendsDescription(string relativeUrl,
 			Action beforeRequest = null,
-			Action afterRequest = null)
+			Action<string> afterRequest = null)
 			: this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
 		{
 		}
@@ -26,7 +26,7 @@ namespace Anywhere.ArcGIS.Operation
 		/// <param name="endpoint">Resource to apply the export against</param>
 		public LegendsDescription(IEndpoint endpoint,
 			Action beforeRequest = null,
-			Action afterRequest = null)
+			Action<string> afterRequest = null)
 			: base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Legend, beforeRequest, afterRequest)
 		{
 		}

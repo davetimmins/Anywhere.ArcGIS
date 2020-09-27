@@ -185,7 +185,7 @@ namespace Anywhere.ArcGIS
                 throw new InvalidOperationException(result.Error.ToString());
             }
 
-            requestObject.AfterRequest?.Invoke();
+            requestObject.AfterRequest?.Invoke(resultString);
 
             return result;
         }

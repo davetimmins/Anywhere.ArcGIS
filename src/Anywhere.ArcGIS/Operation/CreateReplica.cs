@@ -18,11 +18,11 @@
     [DataContract]
     public class CreateReplica : ArcGISServerOperation
     {
-        public CreateReplica(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public CreateReplica(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public CreateReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public CreateReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.CreateReplica, beforeRequest, afterRequest)
         {
             ReturnAttachments = false;
@@ -227,11 +227,11 @@
     [DataContract]
     public class UnregisterReplica : ArcGISServerOperation
     {
-        public UnregisterReplica(string relativeUrl, Action beforeRequest = null, Action afterRequest = null)
+        public UnregisterReplica(string relativeUrl, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), beforeRequest, afterRequest)
         { }
 
-        public UnregisterReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action afterRequest = null)
+        public UnregisterReplica(ArcGISServerEndpoint endpoint, Action beforeRequest = null, Action<string> afterRequest = null)
             : base(endpoint.RelativeUrl.Trim('/') + "/" + Operations.UnregisterReplica, beforeRequest, afterRequest)
         { }
 

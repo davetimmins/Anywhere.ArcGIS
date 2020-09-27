@@ -7,11 +7,11 @@ namespace Anywhere.ArcGIS.Operation
     [DataContract]
     public class LayerFeature : ArcGISServerOperation
     {
-        public LayerFeature(string relativeUrl, long featureId, Action beforeRequest = null, Action afterRequest = null)
+        public LayerFeature(string relativeUrl, long featureId, Action beforeRequest = null, Action<string> afterRequest = null)
             : this(relativeUrl.AsEndpoint(), featureId, beforeRequest, afterRequest)
         { }
 
-        public LayerFeature(ArcGISServerEndpoint endpoint, long featureId, Action beforeRequest = null, Action afterRequest = null)
+        public LayerFeature(ArcGISServerEndpoint endpoint, long featureId, Action beforeRequest = null, Action<string> afterRequest = null)
             : base($"{endpoint.RelativeUrl.Trim('/')}/{featureId}", beforeRequest, afterRequest)
         { }
 

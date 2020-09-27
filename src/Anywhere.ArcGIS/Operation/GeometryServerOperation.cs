@@ -18,7 +18,7 @@ namespace Anywhere.ArcGIS.Operation
     public class SimplifyGeometry<T> : ArcGISServerOperation
         where T : IGeometry
     {
-        public SimplifyGeometry(IEndpoint endpoint, List<Feature<T>> features = null, SpatialReference spatialReference = null, Action beforeRequest = null, Action afterRequest = null)
+        public SimplifyGeometry(IEndpoint endpoint, List<Feature<T>> features = null, SpatialReference spatialReference = null, Action beforeRequest = null, Action<string> afterRequest = null)
             : base((endpoint is AbsoluteEndpoint)
                 ? (IEndpoint)new AbsoluteEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Simplify)
                 : (IEndpoint)new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + Operations.Simplify),
@@ -150,7 +150,7 @@ namespace Anywhere.ArcGIS.Operation
             List<Feature<T>> features,
             SpatialReference outputSpatialReference,
             string operation,
-            Action beforeRequest = null, Action afterRequest = null)
+            Action beforeRequest = null, Action<string> afterRequest = null)
             : base((endpoint is AbsoluteEndpoint)
                 ? (IEndpoint)new AbsoluteEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + operation)
                 : (IEndpoint)new ArcGISServerEndpoint(endpoint.RelativeUrl.Trim('/') + "/" + operation),
@@ -161,8 +161,8 @@ namespace Anywhere.ArcGIS.Operation
             {
                 Geometries = new GeometryCollection<T> { Geometries = new List<T>(features.Select(f => f.Geometry)) };
 
-                if (Geometries.Geometries.First().SpatialReference == null && features.First().Geometry.SpatialReference != null)
-                    Geometries.Geometries.First().SpatialReference = new SpatialReference { Wkid = features.First().Geometry.SpatialReference.Wkid };
+                if (Geometries.Geometries.First()?.SpatialReference == null && features?.First()?.Geometry?.SpatialReference != null)
+                    Geometries.Geometries.First().SpatialReference = new SpatialReference { Wkid = features?.First()?.Geometry?.SpatialReference?.Wkid };
             }
             OutputSpatialReference = outputSpatialReference;
         }
@@ -177,7 +177,7 @@ namespace Anywhere.ArcGIS.Operation
         /// Taken from the spatial reference of the first geometry, if that is null then assumed to be using Wgs84
         /// </summary>
         [DataMember(Name = "inSR")]
-        public SpatialReference InputSpatialReference { get { return Geometries.Geometries.First().SpatialReference ?? SpatialReference.WGS84; } }
+        public SpatialReference InputSpatialReference { get { return Geometries.Geometries.First()?.SpatialReference ?? SpatialReference.WGS84; } }
 
         /// <summary>
         /// The spatial reference of the returned geometry.
