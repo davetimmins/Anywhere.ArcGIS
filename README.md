@@ -9,7 +9,7 @@
 MyGet feed [![MyGet Status](https://img.shields.io/myget/0b0e5c5f92fe4ccbba32eec8c0bb4c22/vpre/Anywhere.ArcGIS.svg)](https://www.myget.org/feed/0b0e5c5f92fe4ccbba32eec8c0bb4c22/package/nuget/Anywhere.ArcGIS)
 
 Use ArcGIS Server REST resources without an official SDK. 
-This is a netstandard 2.0 library, it was ported from [ArcGIS.PCL](https://github.com/davetimmins/ArcGIS.PCL/). It is not endorsed, affiliated or supported by Esri.
+This is a netstandard 2.1 library, it was ported from [ArcGIS.PCL](https://github.com/davetimmins/ArcGIS.PCL/). It is not endorsed, affiliated or supported by Esri. Use v1.x of this library if you need to use the netstandard 2.0 version.
 
 A typical use case would be the need to call some ArcGIS REST resource from server .NET code or maybe a console app. The features that this returns can be used directly as Esri JSON in JavaScript apps using the Esri JS API.
 
