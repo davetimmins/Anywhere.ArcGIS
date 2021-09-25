@@ -107,7 +107,7 @@
         {
             var result = new SiteDescription();
 
-            result.Resources.AddRange(await DescribeEndpoint(new ArcGISServerOperation("/".AsEndpoint()), ct).ConfigureAwait(false));
+            result?.Resources?.AddRange(await DescribeEndpoint(new ArcGISServerOperation("/".AsEndpoint()), ct).ConfigureAwait(false));
 
             return result;
         }
