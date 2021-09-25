@@ -156,10 +156,11 @@
         }
 
 		[Theory]
-        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/0")]
-        [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/1")]
-        [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer/0")]
-        [InlineData("https://services1.arcgis.com/dOFzdrPdRgtU4fRo/ArcGIS", "ServiceDefDouble/FeatureServer/0")]
+        //[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/0")]
+        //[InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer/1")]
+        //[InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer/0")]
+        //[InlineData("https://services1.arcgis.com/dOFzdrPdRgtU4fRo/ArcGIS", "ServiceDefDouble/FeatureServer/0")]
+        [InlineData("https://services2.arcgis.com/dEKgZETqwmDAh1rP/ArcGIS", "superseded_cp2014_v18_2020_Neighbourhood_Plan_boundaries/FeatureServer/0")]
         public async Task CanDescribeLayer(string rootUrl, string layerUrl)
         {
             var gateway = new PortalGateway(rootUrl);
@@ -172,6 +173,7 @@
             Assert.Null(layerResponse.Error);
             Assert.NotNull(layerResponse.GeometryType);
         }
+
         [Theory]
         [InlineData("http://sampleserver3.arcgisonline.com/ArcGIS/", "Petroleum/KSWells/MapServer")]
         [InlineData("http://services.arcgisonline.co.nz/arcgis", "Canvas/Light/MapServer")]

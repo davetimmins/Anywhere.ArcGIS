@@ -142,6 +142,8 @@
 
         public bool IncludeHypermediaWithResponse { get; set; }
 
+        public bool IncludeRawResultWithResponse { get; set; }
+
         public string RootUrl { get; private set; }
 
         public ITokenProvider TokenProvider { get; private set; }
@@ -389,7 +391,7 @@
             where T : IGeometry
         {
             var result = await Post<ApplyEditsResponse, ApplyEdits<T>>(edits, ct);
-            result.SetExpected(edits);
+            result?.SetExpected(edits);
             return result;
         }
 
@@ -410,7 +412,7 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries(projected.Geometries);
-            if (result.First().Geometry.SpatialReference == null)
+            if (result != null && result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
             {
                 result.First().Geometry.SpatialReference = outputSpatialReference;
             }
@@ -425,7 +427,7 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = operation.Features.UpdateGeometries<T>(projected.Geometries);
-            if (result.First().Geometry.SpatialReference == null)
+            if (result != null && result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
             {
                 result.First().Geometry.SpatialReference = operation.OutputSpatialReference;
             }
@@ -450,7 +452,7 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries<T>(buffered.Geometries);
-            if (result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
+            if (result != null && result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
             {
                 result.First().Geometry.SpatialReference = spatialReference;
             }
@@ -474,7 +476,7 @@
             if (ct.IsCancellationRequested) return null;
 
             var result = features.UpdateGeometries<T>(simplified.Geometries);
-            if (result.First().Geometry.SpatialReference == null)
+            if (result != null && result.Any() && result?.First() != null && result.First().Geometry != null && result?.First()?.Geometry?.SpatialReference == null)
             {
                 result.First().Geometry.SpatialReference = spatialReference;
             }
@@ -773,6 +775,11 @@
                 result.Links = new List<Link> { new Link(uri.AbsoluteUri) };
             }
 
+            if (IncludeRawResultWithResponse)
+            {
+                result.RawResult = resultString;
+            }
+
             requestObject.AfterRequest?.Invoke(resultString);
 
             return result;
@@ -872,6 +879,11 @@
             if (IncludeHypermediaWithResponse)
             {
                 result.Links = new List<Link> { new Link(uri.AbsoluteUri, requestObject) };
+            }
+
+            if (IncludeRawResultWithResponse)
+            {
+                result.RawResult = resultString;
             }
 
             requestObject.AfterRequest?.Invoke(resultString);

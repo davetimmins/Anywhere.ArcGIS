@@ -10,6 +10,9 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "_links")]
         List<Link> Links { get; set; }
+
+        [DataMember(Name = "_raw")]
+        string RawResult { get; set; }
     }
 
     /// <summary>
@@ -26,6 +29,8 @@ namespace Anywhere.ArcGIS.Operation
 
         [DataMember(Name = "_links")]
         public List<Link> Links { get; set; }
+        [DataMember(Name = "_raw")]
+        public string RawResult { get; set; }
     }
 
     [DataContract]
