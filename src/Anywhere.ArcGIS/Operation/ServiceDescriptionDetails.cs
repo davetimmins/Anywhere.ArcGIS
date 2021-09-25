@@ -114,7 +114,7 @@
         public string TimeRelation { get; set; }
 
         [DataMember(Name = "defaultTimeInterval")]
-        public int DefaultTimeInterval { get; set; }
+        public double DefaultTimeInterval { get; set; }
 
         [DataMember(Name = "defaultTimeIntervalUnits")]
         public string DefaultTimeIntervalUnits { get; set; }
