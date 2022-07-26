@@ -638,7 +638,7 @@ namespace Anywhere.ArcGIS.Common
                 extent = this;
             }
 
-            if (!SpatialReference.Equals(extent.SpatialReference))
+            if ((SpatialReference != null && extent.SpatialReference != null) && !SpatialReference.Equals(extent.SpatialReference))
             {
                 throw new ArgumentException("Spatial references must match for union operation.");
             }
