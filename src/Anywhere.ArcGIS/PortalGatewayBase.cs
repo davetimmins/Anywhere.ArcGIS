@@ -729,18 +729,20 @@
                     url = url.Replace("http:", "https:");
                 }
             }
-
+            
+            if (url.Length > MaximumGetRequestLength)
+            {
+                _logger.DebugFormat("Url length {0} is greater than maximum configured {1}, switching to POST.", url.Length, MaximumGetRequestLength);
+                return await Post<T, TRequest>(requestObject, ct).ConfigureAwait(false);
+            }
+            
             bool validUrl = Uri.TryCreate(url, UriKind.Absolute, out Uri uri);
             if (!validUrl)
             {
                 throw new HttpRequestException(string.Format("Not a valid url: {0}", url));
             }
 
-            if (url.Length > MaximumGetRequestLength)
-            {
-                _logger.DebugFormat("Url length {0} is greater than maximum configured {1}, switching to POST.", url.Length, MaximumGetRequestLength);
-                return await Post<T, TRequest>(requestObject, ct).ConfigureAwait(false);
-            }
+           
 
             _logger.DebugFormat("GET {0}", uri.AbsoluteUri);
             requestObject.BeforeRequest?.Invoke();
